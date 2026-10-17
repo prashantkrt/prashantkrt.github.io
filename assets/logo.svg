@@ -1,0 +1,76 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" width="64" height="64" fill="none">
+  <defs>
+    <!-- Background Gradient -->
+    <linearGradient id="bgGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#10192d"/>
+      <stop offset="60%" stop-color="#0a101f"/>
+      <stop offset="100%" stop-color="#050811"/>
+    </linearGradient>
+
+    <!-- Border Glow Gradient -->
+    <linearGradient id="borderGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#8a78ff" stop-opacity="0.85"/>
+      <stop offset="50%" stop-color="#38bdf8" stop-opacity="0.6"/>
+      <stop offset="100%" stop-color="#a1f4c2" stop-opacity="0.85"/>
+    </linearGradient>
+
+    <!-- Glyph Gradient -->
+    <linearGradient id="glyphGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#a78bfa"/>
+      <stop offset="40%" stop-color="#38bdf8"/>
+      <stop offset="100%" stop-color="#a1f4c2"/>
+    </linearGradient>
+
+    <!-- Secondary Accent Gradient -->
+    <linearGradient id="accentGrad" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" stop-color="#38bdf8"/>
+      <stop offset="100%" stop-color="#a1f4c2"/>
+    </linearGradient>
+
+    <!-- Ambient Shadow & Glow Filters -->
+    <filter id="neonGlow" x="-25%" y="-25%" width="150%" height="150%">
+      <feGaussianBlur stdDeviation="2.5" result="blur"/>
+      <feMerge>
+        <feMergeNode in="blur"/>
+        <feMergeNode in="SourceGraphic"/>
+      </feMerge>
+    </filter>
+
+    <radialGradient id="innerGlow" cx="50%" cy="30%" r="70%">
+      <stop offset="0%" stop-color="#8a78ff" stop-opacity="0.18"/>
+      <stop offset="100%" stop-color="#8a78ff" stop-opacity="0"/>
+    </radialGradient>
+  </defs>
+
+  <!-- Base Badge / Squircle Shield -->
+  <rect x="2" y="2" width="60" height="60" rx="16" fill="url(#bgGrad)"/>
+  <rect x="2" y="2" width="60" height="60" rx="16" fill="url(#innerGlow)"/>
+  <rect x="2" y="2" width="60" height="60" rx="16" stroke="url(#borderGrad)" stroke-width="1.4"/>
+
+  <!-- Subtle Architecture Grid Accents (Distributed Nodes) -->
+  <circle cx="14" cy="14" r="1.2" fill="#8a78ff" fill-opacity="0.4"/>
+  <circle cx="50" cy="14" r="1.2" fill="#38bdf8" fill-opacity="0.4"/>
+  <circle cx="14" cy="50" r="1.2" fill="#a1f4c2" fill-opacity="0.4"/>
+
+  <!-- MONOGRAM "P" & "T" GLYPH -->
+  <!-- "P" Vertical Pillar -->
+  <path d="M 17 48 L 17 18 C 17 16.34 18.34 15 20 15 L 22 15 C 23.66 15 25 16.34 25 18 L 25 48 C 25 49.66 23.66 51 22 51 L 20 51 C 18.34 51 17 49.66 17 48 Z" 
+        fill="url(#glyphGrad)"/>
+
+  <!-- "P" Upper Loop -->
+  <path d="M 23 15 L 34 15 C 39.52 15 44 19.48 44 25 C 44 30.52 39.52 35 34 35 L 23 35" 
+        stroke="url(#glyphGrad)" stroke-width="5.5" stroke-linecap="round" stroke-linejoin="round"/>
+
+  <!-- "T" Dynamic Crossbar -->
+  <path d="M 33 15 L 48 15 C 49.66 15 51 16.34 51 18 C 51 19.66 49.66 21 48 21 L 33 21" 
+        fill="url(#accentGrad)"/>
+
+  <!-- "T" Central Stem dropping down -->
+  <path d="M 43 21 L 43 43 C 43 44.66 41.66 46 40 46 C 38.34 46 37 44.66 37 43 L 37 21" 
+        fill="url(#accentGrad)"/>
+
+  <!-- Event Stream Spark / Radiant Pulse (Kafka / Event Mesh Core) -->
+  <circle cx="48.5" cy="48.5" r="4" fill="#a1f4c2" filter="url(#neonGlow)"/>
+  <circle cx="48.5" cy="48.5" r="1.8" fill="#07120c"/>
+</svg>
+

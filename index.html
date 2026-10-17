@@ -15,48 +15,182 @@
   <link rel="stylesheet" href="assets/css/styles.css">
 </head>
 <body>
+  <div class="scroll-progress-bar" id="scrollProgressBar"></div>
+  <canvas id="bgCanvas" class="bg-canvas"></canvas>
   <div class="ambient ambient-a"></div><div class="ambient ambient-b"></div>
   <header class="header">
-    <a class="brand" href="index.html" aria-label="Prashant Tiwary home"><span class="brand-icon">PT<span>.</span></span><span>Prashant Tiwary</span></a>
+    <div class="header-left">
+      <a class="brand" href="index.html" aria-label="Prashant Tiwary home">
+        <img class="brand-icon" src="assets/logo.svg" alt="Prashant Tiwary Logo" width="38" height="38">
+        <div class="brand-info">
+          <span class="brand-name">Prashant Tiwary</span>
+          <span class="brand-title">Backend Engineer</span>
+        </div>
+      </a>
+      <div class="header-divider"></div>
+      <div class="header-socials">
+        <a class="header-social-pill github" href="https://github.com/prashantkrt" target="_blank" rel="noreferrer" title="GitHub profile">
+          <span class="social-icon">GH</span>
+          <span class="social-text">GitHub</span>
+        </a>
+        <a class="header-social-pill gitlab" href="https://gitlab.com/prashantkrt" target="_blank" rel="noreferrer" title="GitLab profile">
+          <span class="social-icon">GL</span>
+          <span class="social-text">GitLab</span>
+        </a>
+        <a class="header-social-pill linkedin" href="https://www.linkedin.com/in/prashant-kumar-tiwary-a7a741161/" target="_blank" rel="noreferrer" title="LinkedIn profile">
+          <span class="social-icon">in</span>
+          <span class="social-text">LinkedIn</span>
+        </a>
+      </div>
+    </div>
     <button class="menu-toggle" aria-label="Toggle navigation" aria-expanded="false"><span></span><span></span></button>
     <nav class="nav" aria-label="Main navigation">
-      <a class="active" href="index.html">Home</a><a href="#about">About</a><a href="#skills">Skills</a><a href="#journey">Experience</a><a href="#certifications">Certifications</a><a href="projects.html">Repositories <span class="nav-count">↗</span></a><button class="nav-cta contact-open" type="button">Contact</button>
+      <a class="active" href="index.html">Home</a><a href="#about">About</a><a href="#skills">Skills</a><a href="#journey">Experience</a><a href="#certifications">Certifications</a><a href="projects.html">Repositories <span class="nav-count">↗</span></a><button class="nav-cta contact-open" type="button"><span class="cta-pulse"></span> Contact</button>
+      <div class="mobile-social-row">
+        <a href="https://github.com/prashantkrt" target="_blank" rel="noreferrer">GitHub ↗</a>
+        <a href="https://gitlab.com/prashantkrt" target="_blank" rel="noreferrer">GitLab ↗</a>
+        <a href="https://www.linkedin.com/in/prashant-kumar-tiwary-a7a741161/" target="_blank" rel="noreferrer">LinkedIn ↗</a>
+      </div>
     </nav>
   </header>
 
   <main>
     <section class="hero wrap" id="home">
       <div class="hero-content">
-        <div class="eyebrow"><span class="pulse"></span> JAVA BACKEND ENGINEER <span class="eyebrow-divider">/</span> BUILD · LEARN · IMPROVE</div>
+        <div class="eyebrow"><span class="pulse"></span> <span id="liveStatusRole">JAVA BACKEND ENGINEER</span> <span class="eyebrow-divider">/</span> <span id="liveTime">--:--:-- IST</span> <span class="eyebrow-divider">/</span> BUILD · LEARN · IMPROVE</div>
         <p class="intro">Hello, I'm</p>
-        <h1>Prashant<br><span class="gradient">Kumar Tiwary.</span></h1>
+        <h1>Prashant<br><span class="gradient dynamic-typewriter"><span id="typewriterText">Kumar Tiwary.</span><span class="typewriter-cursor">|</span></span></h1>
         <p class="hero-statement">I build backend systems with <span>clarity, reliability,</span> and room to scale.</p>
-        <p class="hero-copy">Software Engineer at Publicis Sapient, working across Java, Spring Boot, REST APIs, reactive programming, and microservices. This is my professional profile and a place to share my engineering background, technical interests, and continuous learning.</p>
-        <div class="actions"><a class="button primary" href="projects.html">Explore my work <span>↗</span></a><a class="button secondary" href="mailto:hello@mylearningdesk.in">Get in touch <span>↗</span></a></div>
-        <div class="quick-links"><a href="https://github.com/prashantkrt" target="_blank" rel="noreferrer"><span class="link-mark">GH</span> GitHub</a><span class="quick-separator"></span><a href="https://gitlab.com/prashantkrt" target="_blank" rel="noreferrer"><span class="link-mark">GL</span> GitLab</a><span class="quick-separator"></span><a href="https://www.linkedin.com/in/prashant-kumar-tiwary-a7a741161/" target="_blank" rel="noreferrer"><span class="link-mark">in</span> LinkedIn</a><span class="quick-separator"></span><span>India · Backend & distributed systems</span></div>
+        <p class="hero-copy">Senior Associate Platform L1 at Publicis Sapient, engineering high-throughput backend services across Java 21, Spring Boot, Apache Kafka, reactive microservices, and Kubernetes. Passionate about resilient distributed systems, event-driven design, and continuous learning.</p>
+        <div class="actions">
+          <a class="button primary" href="projects.html">Explore my work <span>↗</span></a>
+          <button class="button secondary contact-open" type="button">Get in touch <span>↗</span></button>
+          <button class="button btn-copy" type="button" data-copy-email="hello@mylearningdesk.in" title="Click to copy email address"><span>📋</span> Copy email</button>
+        </div>
+        <div class="quick-links">
+          <a class="quick-badge github" href="https://github.com/prashantkrt" target="_blank" rel="noreferrer"><span class="link-mark">GH</span> GitHub ↗</a>
+          <a class="quick-badge gitlab" href="https://gitlab.com/prashantkrt" target="_blank" rel="noreferrer"><span class="link-mark">GL</span> GitLab ↗</a>
+          <a class="quick-badge linkedin" href="https://www.linkedin.com/in/prashant-kumar-tiwary-a7a741161/" target="_blank" rel="noreferrer"><span class="link-mark">in</span> LinkedIn ↗</a>
+          <span class="quick-location">India · Distributed Systems</span>
+        </div>
       </div>
+
       <div class="hero-art">
         <div class="orbit orbit-1"></div><div class="orbit orbit-2"></div>
         <div class="code-window">
-          <div class="window-bar"><div class="window-dots"><i></i><i></i><i></i></div><span>engineer.profile</span><span class="window-status">● READY</span></div>
-          <div class="code-content">
-            <div class="code-line"><span class="ln">01</span><span class="syntax-purple">const</span> engineer = {</div>
-            <div class="code-line indent"><span class="syntax-blue">name</span>: <span class="syntax-green">"Prashant Tiwary"</span>,</div>
-            <div class="code-line indent"><span class="syntax-blue">role</span>: <span class="syntax-green">"Backend Engineer"</span>,</div>
-            <div class="code-line indent"><span class="syntax-blue">backend</span>: [<span class="syntax-green">"Java"</span>, <span class="syntax-green">"Spring Boot"</span>],</div>
-            <div class="code-line indent"><span class="syntax-blue">messaging</span>: [<span class="syntax-green">"Kafka"</span>, <span class="syntax-green">"Avro"</span>],</div>
-            <div class="code-line indent"><span class="syntax-blue">mindset</span>: <span class="syntax-green">"Keep learning"</span></div>
-            <div class="code-line">};</div>
-            <div class="code-separator"></div>
-            <div class="terminal-line"><span>$</span> git status <b>● ready to build</b></div>
+          <div class="window-bar">
+            <div class="window-dots"><i></i><i></i><i></i></div>
+            <span class="window-status">● SYSTEM ACTIVE</span>
           </div>
-          <div class="window-footer"><span><i class="tiny-pulse"></i> Focused on useful software</span><span>JAVA / CLOUD / SYSTEMS</span></div>
+          <div class="window-tabs" role="tablist">
+            <button class="window-tab active" data-tab="tabJava" type="button"><span class="tab-icon">☕</span> Engineer.java</button>
+            <button class="window-tab" data-tab="tabYaml" type="button"><span class="tab-icon">⚙</span> architecture.yml</button>
+            <button class="window-tab" data-tab="tabTerminal" type="button"><span class="tab-icon">💻</span> terminal.sh</button>
+            <div class="window-actions">
+              <button class="window-action-btn btn-run" id="runCodeBtn" type="button" title="Simulate build & reactive execution"><span>▶</span> Run</button>
+              <button class="window-action-btn" id="copyCodeBtn" type="button" title="Copy active code"><span>📋</span> Copy</button>
+            </div>
+          </div>
+
+          <!-- TAB 1: JAVA -->
+          <div class="tab-content active" id="tabJava">
+            <div class="code-content">
+              <div class="code-line"><span class="ln">01</span><span class="syntax-purple">@Service</span></div>
+              <div class="code-line"><span class="ln">02</span><span class="syntax-purple">public class</span> <span class="syntax-blue">BackendEngineer</span> {</div>
+              <div class="code-line indent"><span class="ln">03</span><span class="syntax-purple">private final</span> String name = <span class="syntax-green">"Prashant Tiwary"</span>;</div>
+              <div class="code-line indent"><span class="ln">04</span><span class="syntax-purple">private final</span> List&lt;String&gt; stack = List.of(</div>
+              <div class="code-line indent" style="padding-left:45px"><span class="ln">05</span><span class="syntax-green">"Java 21"</span>, <span class="syntax-green">"Spring Boot 3"</span>, <span class="syntax-green">"Kafka"</span>, <span class="syntax-green">"K8s"</span></div>
+              <div class="code-line indent"><span class="ln">06</span>);</div>
+              <div class="code-line indent"><span class="ln">07</span><span class="syntax-purple">public</span> Mono&lt;State&gt; <span class="syntax-blue">deliverScalableSystems</span>() {</div>
+              <div class="code-line indent" style="padding-left:45px"><span class="ln">08</span><span class="syntax-purple">return</span> eventPipeline.stream()</div>
+              <div class="code-line indent" style="padding-left:55px"><span class="ln">09</span>.retryWhen(Retry.backoff(3, Duration.ofMillis(100)))</div>
+              <div class="code-line indent" style="padding-left:55px"><span class="ln">10</span>.map(State::HEALTHY);</div>
+              <div class="code-line indent"><span class="ln">11</span>}</div>
+              <div class="code-line"><span class="ln">12</span>}</div>
+              <div class="code-separator"></div>
+              <div class="terminal-line"><span>$</span> ./gradlew test <b>● 48 passed, 0 failed [100% coverage]</b></div>
+            </div>
+          </div>
+
+          <!-- TAB 2: YAML ARCHITECTURE -->
+          <div class="tab-content" id="tabYaml">
+            <div class="code-content">
+              <div class="code-line"><span class="ln">01</span><span class="syntax-blue">system</span>: <span class="syntax-green">event-driven-mesh</span></div>
+              <div class="code-line"><span class="ln">02</span><span class="syntax-blue">runtime</span>: <span class="syntax-green">openjdk-21-distroless</span></div>
+              <div class="code-line"><span class="ln">03</span><span class="syntax-blue">messaging</span>:</div>
+              <div class="code-line indent"><span class="ln">04</span><span class="syntax-purple">cluster</span>: <span class="syntax-green">apache-kafka-v3.7</span></div>
+              <div class="code-line indent"><span class="ln">05</span><span class="syntax-purple">serialization</span>: <span class="syntax-green">avro-schema-registry</span></div>
+              <div class="code-line indent"><span class="ln">06</span><span class="syntax-purple">semantics</span>: <span class="syntax-green">at-least-once + idempotent</span></div>
+              <div class="code-line"><span class="ln">07</span><span class="syntax-blue">infrastructure</span>:</div>
+              <div class="code-line indent"><span class="ln">08</span><span class="syntax-purple">orchestrator</span>: <span class="syntax-green">kubernetes / helm</span></div>
+              <div class="code-line indent"><span class="ln">09</span><span class="syntax-purple">cicd</span>: <span class="syntax-green">github-actions / argocd</span></div>
+              <div class="code-line indent"><span class="ln">10</span><span class="syntax-purple">telemetry</span>: [<span class="syntax-green">"prometheus"</span>, <span class="syntax-green">"grafana"</span>, <span class="syntax-green">"elk"</span>]</div>
+              <div class="code-separator"></div>
+              <div class="terminal-line"><span>$</span> kubectl get pods <b>● 3/3 pods Running · 0 restarts</b></div>
+            </div>
+          </div>
+
+          <!-- TAB 3: INTERACTIVE TERMINAL -->
+          <div class="tab-content" id="tabTerminal">
+            <div class="terminal-tab-content">
+              <div class="terminal-chips">
+                <button class="term-chip" type="button" data-cmd="skills">skills</button>
+                <button class="term-chip" type="button" data-cmd="experience">experience</button>
+                <button class="term-chip" type="button" data-cmd="repos">repos</button>
+                <button class="term-chip" type="button" data-cmd="certs">certs</button>
+                <button class="term-chip" type="button" data-cmd="contact">contact</button>
+                <button class="term-chip" type="button" data-cmd="status">status</button>
+                <button class="term-chip" type="button" data-cmd="clear">clear</button>
+              </div>
+              <div class="terminal-history" id="terminalHistory">
+                <div class="log-line log-muted">Prashant Tiwary Interactive Shell v2.4 (Java 21 environment)</div>
+                <div class="log-line log-muted">Type <span class="log-yellow">help</span> or click command buttons above.</div>
+                <div class="log-line"><span class="log-green">● Systems online:</span> Ready to process backend requests.</div>
+              </div>
+              <div class="terminal-prompt-row">
+                <span class="terminal-prompt-symbol">prashant@portfolio:~$</span>
+                <input class="terminal-input" id="terminalInput" type="text" placeholder="type a command (e.g. skills, repos)..." autocomplete="off" spellcheck="false">
+              </div>
+            </div>
+          </div>
+
+          <div class="window-footer">
+            <span><i class="tiny-pulse"></i> Production-ready systems</span>
+            <span>JAVA 21 / KAFKA / CLOUD</span>
+          </div>
         </div>
-        <div class="float-chip chip-one"><span class="chip-icon">☕</span><span><b>Java</b><small>Backend core</small></span></div>
-        <div class="float-chip chip-two"><span class="chip-icon chip-purple">↯</span><span><b>Event-driven</b><small>Kafka · Avro</small></span></div>
-        <div class="art-caption">SYSTEMS THINKING <span>—</span> HANDS-ON BUILDING</div>
+
+        <div class="float-chip chip-one"><span class="chip-icon">☕</span><span><b>Java 21 & Spring</b><small>Backend Core</small></span></div>
+        <div class="float-chip chip-two"><span class="chip-icon chip-purple">↯</span><span><b>Event-Driven</b><small>Kafka · Avro · K8s</small></span></div>
+        <div class="art-caption">SYSTEMS THINKING <span>—</span> RELIABLE DELIVERY</div>
       </div>
       <a class="scroll-hint" href="#about"><span></span> SCROLL TO EXPLORE</a>
+    </section>
+
+    <!-- DYNAMIC STATS COUNTER BAR -->
+    <section class="wrap">
+      <div class="stats-bar">
+        <div class="stat-card" data-count="6">
+          <div class="stat-number"><span class="counter">0</span><span class="stat-suffix">+</span></div>
+          <div class="stat-label">Years Enterprise Experience</div>
+          <div class="stat-sub">Java · Spring Boot · Microservices</div>
+        </div>
+        <div class="stat-card" data-count="17">
+          <div class="stat-number"><span class="counter">0</span><span class="stat-suffix">+</span></div>
+          <div class="stat-label">Core Technologies & Tools</div>
+          <div class="stat-sub">Kafka · Kubernetes · Reactive APIs</div>
+        </div>
+        <div class="stat-card" data-count="12">
+          <div class="stat-number"><span class="counter">0</span><span class="stat-suffix">+</span></div>
+          <div class="stat-label">Engineering Repositories</div>
+          <div class="stat-sub">Architectures · Experiments · CI/CD</div>
+        </div>
+        <div class="stat-card" data-count="5">
+          <div class="stat-number"><span class="counter">0</span></div>
+          <div class="stat-label">Cloud & Java Certifications</div>
+          <div class="stat-sub">AWS · GCP · Azure · Oracle</div>
+        </div>
+      </div>
     </section>
 
     <div class="ticker"><div class="wrap ticker-inner"><span>WHAT I ENJOY WORKING ON</span><div><b>Backend APIs</b><b>Distributed systems</b><b>Event-driven design</b><b>Cloud-native delivery</b><b>Continuous learning</b></div></div></div>
@@ -75,36 +209,68 @@
 
         <section class="section section-muted" id="skills">
       <div class="wrap">
-        <div class="section-title"><div class="section-label">02 <span>/</span> TOOLKIT</div><h2>The stack behind <span class="gradient">the work.</span></h2><p class="section-description">A broad toolkit spanning backend development, reactive systems, cloud infrastructure, and engineering practices.</p></div>
-        <div class="skill-grid">
-          <article class="skill-card"><div class="skill-icon">{ }</div><h3>Java & Core Java</h3><p>Core Java, OOP, Collections Framework, Streams API, concurrency, exception handling, generics, DSA, SQL, and problem solving.</p><div class="tags"><span>Core Java</span><span>Collections</span><span>Streams</span><span>DSA</span></div></article>
-          <article class="skill-card"><div class="skill-icon">⌨</div><h3>Programming languages</h3><p>Java, JavaScript, TypeScript, Python, C, C++, HTML, and CSS.</p><div class="tags"><span>Programming</span><span>Web basics</span></div></article>
-          <article class="skill-card"><div class="skill-icon">☕</div><h3>Java & Spring ecosystem</h3><p>Spring Boot, Spring Framework, Spring MVC, Spring Security, Spring Data, Hibernate, J2EE, JDBC, Servlets, Spring Batch, AOP.</p><div class="tags"><span>REST APIs</span><span>Validation</span><span>Transactions</span></div></article>
-          <article class="skill-card"><div class="skill-icon">↯</div><h3>Reactive programming</h3><p>Spring WebFlux, Project Reactor, Mono, Flux, non-blocking I/O, asynchronous composition, backpressure concepts.</p><div class="tags"><span>WebFlux</span><span>Reactor</span></div></article>
-          <article class="skill-card"><div class="skill-icon">⌘</div><h3>Architecture & APIs</h3><p>Microservices, distributed systems, event-driven architecture, REST APIs, RESTful services, GraphQL, OpenAPI, Swagger, SOLID, design patterns, system design.</p><div class="tags"><span>API design</span><span>Microservices</span></div></article>
-          <article class="skill-card"><div class="skill-icon">↔</div><h3>Messaging & streaming</h3><p>Apache Kafka, Spring Kafka, Avro, Schema Registry, RabbitMQ, Redis Pub/Sub, producer/consumer patterns, retries, dead-letter queues.</p><div class="tags"><span>Kafka</span><span>Avro</span><span>RabbitMQ</span></div></article>
-          <article class="skill-card"><div class="skill-icon">▤</div><h3>Databases & caching</h3><p>PostgreSQL, MySQL, MariaDB, MongoDB, Redis, DynamoDB, Spring Cache, Spring Data JPA, query optimization.</p><div class="tags"><span>SQL</span><span>NoSQL</span><span>Redis</span></div></article>
-          <article class="skill-card"><div class="skill-icon">☁</div><h3>Cloud platforms</h3><p>AWS, Google Cloud Platform, Microsoft Azure; S3, EC2, CodePipeline, CodeBuild, cloud deployment fundamentals.</p><div class="tags"><span>AWS</span><span>GCP</span><span>Azure</span></div></article>
-          <article class="skill-card"><div class="skill-icon">◈</div><h3>Containers & orchestration</h3><p>Docker, Docker Compose, Kubernetes, Kind, Minikube, Helm, Rancher, deployments, services, probes, rollout strategies.</p><div class="tags"><span>Docker</span><span>Kubernetes</span><span>Helm</span></div></article>
-          <article class="skill-card"><div class="skill-icon">◈</div><h3>Docker & Kubernetes</h3><p>Docker images, Docker Compose, Kubernetes pods, deployments, services, ConfigMaps, Secrets, probes, rollouts, Helm charts, Kind, Minikube, and Rancher.</p><div class="tags"><span>Docker</span><span>Kubernetes</span><span>Helm</span></div></article>
-          <article class="skill-card"><div class="skill-icon">⟳</div><h3>DevOps & CI/CD</h3><p>GitLab CI/CD, GitHub Actions, Jenkins, ArgoCD / GitOps, Maven, Gradle, Ansible, Terraform, Linux, shell scripting.</p><div class="tags"><span>Automation</span><span>GitOps</span></div></article>
-          <article class="skill-card"><div class="skill-icon">◉</div><h3>Observability</h3><p>Splunk, Datadog, ELK Stack, Grafana, Prometheus, Spring Boot Actuator, CloudWatch, logging, metrics, monitoring.</p><div class="tags"><span>Logs</span><span>Metrics</span><span>Monitoring</span></div></article>
-          <article class="skill-card"><div class="skill-icon">✓</div><h3>Testing & quality</h3><p>JUnit, Mockito, MockMvc, integration testing, Testcontainers, Postman, API testing, code review, debugging.</p><div class="tags"><span>Unit tests</span><span>Integration tests</span></div></article>
-          <article class="skill-card"><div class="skill-icon">⌁</div><h3>Tools & collaboration</h3><p>Git, GitHub, GitLab, Bitbucket, IntelliJ IDEA, VS Code, JIRA, Postman, OpenAPI / Swagger.</p><div class="tags"><span>Version control</span><span>Team delivery</span></div></article>
-          <article class="skill-card"><div class="skill-icon security-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><rect x="5" y="10" width="14" height="10" rx="2"></rect><path d="M8 10V7a4 4 0 0 1 8 0v3"></path></svg></div><h3>Security</h3><p>Spring Security, authentication and authorization, JWT concepts, secure API design, access control.</p><div class="tags"><span>Spring Security</span><span>JWT</span></div></article>
-          <article class="skill-card"><div class="skill-icon">⚛</div><h3>Frontend & integration</h3><p>ReactJS, JavaScript, TypeScript, HTML, CSS, and integration between frontend applications and backend APIs.</p><div class="tags"><span>ReactJS</span><span>Web integration</span></div></article>
-          <article class="skill-card"><div class="skill-icon">▧</div><h3>Build & data formats</h3><p>Maven, Gradle, Avro schemas, code generation, JSON, YAML, Docker image builds, Helm packaging.</p><div class="tags"><span>Build tooling</span><span>Serialization</span></div></article>
+        <div class="section-title">
+          <div class="section-label">02 <span>/</span> TOOLKIT</div>
+          <h2>The stack behind <span class="gradient">the work.</span></h2>
+          <p class="section-description">A broad toolkit spanning backend development, reactive systems, cloud infrastructure, and engineering practices.</p>
+        </div>
+
+        <!-- DYNAMIC SKILLS FILTER & INSTANT SEARCH -->
+        <div class="skills-filter-container">
+          <div class="skill-search-box">
+            <span class="search-icon">🔍</span>
+            <input type="text" id="skillSearch" class="skill-search-input" placeholder="Search technologies in real-time (e.g. Kafka, Docker, Reactive, SQL, AWS)..." aria-label="Search skills">
+            <button class="clear-search-btn" id="clearSkillSearch" type="button" aria-label="Clear search" style="display:none">✕</button>
+          </div>
+
+          <div class="skill-tabs" role="tablist">
+            <button class="skill-tab-btn active" data-skill-cat="all" type="button">All <span class="tab-badge">17</span></button>
+            <button class="skill-tab-btn" data-skill-cat="java" type="button">Java & Spring <span class="tab-badge">4</span></button>
+            <button class="skill-tab-btn" data-skill-cat="distributed" type="button">Distributed & Kafka <span class="tab-badge">3</span></button>
+            <button class="skill-tab-btn" data-skill-cat="cloud" type="button">Cloud & DevOps <span class="tab-badge">4</span></button>
+            <button class="skill-tab-btn" data-skill-cat="data" type="button">Data & Security <span class="tab-badge">2</span></button>
+            <button class="skill-tab-btn" data-skill-cat="tools" type="button">Testing & Tools <span class="tab-badge">4</span></button>
+          </div>
+
+          <div class="skills-count-status" id="skillsCountStatus">Showing 17 of 17 technologies · Tip: click any skill tag to quick-filter</div>
+        </div>
+
+        <div class="skill-grid" id="skillGrid">
+          <article class="skill-card" data-category="java"><div class="skill-icon">{ }</div><h3>Java & Core Java</h3><p>Core Java, OOP, Collections Framework, Streams API, concurrency, exception handling, generics, DSA, SQL, and problem solving.</p><div class="tags"><span>Core Java</span><span>Collections</span><span>Streams</span><span>DSA</span></div></article>
+          <article class="skill-card" data-category="java languages"><div class="skill-icon">⌨</div><h3>Programming languages</h3><p>Java, JavaScript, TypeScript, Python, C, C++, HTML, and CSS.</p><div class="tags"><span>Java</span><span>TypeScript</span><span>Python</span><span>Web basics</span></div></article>
+          <article class="skill-card" data-category="java"><div class="skill-icon">☕</div><h3>Java & Spring ecosystem</h3><p>Spring Boot, Spring Framework, Spring MVC, Spring Security, Spring Data, Hibernate, J2EE, JDBC, Servlets, Spring Batch, AOP.</p><div class="tags"><span>Spring Boot</span><span>REST APIs</span><span>Hibernate</span><span>Spring Data</span></div></article>
+          <article class="skill-card" data-category="distributed java"><div class="skill-icon">↯</div><h3>Reactive programming</h3><p>Spring WebFlux, Project Reactor, Mono, Flux, non-blocking I/O, asynchronous composition, backpressure concepts.</p><div class="tags"><span>WebFlux</span><span>Project Reactor</span><span>Mono/Flux</span><span>Non-blocking</span></div></article>
+          <article class="skill-card" data-category="distributed"><div class="skill-icon">⌘</div><h3>Architecture & APIs</h3><p>Microservices, distributed systems, event-driven architecture, REST APIs, RESTful services, GraphQL, OpenAPI, Swagger, SOLID, design patterns, system design.</p><div class="tags"><span>Microservices</span><span>System Design</span><span>REST APIs</span><span>OpenAPI</span></div></article>
+          <article class="skill-card" data-category="distributed"><div class="skill-icon">↔</div><h3>Messaging & streaming</h3><p>Apache Kafka, Spring Kafka, Avro, Schema Registry, RabbitMQ, Redis Pub/Sub, producer/consumer patterns, retries, dead-letter queues.</p><div class="tags"><span>Kafka</span><span>Avro</span><span>RabbitMQ</span><span>Redis Pub/Sub</span></div></article>
+          <article class="skill-card" data-category="data"><div class="skill-icon">▤</div><h3>Databases & caching</h3><p>PostgreSQL, MySQL, MariaDB, MongoDB, Redis, DynamoDB, Spring Cache, Spring Data JPA, query optimization.</p><div class="tags"><span>PostgreSQL</span><span>MongoDB</span><span>Redis</span><span>SQL Optimization</span></div></article>
+          <article class="skill-card" data-category="cloud"><div class="skill-icon">☁</div><h3>Cloud platforms</h3><p>AWS, Google Cloud Platform, Microsoft Azure; S3, EC2, CodePipeline, CodeBuild, cloud deployment fundamentals.</p><div class="tags"><span>AWS</span><span>GCP</span><span>Azure</span><span>S3</span></div></article>
+          <article class="skill-card" data-category="cloud"><div class="skill-icon">◈</div><h3>Containers & orchestration</h3><p>Docker, Docker Compose, Kubernetes, Kind, Minikube, Helm, Rancher, deployments, services, probes, rollout strategies.</p><div class="tags"><span>Docker</span><span>Kubernetes</span><span>Helm</span><span>Docker Compose</span></div></article>
+          <article class="skill-card" data-category="cloud"><div class="skill-icon">◈</div><h3>Kubernetes Deep-Dive</h3><p>Kubernetes pods, deployments, services, ConfigMaps, Secrets, liveness/readiness probes, rolling updates, Helm charts, Kind, Minikube, and Rancher.</p><div class="tags"><span>K8s Architecture</span><span>Helm Charts</span><span>ConfigMaps</span><span>Probes</span></div></article>
+          <article class="skill-card" data-category="cloud tools"><div class="skill-icon">⟳</div><h3>DevOps & CI/CD</h3><p>GitLab CI/CD, GitHub Actions, Jenkins, ArgoCD / GitOps, Maven, Gradle, Ansible, Terraform, Linux, shell scripting.</p><div class="tags"><span>GitHub Actions</span><span>GitLab CI</span><span>ArgoCD</span><span>Maven/Gradle</span></div></article>
+          <article class="skill-card" data-category="tools"><div class="skill-icon">◉</div><h3>Observability</h3><p>Splunk, Datadog, ELK Stack, Grafana, Prometheus, Spring Boot Actuator, CloudWatch, logging, metrics, monitoring.</p><div class="tags"><span>Prometheus</span><span>Grafana</span><span>Splunk</span><span>Datadog</span></div></article>
+          <article class="skill-card" data-category="tools"><div class="skill-icon">✓</div><h3>Testing & quality</h3><p>JUnit, Mockito, MockMvc, integration testing, Testcontainers, Postman, API testing, code review, debugging.</p><div class="tags"><span>JUnit</span><span>Mockito</span><span>Testcontainers</span><span>MockMvc</span></div></article>
+          <article class="skill-card" data-category="tools"><div class="skill-icon">⌁</div><h3>Tools & collaboration</h3><p>Git, GitHub, GitLab, Bitbucket, IntelliJ IDEA, VS Code, JIRA, Postman, OpenAPI / Swagger.</p><div class="tags"><span>Git</span><span>IntelliJ IDEA</span><span>Postman</span><span>JIRA</span></div></article>
+          <article class="skill-card" data-category="data"><div class="skill-icon security-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><rect x="5" y="10" width="14" height="10" rx="2"></rect><path d="M8 10V7a4 4 0 0 1 8 0v3"></path></svg></div><h3>Security</h3><p>Spring Security, authentication and authorization, JWT concepts, secure API design, access control.</p><div class="tags"><span>Spring Security</span><span>JWT</span><span>OAuth2</span><span>API Security</span></div></article>
+          <article class="skill-card" data-category="languages"><div class="skill-icon">⚛</div><h3>Frontend & integration</h3><p>ReactJS, JavaScript, TypeScript, HTML, CSS, and integration between frontend applications and backend APIs.</p><div class="tags"><span>ReactJS</span><span>TypeScript</span><span>JavaScript</span><span>REST Integration</span></div></article>
+          <article class="skill-card" data-category="cloud tools"><div class="skill-icon">▧</div><h3>Build & data formats</h3><p>Maven, Gradle, Avro schemas, code generation, JSON, YAML, Docker image builds, Helm packaging.</p><div class="tags"><span>Maven</span><span>Gradle</span><span>Avro</span><span>Docker Builds</span></div></article>
+
+          <!-- EMPTY STATE FALLBACK -->
+          <div class="skills-empty-state" id="skillsEmptyState" style="display:none">
+            <p>No technologies found matching <span class="empty-query">this filter</span>.</p>
+            <button class="button secondary" id="resetSkillsFilter" type="button" style="margin-top:12px;min-height:36px;padding:0 14px">Reset search filters ↺</button>
+          </div>
         </div>
         <p class="skills-note"><span>NOTE</span> This list combines technologies from my professional background and hands-on learning. The exact tools used vary by role and project.</p>
       </div>
     </section>
+
     <section class="section section-muted" id="journey">
       <div class="wrap">
         <div class="section-title"><div class="section-label">03 <span>/</span> EXPERIENCE & EDUCATION</div><h2>The journey so far.</h2><p class="section-description">Enterprise software development, backend engineering, and continuous learning.</p></div>
         <div class="journey-layout">
-          <div class="journey-callout"><div class="callout-mark">PT<span>.</span></div><h3>Build. Learn.<br><span class="gradient">Improve.</span></h3><p>Focused on dependable backend systems, clear APIs, event-driven integration, and continuous improvement.</p><a class="inline-link" href="https://www.linkedin.com/in/prashant-kumar-tiwary-a7a741161/" target="_blank" rel="noreferrer">Connect on LinkedIn <span>↗</span></a></div>
+          <div class="journey-callout"><img class="callout-logo" src="assets/logo.svg" alt="Prashant Tiwary Logo" width="48" height="48"><h3>Build. Learn.<br><span class="gradient">Improve.</span></h3><p>Focused on dependable backend systems, clear APIs, event-driven integration, and continuous improvement.</p><a class="inline-link" href="https://www.linkedin.com/in/prashant-kumar-tiwary-a7a741161/" target="_blank" rel="noreferrer">Connect on LinkedIn <span>↗</span></a></div>
           <div class="timeline">
-            <article class="timeline-item"><span class="timeline-point"></span><div class="timeline-label">MAR 2025 — PRESENT</div><h3>Publicis Sapient · Senior Associate Platform L1</h3><p>Backend engineering with Java, Spring Boot, Kafka, and reactive APIs. Work includes event-driven services, resilience patterns, and Kubernetes delivery through CI/CD and GitOps workflows.</p></article>
+            <article class="timeline-item"><span class="timeline-point"></span><div class="timeline-label">MAR 2025 — PRESENT <span class="current-role-badge"><span class="pulse"></span> CURRENT ROLE</span></div><h3>Publicis Sapient · Senior Associate Platform L1</h3><p>Backend engineering with Java 21, Spring Boot, Kafka, and reactive APIs. Work includes event-driven services, resilience patterns, and Kubernetes delivery through CI/CD and GitOps workflows.</p></article>
             <article class="timeline-item"><span class="timeline-point"></span><div class="timeline-label">SEP 2024 — FEB 2025</div><h3>EPAM Systems · Software Engineer</h3><p>Developed backend solutions using Java, Spring Boot, REST APIs, and microservices, with a focus on integration, maintainability, and performance.</p></article>
             <article class="timeline-item"><span class="timeline-point"></span><div class="timeline-label">JUN 2022 — SEP 2024</div><h3>Infosys · Senior Associate Consultant</h3><p>Enterprise backend development with Java, Spring Boot, messaging, and cloud-native technologies, including work in banking and finance systems.</p></article>
             <article class="timeline-item"><span class="timeline-point"></span><div class="timeline-label">JUL 2019 — JUN 2022</div><h3>Wipro · Associate Consultant</h3><p>Java/J2EE application development using Hibernate, JDBC, Servlets, MySQL, and backend integration in enterprise applications.</p></article>
@@ -114,8 +280,8 @@
       </div>
     </section>
 
-        <section class="section wrap" id="certifications">
-      <div class="section-title"><div class="section-label">04 <span>/</span> CERTIFICATIONS</div><h2>Cloud & Java credentials.</h2><p class="section-description">Certification names listed in the previous portfolio content. Credential links can be added when available.</p></div>
+    <section class="section wrap" id="certifications">
+      <div class="section-title"><div class="section-label">04 <span>/</span> CERTIFICATIONS</div><h2>Cloud & Java credentials.</h2><p class="section-description">Industry-recognized cloud and language certifications confirming foundational and specialized knowledge.</p></div>
       <div class="cert-grid">
         <div class="cert-card"><span>☁</span><div><h3>AWS Certified Cloud Practitioner</h3><p>Amazon Web Services</p></div></div>
         <div class="cert-card"><span>☁</span><div><h3>Associate Cloud Engineer</h3><p>Google Cloud</p></div></div>
@@ -125,7 +291,24 @@
       </div>
     </section>
 
-    <section class="contact-section" id="contact"><div class="wrap contact-content"><div class="section-label">05 <span>/</span> CONTACT</div><h2>Let's talk about<br><span class="gradient">building useful things.</span></h2><p>Have a question, opportunity, or idea to discuss? Send me a message and I'll get back to you.</p><div class="actions"><button class="button primary contact-open" type="button">Open contact form <span>↗</span></button><a class="button secondary" href="mailto:hello@mylearningdesk.in">hello@mylearningdesk.in <span>↗</span></a></div><div class="social-row"><a href="https://github.com/prashantkrt" target="_blank" rel="noreferrer">GitHub ↗</a><a href="https://gitlab.com/prashantkrt" target="_blank" rel="noreferrer">GitLab ↗</a><a href="https://www.linkedin.com/in/prashant-kumar-tiwary-a7a741161/" target="_blank" rel="noreferrer">LinkedIn ↗</a><a href="https://leetcode.com/prashanttiwary10/" target="_blank" rel="noreferrer">LeetCode ↗</a></div></div></section>
+    <section class="contact-section" id="contact">
+      <div class="wrap contact-content">
+        <div class="section-label">05 <span>/</span> CONTACT</div>
+        <h2>Let's talk about<br><span class="gradient">building useful things.</span></h2>
+        <p>Have a question, opportunity, or idea to discuss? Send me a message and I'll get back to you promptly.</p>
+        <div class="actions">
+          <button class="button primary contact-open" type="button">Open contact form <span>↗</span></button>
+          <a class="button secondary" href="mailto:hello@mylearningdesk.in">hello@mylearningdesk.in <span>↗</span></a>
+          <button class="button btn-copy" type="button" data-copy-email="hello@mylearningdesk.in"><span>📋</span> Copy email</button>
+        </div>
+        <div class="social-row">
+          <a href="https://github.com/prashantkrt" target="_blank" rel="noreferrer">GitHub ↗</a>
+          <a href="https://gitlab.com/prashantkrt" target="_blank" rel="noreferrer">GitLab ↗</a>
+          <a href="https://www.linkedin.com/in/prashant-kumar-tiwary-a7a741161/" target="_blank" rel="noreferrer">LinkedIn ↗</a>
+          <a href="https://leetcode.com/prashanttiwary10/" target="_blank" rel="noreferrer">LeetCode ↗</a>
+        </div>
+      </div>
+    </section>
 
     <div class="contact-modal" id="contactModal" aria-hidden="true">
       <div class="modal-backdrop" data-modal-close></div>
@@ -159,7 +342,32 @@
       </section>
     </div>
   </main>
-  <footer class="footer"><div class="wrap footer-inner"><a class="brand" href="index.html"><span class="brand-icon">PT<span>.</span></span><span>Prashant Tiwary</span></a><p>Designed around the work. Built to keep evolving.</p><span class="footer-domain">MYLEARNINGDESK.IN · © <span id="year"></span></span></div></footer>
+
+  <footer class="footer">
+    <div class="wrap footer-inner">
+      <a class="brand" href="index.html">
+        <img class="brand-icon" src="assets/logo.svg" alt="Prashant Tiwary Logo" width="38" height="38">
+        <div class="brand-info">
+          <span class="brand-name">Prashant Tiwary</span>
+          <span class="brand-title">Backend Engineer</span>
+        </div>
+      </a>
+      <p>Designed around the work. Built with Java, Spring Boot, Kafka, and continuous learning.</p>
+      <span class="footer-domain">MYLEARNINGDESK.IN · © <span id="year"></span></span>
+    </div>
+  </footer>
+
+  <!-- FLOATING BACK TO TOP BUTTON WITH SVG RADIAL PROGRESS -->
+  <button class="back-to-top" id="backToTop" type="button" aria-label="Back to top">
+    <svg class="progress-ring" viewBox="0 0 50 50">
+      <circle class="progress-circle" cx="25" cy="25" r="24"></circle>
+    </svg>
+    <span class="arrow-up">↑</span>
+  </button>
+
+  <!-- DYNAMIC FLOATING TOAST NOTIFICATION CONTAINER -->
+  <div id="toastContainer" class="toast-container" aria-live="polite"></div>
+
   <script src="assets/js/main.js"></script>
 </body>
 </html>
