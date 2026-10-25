@@ -8,45 +8,23 @@
   <link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet">
   <link rel="icon" type="image/svg+xml" href="assets/favicon.svg">
-  <link rel="stylesheet" href="assets/css/styles.css">
+  <link rel="stylesheet" href="assets/css/styles.css?v=3.1">
 </head>
 <body>
   <div class="scroll-progress-bar" id="scrollProgressBar"></div>
   <canvas id="bgCanvas" class="bg-canvas"></canvas>
   <div class="ambient ambient-a"></div><div class="ambient ambient-b"></div>
   <header class="header">
-    <div class="header-left">
-      <a class="brand" href="index.html" aria-label="Prashant Tiwary home">
-        <img class="brand-icon" src="assets/github-avatar.png" onerror="this.src='assets/logo.svg'" alt="Prashant Tiwary Logo" width="38" height="38">
-        <div class="brand-info">
-          <span class="brand-name">Prashant Tiwary</span>
-          <span class="brand-title">Backend Engineer</span>
-        </div>
-      </a>
-      <div class="header-divider"></div>
-      <div class="header-socials">
-        <a class="header-social-pill github" href="https://github.com/prashantkrt" target="_blank" rel="noreferrer" title="GitHub profile">
-          <span class="social-icon">GH</span>
-          <span class="social-text">GitHub</span>
-        </a>
-        <a class="header-social-pill gitlab" href="https://gitlab.com/prashantkrt" target="_blank" rel="noreferrer" title="GitLab profile">
-          <span class="social-icon">GL</span>
-          <span class="social-text">GitLab</span>
-        </a>
-        <a class="header-social-pill linkedin" href="https://www.linkedin.com/in/prashant-kumar-tiwary-a7a741161/" target="_blank" rel="noreferrer" title="LinkedIn profile">
-          <span class="social-icon">in</span>
-          <span class="social-text">LinkedIn</span>
-        </a>
+    <a class="brand" href="index.html" aria-label="Prashant Tiwary home">
+      <img class="brand-icon" src="assets/github-avatar.png" onerror="this.src='assets/logo.svg'" alt="Prashant Tiwary Logo" width="38" height="38">
+      <div class="brand-info">
+        <span class="brand-name">Prashant Tiwary</span>
+        <span class="brand-title">Backend Engineer</span>
       </div>
-    </div>
+    </a>
     <button class="menu-toggle" aria-label="Toggle navigation" aria-expanded="false"><span></span><span></span></button>
     <nav class="nav" aria-label="Main navigation">
       <a href="index.html">Home</a><a href="index.html#about">About</a><a href="index.html#skills">Skills</a><a class="active" href="projects.html">Repositories <span class="nav-count">12</span></a><a href="index.html#journey">Experience</a><a class="nav-cta" href="index.html#contact"><span class="cta-pulse"></span> Contact</a>
-      <div class="mobile-social-row">
-        <a href="https://github.com/prashantkrt" target="_blank" rel="noreferrer">GitHub ↗</a>
-        <a href="https://gitlab.com/prashantkrt" target="_blank" rel="noreferrer">GitLab ↗</a>
-        <a href="https://www.linkedin.com/in/prashant-kumar-tiwary-a7a741161/" target="_blank" rel="noreferrer">LinkedIn ↗</a>
-      </div>
     </nav>
   </header>
   <main>
@@ -128,6 +106,6 @@
   <!-- DYNAMIC FLOATING TOAST NOTIFICATION CONTAINER -->
   <div id="toastContainer" class="toast-container" aria-live="polite"></div>
 
-  <script src="assets/js/main.js"></script><script src="assets/js/projects.js"></script>
+  <script src="assets/js/main.js?v=3.1"></script><script src="assets/js/projects.js?v=3.1"></script>
 </body>
 </html>
