@@ -1097,6 +1097,46 @@
     schedulePeek();
   }
 
+  function initDeerCornerPeek() {
+    if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+
+    const deer = document.createElement('div');
+    deer.className = 'deer-corner-peek';
+    deer.setAttribute('aria-hidden', 'true');
+    deer.innerHTML = `
+      <svg viewBox="0 0 72 68" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <path d="M24 19 18 5l10 8M18 5l-6 1m6-1 1-5M48 19l6-14-10 8m10-8 6 1m-6-1-1-5"
+          stroke="#8B5E3C" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
+        <path d="M18 28 9 18l13 3m32 7 9-10-13 3" fill="#C8956A" stroke="#8B5E3C" stroke-width="2" stroke-linejoin="round"/>
+        <ellipse cx="36" cy="37" rx="25" ry="24" fill="#C8956A"/>
+        <ellipse cx="28" cy="36" rx="3" ry="4" fill="#1A1A2E"/>
+        <ellipse cx="44" cy="36" rx="3" ry="4" fill="#1A1A2E"/>
+        <circle cx="27" cy="35" r="1" fill="#FFF"/>
+        <circle cx="43" cy="35" r="1" fill="#FFF"/>
+        <ellipse cx="36" cy="47" rx="11" ry="7" fill="#B07850"/>
+        <ellipse cx="36" cy="44" rx="4" ry="3" fill="#1A1A2E"/>
+        <path d="M36 47v3m-4 0q4 4 8 0" stroke="#1A1A2E" stroke-width="1.5" stroke-linecap="round"/>
+      </svg>`;
+
+    const corners = ['top-left', 'top-right', 'bottom-right', 'bottom-left'];
+    let cornerIndex = 0;
+    deer.classList.add(`deer-corner-peek-${corners[cornerIndex]}`);
+    document.body.appendChild(deer);
+
+    function showNextCorner() {
+      if (document.visibilityState === 'visible') {
+        deer.classList.remove(`deer-corner-peek-${corners[cornerIndex]}`, 'visible');
+        cornerIndex = (cornerIndex + 1) % corners.length;
+        deer.classList.add(`deer-corner-peek-${corners[cornerIndex]}`);
+        requestAnimationFrame(() => deer.classList.add('visible'));
+        setTimeout(() => deer.classList.remove('visible'), 2200);
+      }
+      setTimeout(showNextCorner, 6500);
+    }
+
+    setTimeout(showNextCorner, 3000);
+  }
+
   // --- INITIALIZE ALL DYNAMIC SYSTEMS ---
   document.addEventListener('DOMContentLoaded', () => {
     initNetworkCanvas();
@@ -1114,6 +1154,7 @@
     initMenuAndModal();
     initByteTheDog();
     initCornerBear();
+    initDeerCornerPeek();
     initPatrolBear();
     initSparkleParticles();
     initRevealAnimations();

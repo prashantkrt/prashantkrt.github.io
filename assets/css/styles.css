@@ -1519,8 +1519,8 @@ body.modal-open{overflow:hidden}
 }
 
 .corner-bear-svg {
-  width: 90px;
-  height: 72px;
+  width: 58px;
+  height: 46px;
   display: block;
 }
 
@@ -1596,8 +1596,8 @@ body.modal-open{overflow:hidden}
     bottom: -2px;
   }
   .corner-bear-svg {
-    width: 76px;
-    height: 60px;
+    width: 50px;
+    height: 40px;
   }
   .corner-bear-bubble {
     font-size: 8.5px;
@@ -1606,6 +1606,5 @@ body.modal-open{overflow:hidden}
     white-space: normal;
   }
 }
-
 
 
