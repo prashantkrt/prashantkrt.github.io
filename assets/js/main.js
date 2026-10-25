@@ -1104,28 +1104,45 @@
     deer.className = 'deer-corner-peek';
     deer.setAttribute('aria-hidden', 'true');
     deer.innerHTML = `
-      <svg viewBox="0 0 72 68" fill="none" xmlns="http://www.w3.org/2000/svg">
-        <path d="M24 19 18 5l10 8M18 5l-6 1m6-1 1-5M48 19l6-14-10 8m10-8 6 1m-6-1-1-5"
-          stroke="#8B5E3C" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
-        <path d="M18 28 9 18l13 3m32 7 9-10-13 3" fill="#C8956A" stroke="#8B5E3C" stroke-width="2" stroke-linejoin="round"/>
-        <ellipse cx="36" cy="37" rx="25" ry="24" fill="#C8956A"/>
-        <g class="deer-eyes">
-          <ellipse cx="28" cy="36" rx="3" ry="4" fill="#1A1A2E"/>
-          <ellipse cx="44" cy="36" rx="3" ry="4" fill="#1A1A2E"/>
-          <circle cx="27" cy="35" r="1" fill="#FFF"/>
-          <circle cx="43" cy="35" r="1" fill="#FFF"/>
-        </g>
-        <ellipse cx="36" cy="47" rx="11" ry="7" fill="#B07850"/>
-        <ellipse cx="36" cy="44" rx="4" ry="3" fill="#1A1A2E"/>
-        <path d="M36 47v3m-4 0q4 4 8 0" stroke="#1A1A2E" stroke-width="1.5" stroke-linecap="round"/>
-      </svg>`;
+      <div class="dp-body">
+        <svg viewBox="0 0 100 140" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M33 84C28 104 22 124 17 140H83C78 124 72 104 67 84Z" fill="#BB7A3E"/>
+          <path d="M43 100C42 114 40 128 38 140H62C60 128 58 114 57 100Z" fill="#F2D6AA"/>
+          <g stroke="#7A5233" stroke-width="2.6" stroke-linecap="round" fill="none">
+            <path d="M40 48C35 35 31 22 26 8M34 32L21 29M30 21L17 14M26 8L20 3M26 8L31 3"/>
+            <path d="M60 48C65 35 69 22 74 8M66 32L79 29M70 21L83 14M74 8L80 3M74 8L69 3"/>
+          </g>
+          <g class="dp-ear-l">
+            <path d="M35 58C24 50 12 47 4 50C8 60 20 68 36 70Z" fill="#BB7A3E"/>
+            <path d="M32 59C24 54 16 52 10 54C14 60 22 64 32 66Z" fill="#E7A982"/>
+          </g>
+          <g class="dp-ear-r">
+            <path d="M65 58C76 50 88 47 96 50C92 60 80 68 64 70Z" fill="#BB7A3E"/>
+            <path d="M68 59C76 54 84 52 90 54C86 60 78 64 68 66Z" fill="#E7A982"/>
+          </g>
+          <path d="M36 50C33 58 32 68 35 76C38 86 42 96 43 103C44 108 56 108 57 103C58 96 62 86 65 76C68 68 67 58 64 50C60 44 40 44 36 50Z" fill="#BB7A3E"/>
+          <path d="M50 46C47 56 47 66 50 76C53 66 53 56 50 46Z" fill="#A9662E" opacity="0.5"/>
+          <path d="M42 90C42 100 43 106 50 107C57 106 58 100 58 90C55 86 45 86 42 90Z" fill="#E0AC74"/>
+          <ellipse cx="50" cy="104" rx="5.5" ry="3.6" fill="#2A1A10"/>
+          <ellipse cx="48.5" cy="102.8" rx="1.6" ry="0.9" fill="#fff" opacity="0.35"/>
+          <ellipse cx="38" cy="80" rx="4" ry="2.5" fill="#E58A6A" opacity="0.35"/>
+          <ellipse cx="62" cy="80" rx="4" ry="2.5" fill="#E58A6A" opacity="0.35"/>
+          <path d="M36 61Q40 58 44 60M56 60Q60 58 64 61" stroke="#8A5424" stroke-width="1.4" stroke-linecap="round" fill="none"/>
+          <g class="dp-eyes">
+            <ellipse cx="40.5" cy="68" rx="3.8" ry="4.6" fill="#1B1410"/>
+            <ellipse cx="59.5" cy="68" rx="3.8" ry="4.6" fill="#1B1410"/>
+            <circle cx="39.3" cy="66.5" r="1.3" fill="#fff"/>
+            <circle cx="58.3" cy="66.5" r="1.3" fill="#fff"/>
+          </g>
+        </svg>
+      </div>`;
 
-    const corners = ['top-left', 'top-right', 'bottom-right', 'bottom-left'];
+    const corners = ['bottom-left', 'top-right', 'bottom-right', 'top-left'];
     let cornerIndex = 0;
     document.body.appendChild(deer);
 
     deer.addEventListener('animationend', (event) => {
-      if (event.target !== deer || event.animationName !== 'deer-corner-peek') return;
+      if (event.animationName !== 'deer-corner-peek') return;
       deer.classList.remove('is-peeking');
       cornerIndex = (cornerIndex + 1) % corners.length;
       setTimeout(peek, 3500);
@@ -1201,8 +1218,8 @@
       'null pointer! Deer escaped! 😅',
     ];
 
-    const GAP_START = 150;  // centre-to-centre distance at the start of a run
-    const GAP_MIN   = 70;   // deer never closer than this, so the sprites don't overlap
+    const GAP_START = 180;  // centre-to-centre distance at the start of a run
+    const GAP_MIN   = 100;  // deer never closer than this, so the sprites don't overlap
     const REST_MIN  = 6000;
     const REST_MAX  = 16000;
 
@@ -1211,31 +1228,122 @@
     let dir         = 1;    // 1 = left→right, -1 = right→left
     let deerV       = 0;    // deer speed, px/s
     let kodiV       = 0;    // Kodi speed, px/s
-    let spriteW     = 104;
-    let deerCycle   = 0;
-    let kodiCycle   = 0;
+    let spriteW     = 124;
     let running     = false;
     let rafId       = null;
     let lastT       = null;
-    let dustAcc     = 0;
     let quipTimer   = 0;
     let speechTimer = null;
     let restTimer   = null;
+
+    // ── Run cycle ──────────────────────────────────────────────────────────
+    // Eight key poses per stride (heel strike → midstance → push-off → heel kick
+    // → knee drive → reach), blended with a periodic Catmull-Rom spline.
+    // Angles are in degrees for a character facing right; positive swings a limb
+    // backwards, so negative thigh = leg forward and positive knee = heel kicked up.
+    const THIGH = [-38, -22, -2, 22, 34, 20, -8, -32];
+    const KNEE  = [6, 20, 14, 12, 45, 92, 100, 55];
+    const ARM_STRIDE = 34;  // how far the arms swing at full speed
+
+    function spline(table, p) {
+      const n = table.length;
+      const x = (((p % 1) + 1) % 1) * n;
+      const i = Math.floor(x);
+      const f = x - i;
+      const p0 = table[(i + n - 1) % n];
+      const p1 = table[i % n];
+      const p2 = table[(i + 1) % n];
+      const p3 = table[(i + 2) % n];
+      return 0.5 * (2 * p1 + (p2 - p0) * f +
+        (2 * p0 - 5 * p1 + 4 * p2 - p3) * f * f +
+        (3 * p1 - p0 - 3 * p2 + p3) * f * f * f);
+    }
+
+    function clamp(v, lo, hi) { return Math.min(hi, Math.max(lo, v)); }
+
+    // Collects every [data-j] joint of a sprite so each can be rotated about its pivot
+    function makeRig(el) {
+      const joints = {};
+      el.querySelectorAll('[data-j]').forEach((g) => {
+        joints[g.dataset.j] = {
+          g,
+          x: parseFloat(g.dataset.px) || 0,
+          y: parseFloat(g.dataset.py) || 0,
+          v: null,
+        };
+      });
+      return { joints, phase: Math.random(), lastStep: 0 };
+    }
+
+    function rotateJoint(rig, name, deg) {
+      const j = rig.joints[name];
+      if (!j) return;
+      const a = Math.round(deg * 10) / 10;
+      if (a === j.v) return;
+      j.v = a;
+      j.g.setAttribute('transform', 'rotate(' + a + ' ' + j.x + ' ' + j.y + ')');
+    }
+
+    function moveBody(rig, dy, pitch) {
+      const j = rig.joints.body;
+      if (!j) return;
+      j.g.setAttribute('transform',
+        'translate(0 ' + dy.toFixed(2) + ') rotate(' + pitch.toFixed(2) + ' ' + j.x + ' ' + j.y + ')');
+    }
+
+    // Advances a sprite's stride from its speed and poses every joint.
+    // Returns true when a foot has just landed (used for dust puffs).
+    function runCycle(rig, speed, dt, opts) {
+      const freq = clamp(speed / opts.stride, 1.5, 3.8);   // strides per second
+      rig.phase = (rig.phase + freq * dt) % 1;
+      const p = rig.phase;
+      const power = clamp(0.62 + speed / 330, 0.8, 1.2);   // harder running = bigger swings
+      const arms = ARM_STRIDE * power;
+
+      rotateJoint(rig, 'thighN', spline(THIGH, p) * power);
+      rotateJoint(rig, 'shinN',  spline(KNEE,  p) * power);
+      rotateJoint(rig, 'thighF', spline(THIGH, p + 0.5) * power);
+      rotateJoint(rig, 'shinF',  spline(KNEE,  p + 0.5) * power);
+
+      // Arms oppose the leg on the same side
+      const aN = Math.cos((p + 0.5) * 2 * Math.PI);
+      const aF = Math.cos(p * 2 * Math.PI);
+      if (opts.armsFree) {
+        rotateJoint(rig, 'armN',  -5 - arms * aN);
+        rotateJoint(rig, 'foreN', -(40 + 30 * aN));
+      } else {
+        // Kodi keeps the marshmallow stick out front and only bobs it
+        rotateJoint(rig, 'armN', -2 + 3 * Math.sin(p * 4 * Math.PI));
+      }
+      rotateJoint(rig, 'armF',  -5 - arms * aF);
+      rotateJoint(rig, 'foreF', -(40 + 30 * aF));
+
+      // Two bounces per stride, lowest at midstance; lean grows with speed
+      const bounce = (1 - Math.cos(4 * Math.PI * (p - 0.25))) / 2;
+      const amp = clamp(1.8 + speed / 110, 2.2, 4.2);
+      const pitch = clamp(speed / 55, 1.5, 5) + 1.4 * Math.sin(4 * Math.PI * p);
+      moveBody(rig, -amp * bounce, pitch);
+
+      const sway = Math.sin(4 * Math.PI * p + 0.6);
+      rotateJoint(rig, 'head', -pitch * 0.6 + 2.4 * sway);
+      rotateJoint(rig, 'earN', 4 + 9 * Math.sin(4 * Math.PI * p - 1));
+      rotateJoint(rig, 'earB', 2 + 7 * Math.sin(4 * Math.PI * p - 1.4));
+      rotateJoint(rig, 'tail', 12 * Math.sin(4 * Math.PI * p + 1));
+
+      const step = Math.floor(p * 2);
+      const landed = step !== rig.lastStep;
+      rig.lastStep = step;
+      return landed;
+    }
+
+    const deerRig = deer ? makeRig(deer) : null;
+    const kodiRig = kodi ? makeRig(kodi) : null;
 
     function vw() { return window.innerWidth; }
 
     // Sprites are positioned by translate so the element's centre is the given x
     function place(el, cx) {
       el.style.transform = 'translate3d(' + (cx - spriteW / 2) + 'px,0,0)';
-    }
-
-    // Stride length follows speed: faster running means a shorter stride cycle.
-    // Only updated when the change is noticeable, to avoid constant animation restarts.
-    function setCycle(el, current, speed) {
-      const next = Math.min(0.8, Math.max(0.32, (0.55 * 150) / Math.max(speed, 60)));
-      if (current && Math.abs(next - current) < 0.04) return current;
-      el.style.setProperty('--cycle', next.toFixed(2) + 's');
-      return next;
     }
 
     function say(msg) {
@@ -1258,14 +1366,11 @@
     // Both sprites start and end fully off-screen, so the scene has no visible cut-in.
     function startRun() {
       if (!kodi || !deer) return;
-      spriteW  = kodi.offsetWidth || 104;
+      spriteW  = kodi.offsetWidth || 124;
       kodiX    = dir === 1 ? -spriteW - GAP_START : vw() + spriteW + GAP_START;
       gap      = GAP_START;
       deerV    = 0;
       kodiV    = 0;
-      deerCycle = 0;
-      kodiCycle = 0;
-      dustAcc  = 0;
       quipTimer = 2.5 + Math.random() * 1.5;
       lastT    = null;
       running  = true;
@@ -1280,10 +1385,10 @@
       const dt = Math.min(0.05, (t - lastT) / 1000);
       lastT = t;
 
-      const deerTarget = gap < 90 ? 230 : gap > 220 ? 120 : 150;
+      const deerTarget = gap < 115 ? 235 : gap > 240 ? 125 : 155;
       deerV += (deerTarget - deerV) * Math.min(1, 3 * dt);
 
-      const kodiTarget = Math.min(280, Math.max(60, deerV + (gap - 120) * 1.2));
+      const kodiTarget = Math.min(285, Math.max(60, deerV + (gap - 135) * 1.2));
       kodiV += (kodiTarget - kodiV) * Math.min(1, 4 * dt);
 
       kodiX += dir * kodiV * dt;
@@ -1292,12 +1397,8 @@
 
       place(kodi, kodiX);
       place(deer, deerX);
-      deerCycle = setCycle(deer, deerCycle, deerV);
-      kodiCycle = setCycle(kodi, kodiCycle, kodiV);
-
-      dustAcc += dt;
-      if (dustAcc > 0.12) {
-        dustAcc = 0;
+      runCycle(deerRig, deerV, dt, { stride: 78, armsFree: true });
+      if (runCycle(kodiRig, kodiV, dt, { stride: 84, armsFree: false })) {
         spawnDust(kodiX);
       }
 
