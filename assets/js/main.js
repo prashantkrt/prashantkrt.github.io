@@ -1114,5 +1114,258 @@
     initMenuAndModal();
     initByteTheDog();
     initCornerBear();
+    initPatrolBear();
+    initSparkleParticles();
+    initRevealAnimations();
   });
+})();
+
+// ============================================================
+// PATROL BEAR ENGINE — runs across bottom, peeks from corners
+// ============================================================
+(function () {
+  'use strict';
+
+  window.initPatrolBear = function () {
+    const bear = document.getElementById('patrolBear');
+    if (!bear) return;
+
+    // If user prefers reduced motion, bail out
+    if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+      bear.style.display = 'none';
+      return;
+    }
+
+    const svg    = bear.querySelector('.patrol-bear-svg');
+    const peekEl = bear.querySelector('.pb-peek-eyes');
+    const speech = document.getElementById('pbSpeech');
+
+    const sayings = [
+      'Shipping clean code! 🍯',
+      'Java 21 FTW! ☕',
+      'Kafka lag = 0ms! ⚡',
+      'Found a bug! 🐛→🗑️',
+      '100% test coverage! ✅',
+      'Refactoring in progress… 🔧',
+      'Spring Boot ready! 🚀',
+      'Microservices deployed! 🎉',
+      'Event loop is happy! 🔄',
+      'Honey break! 🍯',
+    ];
+
+    const BEAR_W    = 70;   // px, must match CSS width
+    const RUN_SPEED = 1.8;  // px per frame at 60fps
+    const PEEK_TIME = 3800; // ms spent peeking
+    const REST_TIME = [5000, 14000]; // ms between patrols
+
+    let posX         = -BEAR_W;
+    let dir          = 1;          // 1 = left→right, -1 = right→left
+    let state        = 'running';  // 'running' | 'peeking' | 'resting'
+    let rafId        = null;
+    let speechTimer  = null;
+    let restTimer    = null;
+
+    function vw() { return window.innerWidth; }
+
+    // ── Clamp position ───────────────────────────────────────────────────
+    function clamp(v, lo, hi) { return Math.max(lo, Math.min(hi, v)); }
+
+    // ── Show speech bubble ───────────────────────────────────────────────
+    function saySomething() {
+      if (!speech) return;
+      speech.textContent = sayings[Math.floor(Math.random() * sayings.length)];
+      speech.classList.add('visible');
+      clearTimeout(speechTimer);
+      speechTimer = setTimeout(() => speech.classList.remove('visible'), 2500);
+    }
+
+    // ── Enter peek state ─────────────────────────────────────────────────
+    function enterPeek(fromRight) {
+      state = 'peeking';
+      cancelAnimationFrame(rafId);
+
+      // Position bear at correct corner, mostly hidden (only top 35px visible)
+      if (fromRight) {
+        bear.style.left  = '';
+        bear.style.right = '20px';
+      } else {
+        bear.style.right = '';
+        bear.style.left  = '20px';
+      }
+
+      // Show only the peek (head) portion
+      bear.classList.add('peeking');
+      if (svg) svg.style.animation = 'none';
+
+      saySomething();
+
+      // After PEEK_TIME ms, dive away and start rest
+      restTimer = setTimeout(() => {
+        exitPeek(fromRight);
+      }, PEEK_TIME);
+    }
+
+    // ── Exit peek → rest ─────────────────────────────────────────────────
+    function exitPeek(fromRight) {
+      bear.classList.remove('peeking');
+      bear.classList.add('hiding');
+      speech.classList.remove('visible');
+
+      setTimeout(() => {
+        bear.classList.remove('hiding');
+
+        // Reset position to the opposite side, ready to run back
+        dir  = fromRight ? -1 : 1;
+        posX = fromRight ? vw() + 10 : -BEAR_W;
+
+        // Mirror bear SVG for direction
+        if (svg) {
+          svg.style.transform = dir === -1 ? 'scaleX(-1)' : '';
+          svg.style.animation = '';
+        }
+
+        bear.style.right = '';
+        bear.style.left  = posX + 'px';
+
+        // Rest before running again
+        const waitMs = REST_TIME[0] + Math.random() * (REST_TIME[1] - REST_TIME[0]);
+        state = 'resting';
+        restTimer = setTimeout(startRun, waitMs);
+      }, 500);
+    }
+
+    // ── Start the run loop ───────────────────────────────────────────────
+    function startRun() {
+      state = 'running';
+      bear.style.right = '';
+      bear.style.left  = posX + 'px';
+      if (svg) {
+        svg.style.transform = dir === -1 ? 'scaleX(-1) translateY(0)' : '';
+        svg.style.animation = '';
+      }
+
+      // Occasionally say something while running
+      const runQuip = setTimeout(saySomething, 1200 + Math.random() * 2000);
+
+      function frame() {
+        if (state !== 'running') return;
+
+        posX += dir * RUN_SPEED;
+        bear.style.left = posX + 'px';
+
+        // Hit right edge → peek from right
+        if (dir === 1 && posX >= vw() - 30) {
+          clearTimeout(runQuip);
+          enterPeek(true);
+          return;
+        }
+        // Hit left edge → peek from left
+        if (dir === -1 && posX <= -BEAR_W + 30) {
+          clearTimeout(runQuip);
+          enterPeek(false);
+          return;
+        }
+
+        rafId = requestAnimationFrame(frame);
+      }
+
+      rafId = requestAnimationFrame(frame);
+    }
+
+    // ── Make patrol bear clickable / tappable ────────────────────────────
+    bear.style.pointerEvents = 'auto';
+    bear.style.cursor        = 'pointer';
+
+    bear.addEventListener('click', () => {
+      saySomething();
+      // Tiny jump on click
+      bear.style.transition = 'transform 0.3s cubic-bezier(0.34,1.56,0.64,1)';
+      bear.style.transform  = 'translateY(-18px)';
+      setTimeout(() => {
+        bear.style.transform  = '';
+        bear.style.transition = '';
+      }, 320);
+    });
+
+    // ── Initial delay before first patrol ───────────────────────────────
+    const initialDelay = 3000 + Math.random() * 4000;
+    restTimer = setTimeout(() => {
+      posX = -BEAR_W;
+      dir  = 1;
+      if (svg) svg.style.transform = '';
+      bear.style.left = posX + 'px';
+      startRun();
+    }, initialDelay);
+  };
+
+  // ============================================================
+  // SPARKLE PARTICLES — float up from random spots
+  // ============================================================
+  window.initSparkleParticles = function () {
+    if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+
+    const colors = ['#a1f4c2', '#8eb5ff', '#c0a5ff', '#ffd57b', '#ff9cc5'];
+
+    function spawnSparkle() {
+      const el = document.createElement('div');
+      el.className = 'sparkle-particle';
+
+      const size  = 3 + Math.random() * 5;
+      const color = colors[Math.floor(Math.random() * colors.length)];
+      const x     = 5 + Math.random() * 90; // vw %
+      const dur   = 2.5 + Math.random() * 3;
+
+      el.style.cssText = `
+        width: ${size}px;
+        height: ${size}px;
+        background: ${color};
+        left: ${x}vw;
+        bottom: ${Math.random() * 30}vh;
+        opacity: 0;
+        animation-duration: ${dur}s;
+        animation-delay: 0s;
+        box-shadow: 0 0 ${size * 2}px ${color};
+      `;
+      document.body.appendChild(el);
+      setTimeout(() => el.remove(), (dur + 0.2) * 1000);
+    }
+
+    // Spawn a sparkle every 1.8s
+    setInterval(spawnSparkle, 1800);
+    // Also spawn a few immediately
+    for (let i = 0; i < 4; i++) {
+      setTimeout(spawnSparkle, i * 400);
+    }
+  };
+
+  // ============================================================
+  // SCROLL REVEAL ANIMATIONS — .reveal-up elements fade in
+  // ============================================================
+  window.initRevealAnimations = function () {
+    const targets = document.querySelectorAll(
+      '.section-title, .stat-card, .skill-card, .project-card, .timeline-item, .cert-card, .directory-card, .principles article'
+    );
+
+    if (!targets.length) return;
+
+    // Add reveal-up to eligible elements
+    targets.forEach((el, i) => {
+      if (!el.classList.contains('reveal-up')) {
+        el.classList.add('reveal-up');
+        el.style.transitionDelay = `${(i % 4) * 0.08}s`;
+      }
+    });
+
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          entry.target.classList.add('visible');
+          observer.unobserve(entry.target);
+        }
+      });
+    }, { threshold: 0.12 });
+
+    targets.forEach(el => observer.observe(el));
+  };
+
 })();
