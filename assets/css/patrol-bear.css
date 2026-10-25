@@ -1,64 +1,194 @@
 /* ==========================================================================
-   PATROL BEAR — Running / Peeking Corner Bear (3rd Bear, different design)
-   Runs across bottom, ducks into corners, peeks with eyes
+   KODI CHASE SCENE — Campfire Moon Bear (Kodi) chases Deer across screen
    ========================================================================== */
 
-/* ── Wrapper positioned at bottom of viewport, fixed ───────────────────── */
-.patrol-bear-wrap {
+/* ── Outer scene container — positioned at bottom, fixed ────────────────── */
+.patrol-scene {
   position: fixed;
   bottom: 0;
-  left: -90px; /* starts off-screen */
+  left: -180px;           /* starts fully off-screen left */
   z-index: 980;
-  width: 70px;
-  height: 68px;
+  display: flex;
+  align-items: flex-end;
+  gap: 0px;               /* deer is leading, Kodi is behind — gap controlled by JS */
   pointer-events: none;
   user-select: none;
-  will-change: transform, left, bottom;
+  will-change: left;
 }
 
-/* ── Full bear SVG (visible while running) ──────────────────────────────── */
-.patrol-bear-svg {
-  width: 70px;
-  height: 64px;
-  display: block;
-  filter: drop-shadow(0 6px 18px rgba(0,0,0,0.55));
-}
-
-/* ── Peek-only: just the top of the head peeking over edge ─────────────── */
-.pb-peek-eyes {
-  position: absolute;
-  bottom: 100%;
-  left: 50%;
-  transform: translateX(-50%);
-  width: 70px;
-  height: 35px;
-  overflow: hidden;
-  opacity: 0;
+/* ── DEER ────────────────────────────────────────────────────────────────── */
+.patrol-deer {
+  position: relative;
+  width: 54px;
+  flex-shrink: 0;
   pointer-events: none;
 }
 
-.pb-peek-eyes svg {
-  width: 70px;
-  height: 35px;
+.deer-svg {
+  width: 54px;
+  height: 68px;
   display: block;
+  filter: drop-shadow(0 4px 12px rgba(0,0,0,0.45));
 }
 
-/* ── Speech bubble above the bear ──────────────────────────────────────── */
+/* Deer running legs — 4-beat gallop */
+.deer-leg-fl { transform-origin: 20.5px 52px; animation: deer-fl 0.32s ease-in-out infinite alternate; }
+.deer-leg-fr { transform-origin: 26.5px 54px; animation: deer-fr 0.32s ease-in-out infinite alternate; }
+.deer-leg-bl { transform-origin: 32.5px 52px; animation: deer-bl 0.32s ease-in-out infinite alternate; }
+.deer-leg-br { transform-origin: 38.5px 54px; animation: deer-br 0.32s ease-in-out infinite alternate; }
+
+@keyframes deer-fl {
+  0%   { transform: rotate(-28deg) translateY(-3px); }
+  100% { transform: rotate(18deg) translateY(0); }
+}
+@keyframes deer-fr {
+  0%   { transform: rotate(18deg) translateY(0); }
+  100% { transform: rotate(-28deg) translateY(-3px); }
+}
+@keyframes deer-bl {
+  0%   { transform: rotate(20deg) translateY(0); }
+  100% { transform: rotate(-22deg) translateY(-4px); }
+}
+@keyframes deer-br {
+  0%   { transform: rotate(-22deg) translateY(-4px); }
+  100% { transform: rotate(20deg) translateY(0); }
+}
+
+/* Deer body gallop bounce */
+.deer-svg {
+  animation: deer-gallop 0.32s ease-in-out infinite alternate;
+}
+
+@keyframes deer-gallop {
+  0%   { transform: translateY(0) rotate(0deg); }
+  50%  { transform: translateY(-6px) rotate(-2deg); }
+  100% { transform: translateY(0) rotate(1deg); }
+}
+
+/* ── KODI (Campfire Moon Bear) ───────────────────────────────────────────── */
+.patrol-kodi {
+  position: relative;
+  width: 88px;
+  flex-shrink: 0;
+  pointer-events: auto;
+  cursor: pointer;
+}
+
+.kodi-svg {
+  width: 88px;
+  height: 80px;
+  display: block;
+  filter: drop-shadow(0 6px 20px rgba(0,0,0,0.55));
+}
+
+/* Kodi running legs */
+.kodi-leg-l {
+  transform-origin: 27px 72px;
+  animation: kodi-leg-left 0.36s ease-in-out infinite alternate;
+}
+.kodi-leg-r {
+  transform-origin: 49px 72px;
+  animation: kodi-leg-right 0.36s ease-in-out infinite alternate;
+}
+
+@keyframes kodi-leg-left {
+  0%   { transform: rotate(-20deg) translateY(-2px); }
+  100% { transform: rotate(22deg) translateY(2px); }
+}
+@keyframes kodi-leg-right {
+  0%   { transform: rotate(22deg) translateY(2px); }
+  100% { transform: rotate(-20deg) translateY(-2px); }
+}
+
+/* Kodi chasing arm swing */
+.kodi-arm-l {
+  transform-origin: 18px 52px;
+  animation: kodi-arm-l 0.36s ease-in-out infinite alternate;
+}
+.kodi-arm-r {
+  transform-origin: 58px 50px;
+  animation: kodi-arm-r 0.36s ease-in-out infinite alternate;
+}
+
+@keyframes kodi-arm-l {
+  0%   { transform: rotate(-15deg); }
+  100% { transform: rotate(20deg); }
+}
+@keyframes kodi-arm-r {
+  0%   { transform: rotate(10deg); }
+  100% { transform: rotate(-10deg); }
+}
+
+/* Kodi body bounce while running */
+.kodi-svg {
+  animation: kodi-run-bounce 0.36s ease-in-out infinite alternate;
+}
+
+@keyframes kodi-run-bounce {
+  0%   { transform: translateY(0) rotate(-1deg); }
+  100% { transform: translateY(-5px) rotate(1.5deg); }
+}
+
+/* Tongue flap */
+.kodi-tongue {
+  transform-origin: 38px 56px;
+  animation: kodi-tongue-flap 0.72s ease-in-out infinite;
+}
+
+@keyframes kodi-tongue-flap {
+  0%, 100% { transform: scaleY(1) rotate(0deg); }
+  45%       { transform: scaleY(1.4) rotate(6deg) translateY(2px); }
+}
+
+/* Marshmallow fire flicker */
+.kodi-fire {
+  animation: fire-flicker 0.4s ease-in-out infinite alternate;
+  transform-origin: 83px 0px;
+}
+
+@keyframes fire-flicker {
+  0%   { transform: scaleY(1) scaleX(1);   opacity: 0.9; }
+  50%  { transform: scaleY(1.3) scaleX(0.8); opacity: 1; }
+  100% { transform: scaleY(0.8) scaleX(1.2); opacity: 0.75; }
+}
+
+/* Sweat drop animation */
+.kodi-sweat {
+  animation: sweat-drop 1.6s ease-in-out infinite;
+}
+
+@keyframes sweat-drop {
+  0%, 70%, 100% { opacity: 0.8; transform: translateY(0); }
+  80%            { opacity: 0.2; transform: translateY(6px); }
+}
+
+/* Eye blink */
+.kodi-eye-l, .kodi-eye-r {
+  transform-origin: 38px 39px;
+  animation: kodi-blink 4s ease-in-out infinite;
+}
+
+@keyframes kodi-blink {
+  0%, 92%, 100% { transform: scaleY(1); }
+  95%            { transform: scaleY(0.1); }
+}
+
+/* ── Speech bubble above Kodi ────────────────────────────────────────────── */
 .pb-speech {
   position: absolute;
   bottom: calc(100% + 6px);
   left: 50%;
-  transform: translateX(-50%) translateY(8px) scale(0.88);
-  background: rgba(10, 18, 38, 0.95);
-  border: 1px solid rgba(161, 244, 194, 0.5);
-  color: #e8f0fc;
+  transform: translateX(-50%) translateY(10px) scale(0.88);
+  background: rgba(8, 13, 30, 0.95);
+  border: 1px solid rgba(161, 244, 194, 0.55);
+  color: #e8f4fc;
   font: 9px "DM Mono", monospace;
-  padding: 5px 10px;
-  border-radius: 10px;
+  padding: 6px 12px;
+  border-radius: 12px;
   white-space: nowrap;
-  box-shadow: 0 8px 22px rgba(0,0,0,0.6), 0 0 14px rgba(161,244,194,0.2);
+  box-shadow: 0 8px 24px rgba(0,0,0,0.65), 0 0 16px rgba(161,244,194,0.2);
   opacity: 0;
-  transition: opacity 0.25s ease, transform 0.25s cubic-bezier(0.16,1,0.3,1);
+  transition: opacity 0.28s ease, transform 0.28s cubic-bezier(0.16,1,0.3,1);
   pointer-events: none;
   z-index: 990;
 }
@@ -70,7 +200,7 @@
   left: 50%;
   transform: translateX(-50%);
   border: 5px solid transparent;
-  border-top-color: rgba(161, 244, 194, 0.5);
+  border-top-color: rgba(161, 244, 194, 0.55);
 }
 
 .pb-speech.visible {
@@ -78,296 +208,248 @@
   transform: translateX(-50%) translateY(0) scale(1);
 }
 
-/* ── Bear body part animations ──────────────────────────────────────────── */
-
-/* Walking leg waddle */
-.pb-leg-l {
-  transform-origin: 24px 59px;
-  animation: pb-leg-left 0.38s ease-in-out infinite alternate;
-}
-.pb-leg-r {
-  transform-origin: 46px 59px;
-  animation: pb-leg-right 0.38s ease-in-out infinite alternate;
-}
-
-@keyframes pb-leg-left {
-  0%   { transform: translateY(0) rotate(-8deg); }
-  100% { transform: translateY(3px) rotate(8deg); }
-}
-@keyframes pb-leg-right {
-  0%   { transform: translateY(3px) rotate(8deg); }
-  100% { transform: translateY(0) rotate(-8deg); }
-}
-
-/* Arm swing */
-.pb-arm-l {
-  transform-origin: 17px 46px;
-  animation: pb-arm-swing-l 0.38s ease-in-out infinite alternate;
-}
-.pb-arm-r {
-  transform-origin: 53px 46px;
-  animation: pb-arm-swing-r 0.38s ease-in-out infinite alternate;
-}
-
-@keyframes pb-arm-swing-l {
-  0%   { transform: rotate(-30deg); }
-  100% { transform: rotate(10deg); }
-}
-@keyframes pb-arm-swing-r {
-  0%   { transform: rotate(10deg); }
-  100% { transform: rotate(-30deg); }
-}
-
-/* Body bounce while running */
-.patrol-bear-svg {
-  animation: pb-bounce 0.38s ease-in-out infinite alternate;
-}
-
-@keyframes pb-bounce {
-  0%   { transform: translateY(0); }
-  100% { transform: translateY(-4px); }
-}
-
-/* Honey jar sway */
-.pb-honey {
-  transform-origin: 55px 48px;
-  animation: pb-honey-sway 0.76s ease-in-out infinite alternate;
-}
-
-@keyframes pb-honey-sway {
-  0%   { transform: rotate(-6deg); }
-  100% { transform: rotate(8deg); }
-}
-
-/* Tongue flick while running */
-.pb-tongue {
-  animation: pb-tongue-flick 1.8s ease-in-out infinite;
-}
-
-@keyframes pb-tongue-flick {
-  0%, 80%, 100% { transform: scaleY(1); }
-  85%           { transform: scaleY(1.4) translateY(1px); }
-}
-
-/* Shadow squish when landing */
-.pb-shadow {
-  animation: pb-shadow-squish 0.38s ease-in-out infinite alternate;
-}
-
-@keyframes pb-shadow-squish {
-  0%   { rx: 22; opacity: 0.3; }
-  100% { rx: 16; opacity: 0.18; }
-}
-
-/* ── State: PEEKING from corner (only head shows) ───────────────────────── */
-.patrol-bear-wrap.peeking .patrol-bear-svg {
+/* ── Peeking state — only Kodi's head shows over the edge ───────────────── */
+.pb-peek-eyes {
+  position: absolute;
+  bottom: 100%;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 88px;
+  height: 36px;
+  overflow: hidden;
   opacity: 0;
-  animation: none;
+  pointer-events: none;
+  transition: opacity 0.3s ease;
 }
 
-.patrol-bear-wrap.peeking .pb-peek-eyes {
+.pb-peek-eyes svg {
+  width: 88px;
+  height: 36px;
+  display: block;
+}
+
+/* When peeking: hide full body, show just head-peek */
+.patrol-scene.peeking .kodi-svg,
+.patrol-scene.peeking .patrol-deer {
+  opacity: 0;
+  pointer-events: none;
+}
+
+.patrol-scene.peeking .pb-peek-eyes {
   opacity: 1;
-  animation: pb-peek-bob 2.5s ease-in-out infinite;
+  animation: kodi-peek-bob 2.4s ease-in-out infinite;
 }
 
-.patrol-bear-wrap.peeking .pb-leg-l,
-.patrol-bear-wrap.peeking .pb-leg-r,
-.patrol-bear-wrap.peeking .pb-arm-l,
-.patrol-bear-wrap.peeking .pb-arm-r {
+.patrol-scene.peeking .kodi-leg-l,
+.patrol-scene.peeking .kodi-leg-r,
+.patrol-scene.peeking .kodi-arm-l,
+.patrol-scene.peeking .kodi-arm-r {
   animation: none;
 }
 
-@keyframes pb-peek-bob {
+@keyframes kodi-peek-bob {
   0%, 100% { transform: translateX(-50%) translateY(0); }
-  45%       { transform: translateX(-50%) translateY(-5px); }
-  65%       { transform: translateX(-50%) translateY(-3px); }
+  40%       { transform: translateX(-50%) translateY(-7px); }
+  60%       { transform: translateX(-50%) translateY(-4px); }
 }
 
-/* ── State: HIDDEN (diving underground) ─────────────────────────────────── */
-.patrol-bear-wrap.hiding {
-  transform: translateY(80px);
-  transition: transform 0.45s cubic-bezier(0.55, 0, 1, 0.45);
+/* Peeking scene: position Kodi flush at corner edge */
+.patrol-scene.peeking {
+  bottom: -42px;  /* only top of head peeks above fold */
 }
 
-/* ── Flipped for right-to-left run ──────────────────────────────────────── */
-.patrol-bear-wrap.flipped .patrol-bear-svg {
+/* ── Hiding/diving animation ─────────────────────────────────────────────── */
+.patrol-scene.hiding {
+  transition: transform 0.4s cubic-bezier(0.55, 0, 1, 0.45),
+              opacity 0.3s ease;
+  transform: translateY(90px);
+  opacity: 0;
+}
+
+/* ── Flipped (running right→left) ───────────────────────────────────────── */
+.patrol-scene.flipped .kodi-svg,
+.patrol-scene.flipped .deer-svg {
   transform: scaleX(-1);
 }
 
-/* ── Reduced motion: disable everything ─────────────────────────────────── */
+.patrol-scene.flipped .pb-speech {
+  /* Keep speech bubble unflipped */
+  transform: translateX(-50%) scaleX(-1) translateY(0) scale(1);
+}
+
+/* ── Footstep dust puffs (created by JS) ─────────────────────────────────── */
+.dust-puff {
+  position: fixed;
+  bottom: 4px;
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  background: rgba(200, 190, 170, 0.35);
+  pointer-events: none;
+  z-index: 975;
+  animation: dust-rise 0.7s ease-out forwards;
+}
+
+@keyframes dust-rise {
+  0%   { transform: scale(0.5); opacity: 0.7; }
+  60%  { transform: scale(2.5); opacity: 0.3; }
+  100% { transform: scale(3.5); opacity: 0; }
+}
+
+/* ── Reduced motion: hide everything ────────────────────────────────────── */
 @media (prefers-reduced-motion: reduce) {
-  .patrol-bear-wrap {
-    display: none !important;
+  .patrol-scene,
+  .sparkle-particle,
+  .dust-puff { display: none !important; }
+}
+
+/* ── Mobile scale down ───────────────────────────────────────────────────── */
+@media (max-width: 480px) {
+  .patrol-scene {
+    transform-origin: bottom left;
+    transform: scale(0.75);
   }
 }
 
 /* ==========================================================================
-   ENHANCED PAGE ANIMATIONS — Floating particles, glow pulses, card shimmer
+   SPARKLE PARTICLES — floating upward from random positions
    ========================================================================== */
-
-/* ── Floating sparkle particles (created by JS) ─────────────────────────── */
 .sparkle-particle {
   position: fixed;
   pointer-events: none;
-  z-index: 1;
+  z-index: 2;
   border-radius: 50%;
   animation: sparkle-float linear forwards;
 }
 
 @keyframes sparkle-float {
-  0% {
-    opacity: 0;
-    transform: translateY(0) scale(0.5) rotate(0deg);
-  }
-  15% {
-    opacity: 1;
-  }
-  85% {
-    opacity: 0.6;
-  }
-  100% {
-    opacity: 0;
-    transform: translateY(-120px) scale(1.2) rotate(180deg);
-  }
+  0%   { opacity: 0;   transform: translateY(0) scale(0.4) rotate(0deg); }
+  15%  { opacity: 1; }
+  85%  { opacity: 0.5; }
+  100% { opacity: 0;   transform: translateY(-130px) scale(1.4) rotate(200deg); }
 }
 
-/* ── Hero section glow pulse ─────────────────────────────────────────────── */
+/* ==========================================================================
+   ENHANCED PAGE ANIMATIONS
+   ========================================================================== */
+
+/* ── Hero ambient pulse ──────────────────────────────────────────────────── */
 .hero::before {
   content: '';
   position: absolute;
-  top: 15%;
-  left: 5%;
-  width: 320px;
-  height: 320px;
-  background: radial-gradient(circle, rgba(161, 244, 194, 0.04) 0%, transparent 70%);
+  top: 10%;
+  left: 2%;
+  width: 380px;
+  height: 380px;
+  background: radial-gradient(circle, rgba(161, 244, 194, 0.045) 0%, transparent 70%);
   border-radius: 50%;
   pointer-events: none;
-  animation: hero-glow-pulse 6s ease-in-out infinite;
+  animation: hero-glow-pulse 7s ease-in-out infinite;
   z-index: 0;
 }
 
 @keyframes hero-glow-pulse {
-  0%, 100% { opacity: 0.5; transform: scale(1); }
-  50%       { opacity: 1; transform: scale(1.18); }
+  0%, 100% { opacity: 0.4; transform: scale(1); }
+  50%       { opacity: 1;   transform: scale(1.22); }
 }
 
-/* ── Orbit ring rotation (subtle) ───────────────────────────────────────── */
-.orbit-1 {
-  animation: orbit-spin-slow 28s linear infinite;
-}
-.orbit-2 {
-  animation: orbit-spin-slow 36s linear infinite reverse;
-}
+/* ── Orbit rings subtle spin ─────────────────────────────────────────────── */
+.orbit-1 { animation: orbit-slow 30s linear infinite; }
+.orbit-2 { animation: orbit-slow 42s linear infinite reverse; }
 
-@keyframes orbit-spin-slow {
+@keyframes orbit-slow {
   from { transform: rotate(-27deg); }
   to   { transform: rotate(333deg); }
 }
 
-/* ── Skill card shimmer on hover ─────────────────────────────────────────── */
-.skill-card {
-  overflow: hidden;
-}
-
-.skill-card::after {
-  content: '';
-  position: absolute;
-  top: -60%;
-  left: -80%;
-  width: 50%;
-  height: 200%;
-  background: linear-gradient(
-    105deg,
-    transparent 20%,
-    rgba(255, 255, 255, 0.04) 50%,
-    transparent 80%
-  );
-  transform: rotate(15deg);
-  transition: left 0.5s ease;
-  pointer-events: none;
-}
-
-.skill-card:hover::after {
-  left: 130%;
-}
-
-.skill-card {
-  position: relative;
-}
-
-/* ── Project card shimmer ────────────────────────────────────────────────── */
-.project-card {
+/* ── Skill / project card shimmer sweep ──────────────────────────────────── */
+.skill-card, .project-card, .directory-card {
   position: relative;
   overflow: hidden;
 }
 
-.project-card::after {
+.skill-card::after,
+.project-card::after,
+.directory-card::after {
   content: '';
   position: absolute;
   top: -60%;
   left: -80%;
-  width: 40%;
+  width: 45%;
   height: 200%;
-  background: linear-gradient(
-    105deg,
-    transparent 20%,
-    rgba(142, 181, 255, 0.05) 50%,
-    transparent 80%
-  );
-  transform: rotate(15deg);
+  background: linear-gradient(105deg, transparent 25%, rgba(255,255,255,0.045) 50%, transparent 75%);
+  transform: rotate(18deg);
   transition: left 0.55s ease;
   pointer-events: none;
 }
 
-.project-card:hover::after {
-  left: 130%;
+.skill-card:hover::after,
+.project-card:hover::after,
+.directory-card:hover::after {
+  left: 135%;
 }
 
-/* ── Floating stat number pulse ──────────────────────────────────────────── */
+/* ── Stat card number pop on hover ───────────────────────────────────────── */
 .stat-card:hover .counter {
   animation: stat-pop 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
 }
 
 @keyframes stat-pop {
   0%   { transform: scale(1); }
-  50%  { transform: scale(1.15); }
+  50%  { transform: scale(1.18); color: var(--green); }
   100% { transform: scale(1); }
 }
 
-/* ── Ticker text shimmer ─────────────────────────────────────────────────── */
-.ticker b {
-  position: relative;
-  transition: color 0.3s ease;
-}
-
-.ticker b:hover {
-  color: var(--green);
-}
-
-/* ── Timeline point glow ─────────────────────────────────────────────────── */
+/* ── Timeline dots pulse ─────────────────────────────────────────────────── */
 .timeline-point {
-  animation: tl-point-glow 2.5s ease-in-out infinite;
+  animation: tl-pulse 2.8s ease-in-out infinite;
 }
 
-@keyframes tl-point-glow {
-  0%, 100% { box-shadow: 0 0 0 0 rgba(161, 244, 194, 0.4); }
-  50%       { box-shadow: 0 0 0 6px rgba(161, 244, 194, 0); }
+@keyframes tl-pulse {
+  0%, 100% { box-shadow: 0 0 0 0 rgba(161,244,194,0.45); }
+  55%       { box-shadow: 0 0 0 7px rgba(161,244,194,0); }
 }
 
-/* ── Quick link badge glow on hover ─────────────────────────────────────── */
-.quick-badge {
-  transition: all 0.2s ease;
+/* ── Green pulse dot ring ────────────────────────────────────────────────── */
+.pulse {
+  animation: pulse-ring 2.4s ease-in-out infinite;
 }
 
+@keyframes pulse-ring {
+  0%, 100% { box-shadow: 0 0 0 0 rgba(161,244,194,0.75); }
+  50%       { box-shadow: 0 0 0 9px rgba(161,244,194,0); }
+}
+
+/* ── Primary button glow ─────────────────────────────────────────────────── */
+.actions .button.primary {
+  animation: btn-float 3.8s ease-in-out infinite;
+}
+
+@keyframes btn-float {
+  0%, 100% { box-shadow: 0 4px 18px rgba(161,244,194,0.22); }
+  50%       { box-shadow: 0 8px 36px rgba(161,244,194,0.48); }
+}
+
+/* ── Code window glow breathe ────────────────────────────────────────────── */
+.code-window {
+  animation: code-breathe 5.5s ease-in-out infinite;
+}
+
+@keyframes code-breathe {
+  0%, 100% { box-shadow: 0 32px 100px rgba(0,0,0,0.4), 0 0 0 0 rgba(161,244,194,0.0); }
+  50%       { box-shadow: 0 32px 100px rgba(0,0,0,0.4), 0 0 50px rgba(161,244,194,0.08); }
+}
+
+/* ── Quick badge hover ───────────────────────────────────────────────────── */
 .quick-badge:hover {
-  text-shadow: 0 0 12px rgba(161, 244, 194, 0.5);
-  transform: translateY(-1px);
+  text-shadow: 0 0 14px rgba(161,244,194,0.55);
+  transform: translateY(-2px);
 }
 
-/* ── Section reveal animation (for JS IntersectionObserver) ─────────────── */
+/* ── Section scroll-reveal ───────────────────────────────────────────────── */
 .reveal-up {
   opacity: 0;
-  transform: translateY(28px);
+  transform: translateY(30px);
   transition: opacity 0.65s cubic-bezier(0.16, 1, 0.3, 1),
               transform 0.65s cubic-bezier(0.16, 1, 0.3, 1);
 }
@@ -376,52 +458,3 @@
   opacity: 1;
   transform: translateY(0);
 }
-
-/* ── Glowing green pulse dot (eyebrow) ───────────────────────────────────── */
-.pulse {
-  animation: pulse-ring 2.2s ease-in-out infinite;
-}
-
-@keyframes pulse-ring {
-  0%, 100% {
-    box-shadow: 0 0 0 0 rgba(161, 244, 194, 0.7);
-  }
-  50% {
-    box-shadow: 0 0 0 8px rgba(161, 244, 194, 0);
-  }
-}
-
-/* ── Action buttons subtle float animation ───────────────────────────────── */
-.actions .button.primary {
-  animation: btn-float 3.5s ease-in-out infinite;
-}
-
-@keyframes btn-float {
-  0%, 100% { box-shadow: 0 4px 20px rgba(161, 244, 194, 0.25); }
-  50%       { box-shadow: 0 8px 32px rgba(161, 244, 194, 0.45); }
-}
-
-/* ── Code window glow breathing ──────────────────────────────────────────── */
-.code-window {
-  animation: code-window-breathe 5s ease-in-out infinite;
-}
-
-@keyframes code-window-breathe {
-  0%, 100% {
-    box-shadow: 0 32px 100px rgba(0,0,0,0.4),
-                0 0 0 0 rgba(161, 244, 194, 0.0);
-  }
-  50% {
-    box-shadow: 0 32px 100px rgba(0,0,0,0.4),
-                0 0 40px rgba(161, 244, 194, 0.07);
-  }
-}
-
-/* ── Mobile: hide patrol bear on very small screens ─────────────────────── */
-@media (max-width: 480px) {
-  .patrol-bear-wrap {
-    transform: scale(0.8);
-    transform-origin: bottom center;
-  }
-}
-
