@@ -1433,13 +1433,21 @@ body.modal-open{overflow:hidden}
   transform: scale(1.08);
 }
 
-@media (max-width: 960px) {
+/* The hero art clips its overflow at 1120px and below, so Kodi sits in the flow there */
+@media (max-width: 1120px) {
   .byte-dog-wrapper {
     position: relative;
     top: auto;
     right: auto;
-    margin: 0 auto 14px;
+    margin: 46px auto 14px;   /* room above Kodi for his speech bubble inside the clipped hero art */
     z-index: 10;
+  }
+  .dog-speech-bubble {
+    white-space: normal;
+    width: max-content;
+    max-width: min(300px, 88vw);
+    text-align: center;
+    border-radius: 14px;
   }
   .byte-dog-svg {
     width: 82px;
@@ -1519,8 +1527,8 @@ body.modal-open{overflow:hidden}
 }
 
 .corner-bear-svg {
-  width: 58px;
-  height: 46px;
+  width: 104px;
+  height: 83px;
   display: block;
 }
 
@@ -1596,8 +1604,8 @@ body.modal-open{overflow:hidden}
     bottom: -2px;
   }
   .corner-bear-svg {
-    width: 50px;
-    height: 40px;
+    width: 82px;
+    height: 66px;
   }
   .corner-bear-bubble {
     font-size: 8.5px;

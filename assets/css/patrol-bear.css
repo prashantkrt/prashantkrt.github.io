@@ -57,6 +57,8 @@
 
 .is-peeking .dp-body {
   animation: deer-corner-peek 3.8s cubic-bezier(0.33, 0, 0.2, 1) forwards;
+  pointer-events: auto;
+  cursor: pointer;
 }
 
 .is-peeking .dp-eyes {
@@ -71,11 +73,24 @@
   animation: dp-ear-flick-r 3.8s ease-in-out forwards;
 }
 
-/* Bottom corners rise from the bottom edge, top corners lean in from the sides */
-.deer-corner-peek-bottom-left  { bottom: -10px; left: 150px;  --rot: 16deg; }
-.deer-corner-peek-bottom-right { bottom: -10px; right: 150px; --rot: -16deg; }
-.deer-corner-peek-top-left     { top: 150px;    left: -14px;  --rot: 104deg; }
-.deer-corner-peek-top-right    { top: 150px;    right: -14px; --rot: -104deg; }
+/* Bottom corners rise from the bottom edge, top corners lean in from the sides.
+   --tx/--ty place the name tag, --bx/--by/--btx/--bty place the speech bubble. */
+.deer-corner-peek-bottom-left {
+  bottom: -10px; left: 200px; --rot: 16deg;
+  --tx: 0px; --ty: -30px; --bx: 0px; --by: -134px; --btx: -50%; --bty: -100%;
+}
+.deer-corner-peek-bottom-right {
+  bottom: -10px; right: 150px; --rot: -16deg;
+  --tx: 0px; --ty: -30px; --bx: 0px; --by: -134px; --btx: -50%; --bty: -100%;
+}
+.deer-corner-peek-top-left {
+  top: 150px; left: -14px; --rot: 104deg;
+  --tx: 62px; --ty: 60px; --bx: 120px; --by: 0px; --btx: 0%; --bty: -50%;
+}
+.deer-corner-peek-top-right {
+  top: 150px; right: -14px; --rot: -104deg;
+  --tx: -62px; --ty: 60px; --bx: -120px; --by: 0px; --btx: -100%; --bty: -50%;
+}
 
 @keyframes deer-corner-peek {
   0%   { transform: rotate(var(--rot)) translateY(105%); }
@@ -111,6 +126,119 @@
   58%           { transform: rotate(0deg); }
 }
 
+/* Idle life: eyes glance around and the nose twitches, like Kodi's face */
+.dp-look {
+  animation: dp-look 5s ease-in-out infinite;
+}
+
+@keyframes dp-look {
+  0%, 18%, 100% { transform: translateX(0); }
+  26%, 44%      { transform: translateX(-1.8px); }
+  52%, 72%      { transform: translateX(1.8px); }
+  80%           { transform: translateX(0); }
+}
+
+.dp-nose {
+  transform-box: fill-box;
+  transform-origin: center;
+  animation: dp-nose 2.8s ease-in-out infinite;
+}
+
+@keyframes dp-nose {
+  0%, 68%, 100% { transform: scale(1); }
+  74%           { transform: scale(1.14, 0.88); }
+  80%           { transform: scale(1); }
+  86%           { transform: scale(1.1, 0.9); }
+  92%           { transform: scale(1); }
+}
+
+/* Name tag and speech bubble stay upright while the deer is rotated */
+.dp-tag,
+.dp-bubble {
+  position: absolute;
+  pointer-events: none;
+}
+
+.dp-tag {
+  left: var(--tx, 0px);
+  top: var(--ty, -30px);
+  transform: translate(-50%, -50%);
+  opacity: 0;
+  background: rgba(14, 23, 42, 0.94);
+  border: 1px solid rgba(161, 244, 194, 0.4);
+  color: #a1f4c2;
+  font: 700 8.5px "DM Mono", monospace;
+  padding: 2px 8px;
+  border-radius: 999px;
+  white-space: nowrap;
+  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.5);
+}
+
+.is-peeking .dp-tag {
+  animation: dp-tag-show 3.8s ease-in-out forwards;
+  pointer-events: auto;
+  cursor: pointer;
+}
+
+@keyframes dp-tag-show {
+  0%, 14%   { opacity: 0; }
+  24%, 66%  { opacity: 1; }
+  76%, 100% { opacity: 0; }
+}
+
+.dp-bubble {
+  left: var(--bx, 0px);
+  top: var(--by, -134px);
+  transform: translate(var(--btx, -50%), var(--bty, -100%)) scale(0.92);
+  background: rgba(14, 23, 42, 0.96);
+  border: 1px solid #a1f4c2;
+  color: #f4f7ff;
+  font: 9.5px "DM Mono", monospace;
+  padding: 8px 14px;
+  border-radius: 12px;
+  white-space: normal;
+  width: max-content;
+  max-width: min(250px, 70vw);
+  line-height: 1.45;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.65), 0 0 18px rgba(161, 244, 194, 0.25);
+  opacity: 0;
+  transition: opacity 0.25s ease, transform 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+  z-index: 2;
+}
+
+.dp-bubble.visible {
+  opacity: 1;
+  transform: translate(var(--btx, -50%), var(--bty, -100%)) scale(1);
+}
+
+/* Tap reaction: a happy hop along the deer's own axis, plus floating hearts */
+.is-popping .dp-body svg {
+  transform-origin: 50% 100%;
+  animation: dp-pop 0.55s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+@keyframes dp-pop {
+  0%   { transform: translateY(0) scale(1); }
+  35%  { transform: translateY(-12px) scale(1.1, 0.92); }
+  70%  { transform: translateY(2px) scale(0.97, 1.04); }
+  100% { transform: translateY(0) scale(1); }
+}
+
+.dp-heart {
+  position: absolute;
+  left: var(--tx, 0px);
+  top: var(--ty, -30px);
+  font-size: 12px;
+  pointer-events: none;
+  animation: dp-heart-float 1.4s ease-out forwards;
+}
+
+@keyframes dp-heart-float {
+  0%   { opacity: 0; transform: translate(calc(-50% + var(--hx, 0px)), -8px) scale(0.5); }
+  20%  { opacity: 1; }
+  100% { opacity: 0; transform: translate(calc(-50% + var(--hx, 0px)), -52px) scale(1.15); }
+}
+
 /* ── Sprites: placed on the ground line and moved with translate3d ──────── */
 .patrol-sprite {
   position: absolute;
@@ -120,6 +248,13 @@
   height: 124px;
   pointer-events: none;
   will-change: transform;
+  transform: translate3d(-200%, 0, 0);   /* parked off-screen until the first run */
+}
+
+/* Kodi is a little bigger than Nodi */
+.patrol-kodi {
+  width: 142px;
+  height: 142px;
 }
 
 /* Facing lives on a plain wrapper, so it never fights the SVG animations */
@@ -146,6 +281,8 @@
 
 /* ── Eye blink (each eye sets its own transform-origin inline) ───────────── */
 .blink {
+  transform-box: fill-box;
+  transform-origin: center;
   animation: blink-eye 4.6s ease-in-out infinite;
 }
 
@@ -156,7 +293,8 @@
 
 /* ── Kodi details ────────────────────────────────────────────────────────── */
 .kodi-tongue {
-  transform-origin: 98px 47.5px;
+  transform-box: fill-box;
+  transform-origin: 50% 0;
   animation: tongue-flap 0.72s ease-in-out infinite;
 }
 
@@ -185,35 +323,40 @@
   80%           { opacity: 0.2; transform: translateY(6px); }
 }
 
-/* Click on Kodi: hop */
-.patrol-kodi.hop .kodi-svg {
-  animation: kodi-hop 0.38s cubic-bezier(0.34, 1.56, 0.64, 1);
+/* Click on Kodi or Nodi: hop */
+.patrol-sprite.hop svg {
+  animation: sprite-hop 0.38s cubic-bezier(0.34, 1.56, 0.64, 1);
 }
 
-@keyframes kodi-hop {
+@keyframes sprite-hop {
   0%, 100% { transform: translateY(0); }
   50%      { transform: translateY(-16px); }
 }
 
-/* ── Kodi click target and speech bubble ─────────────────────────────────── */
-/* The bubble sits outside the flip wrapper, so it's never mirrored */
-.patrol-kodi {
+/* ── Click targets and speech bubbles ────────────────────────────────────── */
+/* Bubbles sit outside the flip wrapper, so they're never mirrored */
+.patrol-sprite {
   pointer-events: auto;
   cursor: pointer;
 }
 
 .pb-speech {
   position: absolute;
-  bottom: calc(100% + 6px);
+  bottom: calc(100% + 30px);
   left: 50%;
+  margin-left: var(--shift, 0px);
   transform: translateX(-50%) translateY(10px) scale(0.88);
   background: rgba(8, 13, 30, 0.95);
   border: 1px solid rgba(161, 244, 194, 0.55);
   color: #e8f4fc;
   font: 9px "DM Mono", monospace;
+  line-height: 1.45;
+  text-align: center;
   padding: 6px 12px;
   border-radius: 12px;
-  white-space: nowrap;
+  white-space: normal;
+  width: max-content;
+  max-width: min(210px, 60vw);
   box-shadow: 0 8px 24px rgba(0,0,0,0.65), 0 0 16px rgba(161,244,194,0.2);
   opacity: 0;
   transition: opacity 0.28s ease, transform 0.28s cubic-bezier(0.16,1,0.3,1);
@@ -221,11 +364,43 @@
   z-index: 990;
 }
 
+/* Role label above each runner: Kodi writes the code, Nodi deploys it */
+.pb-tag {
+  position: absolute;
+  bottom: calc(100% + 4px);
+  left: 50%;
+  transform: translateX(-50%);
+  background: rgba(14, 23, 42, 0.94);
+  border: 1px solid rgba(161, 244, 194, 0.4);
+  color: #a1f4c2;
+  font: 700 8.5px "DM Mono", monospace;
+  padding: 2px 8px;
+  border-radius: 999px;
+  white-space: nowrap;
+  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.5);
+  pointer-events: none;
+}
+
+/* While the chase is running, the other bottom-of-screen mascots step aside */
+.corner-bear-container {
+  transition: opacity 0.35s ease;
+}
+
+body.chase-active .corner-bear-container,
+body.chase-active .deer-corner-peek {
+  opacity: 0;
+  pointer-events: none;
+}
+
+body.chase-active .deer-corner-peek * {
+  pointer-events: none !important;
+}
+
 .pb-speech::after {
   content: '';
   position: absolute;
   top: 100%;
-  left: 50%;
+  left: calc(50% - var(--shift, 0px));
   transform: translateX(-50%);
   border: 5px solid transparent;
   border-top-color: rgba(161, 244, 194, 0.55);
@@ -270,6 +445,11 @@
     height: 96px;
   }
 
+  .patrol-kodi {
+    width: 110px;
+    height: 110px;
+  }
+
   .dp-body {
     left: -35px;
     top: -98px;
@@ -277,8 +457,15 @@
     height: 98px;
   }
 
-  .deer-corner-peek-bottom-left  { left: 112px; }
+  .deer-corner-peek-bottom-left  { left: 164px; }
   .deer-corner-peek-bottom-right { right: 112px; }
+
+  .dp-bubble {
+    white-space: normal;
+    max-width: 190px;
+    font-size: 8.5px;
+    padding: 6px 10px;
+  }
 }
 
 /* ==========================================================================

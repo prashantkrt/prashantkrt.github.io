@@ -948,7 +948,8 @@
       "Sweet marshmallows & zero memory leaks! 🍡",
       "Under the stars shipping reliable distributed systems! ✨",
       "Spring Boot 3.3 initialized in 1.42s by the fire! ⚡",
-      "K8s pods 3/3 Running with zero restarts! 🛡️"
+      "K8s pods 3/3 Running with zero restarts! 🛡️",
+      "I'm Kodi, I write the code. My friend Nodi deploys it! 🦌"
     ];
 
     let bubbleTimer = null;
@@ -1032,7 +1033,8 @@
       "99.99% uptime vibes right here! 🛡️",
       "Spring Boot 3, Virtual Threads, and campfire warmth! ☕",
       "Checking out the code? Tap Engineer.java above! 💻",
-      "Keep exploring! Lots of cool distributed systems below! 🎯"
+      "Keep exploring! Lots of cool distributed systems below! 🎯",
+      "Kodi writes the code, Nodi deploys the pods! 🦌"
     ];
 
     let bubbleTimer = null;
@@ -1106,53 +1108,161 @@
     deer.innerHTML = `
       <div class="dp-body">
         <svg viewBox="0 0 100 140" fill="none" xmlns="http://www.w3.org/2000/svg">
-          <path d="M33 84C28 104 22 124 17 140H83C78 124 72 104 67 84Z" fill="#BB7A3E"/>
-          <path d="M43 100C42 114 40 128 38 140H62C60 128 58 114 57 100Z" fill="#F2D6AA"/>
-          <g stroke="#7A5233" stroke-width="2.6" stroke-linecap="round" fill="none">
-            <path d="M40 48C35 35 31 22 26 8M34 32L21 29M30 21L17 14M26 8L20 3M26 8L31 3"/>
-            <path d="M60 48C65 35 69 22 74 8M66 32L79 29M70 21L83 14M74 8L80 3M74 8L69 3"/>
+          <path d="M33 92C28 108 22 124 17 140H83C78 124 72 108 67 92Z" fill="#BB7A3E"/>
+          <path d="M43 104C42 118 40 130 38 140H62C60 130 58 118 57 104Z" fill="#F2D6AA"/>
+          <g stroke="#7A5233" stroke-width="3.2" stroke-linecap="round" fill="none">
+            <path d="M41 54C37 42 33 28 28 12M35 38L23 34M31 25L19 18M28 12L22 6M28 12L33 6"/>
+            <path d="M59 54C63 42 67 28 72 12M65 38L77 34M69 25L81 18M72 12L78 6M72 12L67 6"/>
           </g>
           <g class="dp-ear-l">
-            <path d="M35 58C24 50 12 47 4 50C8 60 20 68 36 70Z" fill="#BB7A3E"/>
-            <path d="M32 59C24 54 16 52 10 54C14 60 22 64 32 66Z" fill="#E7A982"/>
+            <path d="M35 58C24 50 12 47 4 50C8 62 20 70 36 72Z" fill="#BB7A3E"/>
+            <path d="M32 60C24 55 16 53 10 55C14 62 22 66 32 68Z" fill="#E7A982"/>
           </g>
           <g class="dp-ear-r">
-            <path d="M65 58C76 50 88 47 96 50C92 60 80 68 64 70Z" fill="#BB7A3E"/>
-            <path d="M68 59C76 54 84 52 90 54C86 60 78 64 68 66Z" fill="#E7A982"/>
+            <path d="M65 58C76 50 88 47 96 50C92 62 80 70 64 72Z" fill="#BB7A3E"/>
+            <path d="M68 60C76 55 84 53 90 55C86 62 78 66 68 68Z" fill="#E7A982"/>
           </g>
-          <path d="M36 50C33 58 32 68 35 76C38 86 42 96 43 103C44 108 56 108 57 103C58 96 62 86 65 76C68 68 67 58 64 50C60 44 40 44 36 50Z" fill="#BB7A3E"/>
-          <path d="M50 46C47 56 47 66 50 76C53 66 53 56 50 46Z" fill="#A9662E" opacity="0.5"/>
-          <path d="M42 90C42 100 43 106 50 107C57 106 58 100 58 90C55 86 45 86 42 90Z" fill="#E0AC74"/>
-          <ellipse cx="50" cy="104" rx="5.5" ry="3.6" fill="#2A1A10"/>
-          <ellipse cx="48.5" cy="102.8" rx="1.6" ry="0.9" fill="#fff" opacity="0.35"/>
-          <ellipse cx="38" cy="80" rx="4" ry="2.5" fill="#E58A6A" opacity="0.35"/>
-          <ellipse cx="62" cy="80" rx="4" ry="2.5" fill="#E58A6A" opacity="0.35"/>
-          <path d="M36 61Q40 58 44 60M56 60Q60 58 64 61" stroke="#8A5424" stroke-width="1.4" stroke-linecap="round" fill="none"/>
-          <g class="dp-eyes">
-            <ellipse cx="40.5" cy="68" rx="3.8" ry="4.6" fill="#1B1410"/>
-            <ellipse cx="59.5" cy="68" rx="3.8" ry="4.6" fill="#1B1410"/>
-            <circle cx="39.3" cy="66.5" r="1.3" fill="#fff"/>
-            <circle cx="58.3" cy="66.5" r="1.3" fill="#fff"/>
+          <path d="M37 52C30 58 27 70 29 82C31 94 38 104 50 106C62 104 69 94 71 82C73 70 70 58 63 52C58 47 42 47 37 52Z" fill="#BB7A3E"/>
+          <path d="M50 50C46 57 47 63 50 67C53 63 54 57 50 50Z" fill="#A9662E" opacity="0.45"/>
+          <ellipse cx="50" cy="94" rx="14" ry="10.5" fill="#F2D6AA"/>
+          <g class="dp-nose">
+            <path d="M44 90C46 87 54 87 56 90C57 93 53 96.5 50 96.5C47 96.5 43 93 44 90Z" fill="#2A1A10"/>
+            <ellipse cx="48.2" cy="89.6" rx="1.6" ry="1" fill="#fff" opacity="0.5"/>
+          </g>
+          <ellipse cx="50" cy="102" rx="2.8" ry="1.8" fill="#FF6B81"/>
+          <path d="M50 96.5V99M45 99.5Q50 104 55 99.5" stroke="#2A1A10" stroke-width="1.6" stroke-linecap="round" fill="none"/>
+          <ellipse cx="35" cy="88" rx="5" ry="3" fill="#F28B82" opacity="0.45"/>
+          <ellipse cx="65" cy="88" rx="5" ry="3" fill="#F28B82" opacity="0.45"/>
+          <path d="M33 67Q39 63 45 66M55 66Q61 63 67 67" stroke="#8A5424" stroke-width="1.8" stroke-linecap="round" fill="none"/>
+          <g class="dp-look">
+            <g class="dp-eyes">
+              <ellipse cx="39" cy="77" rx="5" ry="5.8" fill="#1B1410"/>
+              <ellipse cx="61" cy="77" rx="5" ry="5.8" fill="#1B1410"/>
+              <circle cx="37.4" cy="74.6" r="1.9" fill="#fff"/>
+              <circle cx="41" cy="80" r="0.9" fill="#fff"/>
+              <circle cx="59.4" cy="74.6" r="1.9" fill="#fff"/>
+              <circle cx="63" cy="80" r="0.9" fill="#fff"/>
+            </g>
           </g>
         </svg>
-      </div>`;
+      </div>
+      <span class="dp-tag">Nodi · Deploy 🦌</span>
+      <div class="dp-bubble"></div>`;
+    const body = deer.querySelector('.dp-body');
+    const tag = deer.querySelector('.dp-tag');
+    const bubble = deer.querySelector('.dp-bubble');
 
     const corners = ['bottom-left', 'top-right', 'bottom-right', 'top-left'];
+    const quotes = [
+      "Hi! I'm Nodi, I keep the pods running! 🦌",
+      "Kodi writes the code, I deploy it! 🚀",
+      "I'm the Node, Kodi is the Code! 💻",
+      "Pods: 3/3 Running. You're welcome! ✅",
+      "Zero-downtime rollout, courtesy of Nodi! 🔄",
+      "Kafka lag 0ms and the cluster is healthy! ⚡",
+      "Ask Kodi about code, ask me about deployments! 🧭",
+      "Kubernetes, Docker, CI/CD: that's my forest! 🌲"
+    ];
+    const PEEK_MS = 3800;
+    const HOLD_ANIMS = ['deer-corner-peek', 'deer-corner-blink', 'dp-ear-flick-l', 'dp-ear-flick-r', 'dp-tag-show'];
     let cornerIndex = 0;
+    let holdTimer = null;
+    let holding = false;
+    let audio = null;
     document.body.appendChild(deer);
 
     deer.addEventListener('animationend', (event) => {
+      if (event.animationName === 'dp-pop') {
+        deer.classList.remove('is-popping');
+        return;
+      }
       if (event.animationName !== 'deer-corner-peek') return;
       deer.classList.remove('is-peeking');
       cornerIndex = (cornerIndex + 1) % corners.length;
       setTimeout(peek, 3500);
     });
 
+    function peekAnimations() {
+      return deer.getAnimations({ subtree: true }).filter((a) => HOLD_ANIMS.includes(a.animationName));
+    }
+
+    function chime() {
+      try {
+        const Ctx = window.AudioContext || window.webkitAudioContext;
+        if (!Ctx) return;
+        audio = audio || new Ctx();
+        if (audio.state === 'suspended') audio.resume();
+        const now = audio.currentTime;
+        const osc = audio.createOscillator();
+        const gain = audio.createGain();
+        osc.type = 'sine';
+        osc.frequency.setValueAtTime(520, now);
+        osc.frequency.exponentialRampToValueAtTime(880, now + 0.12);
+        gain.gain.setValueAtTime(0.06, now);
+        gain.gain.exponentialRampToValueAtTime(0.001, now + 0.22);
+        osc.connect(gain);
+        gain.connect(audio.destination);
+        osc.start(now);
+        osc.stop(now + 0.23);
+      } catch (err) {
+        // AudioContext is restricted until the first user gesture
+      }
+    }
+
+    function release() {
+      holding = false;
+      bubble.classList.remove('visible');
+      peekAnimations().forEach((a) => a.play());
+    }
+
+    // Tapping Nodi keeps him in view for a chat, then he carries on his way
+    function react() {
+      if (!deer.classList.contains('is-peeking')) return;
+      if (!holding) {
+        holding = true;
+        peekAnimations().forEach((a) => {
+          a.currentTime = PEEK_MS * 0.5;
+          a.pause();
+        });
+      }
+
+      const quote = quotes[Math.floor(Math.random() * quotes.length)];
+      bubble.textContent = quote;
+      bubble.classList.add('visible');
+
+      deer.classList.remove('is-popping');
+      void deer.offsetWidth;
+      deer.classList.add('is-popping');
+
+      for (let i = 0; i < 3; i++) {
+        const heart = document.createElement('span');
+        heart.className = 'dp-heart';
+        heart.textContent = '💚';
+        heart.style.setProperty('--hx', (i - 1) * 16 + 'px');
+        heart.style.animationDelay = i * 0.12 + 's';
+        deer.appendChild(heart);
+        setTimeout(() => heart.remove(), 1800);
+      }
+
+      chime();
+      if (window.showToast) window.showToast(`🦌 Nodi: "${quote}"`);
+
+      clearTimeout(holdTimer);
+      holdTimer = setTimeout(release, 3600);
+    }
+
+    body.addEventListener('click', react);
+    tag.addEventListener('click', react);
+
     function peek() {
-      if (document.visibilityState !== 'visible') {
+      // The corner mascots stay out of the way while Kodi and Nodi are running
+      if (document.visibilityState !== 'visible' || document.body.classList.contains('chase-active')) {
         setTimeout(peek, 1000);
         return;
       }
+      holding = false;
+      clearTimeout(holdTimer);
+      bubble.classList.remove('visible');
       deer.className = `deer-corner-peek deer-corner-peek-${corners[cornerIndex]}`;
       void deer.offsetWidth;
       deer.classList.add('is-peeking');
@@ -1203,23 +1313,49 @@
     const kodi   = document.getElementById('patrolKodi');
     const deer   = document.getElementById('patrolDeer');
     const speech = document.getElementById('pbSpeech');
+    const speechDeer = document.getElementById('pbSpeechDeer');
 
-    // Kodi chasing the deer — fun themed sayings
-    const chaseQuips = [
-      '🍢 Come back! Try my marshmallow!',
-      '🏃 I just want to say hi, deer!',
-      '☕ Wait up! Java break!',
-      'Hey, your tail is adorable! 🦌',
-      '🍯 Sharing is caring!',
-      '⚡ Kafka can\'t catch YOU… but I can!',
-      '🐻 Kodi.chase(deer) — running…',
-      '🌙 Campfire friends forever!',
-      '🔥 Marshmallow for the road?',
-      'null pointer! Deer escaped! 😅',
+    // Kodi writes the code, Nodi deploys it: a short back-and-forth during each run
+    const dialogues = [
+      { kodi: 'Hey Nodi! Make the pods up and running, else we go down! 🚨',
+        deer: 'On it, Kodi! Pods are 3/3 Running ✅' },
+      { kodi: 'Nodi, my new build is ready to deploy! 🚀',
+        deer: 'Rolling out with zero downtime! 🔄' },
+      { kodi: 'Tests are green, Nodi! Ship it! ✅',
+        deer: 'Deploying… but never on a Friday, Kodi! 😅' },
+      { kodi: 'Nodi, is the cluster healthy? ⚙️',
+        deer: 'All nodes Ready, Kafka lag is 0ms! ⚡' },
+      { kodi: 'Nodi! CrashLoopBackOff again?! 😱',
+        deer: 'Fixed! It was a missing env var 🔧' },
+      { kodi: 'Scale up, Nodi! Traffic is spiking! 📈',
+        deer: 'Autoscaler says 3 → 8 pods! 🚀' },
+      { kodi: 'I write the code, Nodi. You run it! 💻',
+        deer: 'And I keep it alive, Kodi! Teamwork 🦌' },
+      { kodi: 'Nodi, wait! Marshmallow for the road? 🍢',
+        deer: 'Later! Pods first, snacks second! 🏃' },
     ];
 
-    const GAP_START = 180;  // centre-to-centre distance at the start of a run
-    const GAP_MIN   = 100;  // deer never closer than this, so the sprites don't overlap
+    // What they say when you tap them
+    const tapQuips = {
+      kodi: [
+        'I\'m Kodi, I write the code! 💻',
+        '🍢 Nodi, come back! Try my marshmallow!',
+        '🐻 Kodi.chase(Nodi) — running…',
+        '🌙 Campfire friends forever!',
+      ],
+      deer: [
+        'I\'m Nodi, I deploy the pods! 🚀',
+        'Can\'t catch me, Kodi! 😜',
+        '🦌 Nodi.escape() — O(1)!',
+        '404: Nodi not found! 💨',
+      ],
+    };
+    const bubbles = { kodi: speech, deer: speechDeer };
+    const bubbleW = { kodi: 0, deer: 0 };
+    const speechTimers = { kodi: null, deer: null };
+
+    const GAP_START = 200;  // centre-to-centre distance at the start of a run
+    const GAP_MIN   = 112;  // deer never closer than this, so the sprites don't overlap
     const REST_MIN  = 6000;
     const REST_MAX  = 16000;
 
@@ -1228,12 +1364,15 @@
     let dir         = 1;    // 1 = left→right, -1 = right→left
     let deerV       = 0;    // deer speed, px/s
     let kodiV       = 0;    // Kodi speed, px/s
-    let spriteW     = 124;
+    let spriteW     = 142;  // Kodi's width, used for entry/exit and dust
+    let deerW       = 124;
     let running     = false;
     let rafId       = null;
     let lastT       = null;
-    let quipTimer   = 0;
-    let speechTimer = null;
+    let talkTimer   = 0;
+    let talkStage   = 0;    // 0 = Kodi's turn, 1 = Nodi's reply, 2 = pause
+    let talkPair    = null;
+    let lastPair    = -1;
     let restTimer   = null;
 
     // ── Run cycle ──────────────────────────────────────────────────────────
@@ -1243,7 +1382,7 @@
     // backwards, so negative thigh = leg forward and positive knee = heel kicked up.
     const THIGH = [-38, -22, -2, 22, 34, 20, -8, -32];
     const KNEE  = [6, 20, 14, 12, 45, 92, 100, 55];
-    const ARM_STRIDE = 34;  // how far the arms swing at full speed
+    const ARM_STRIDE = 26;  // how far the arms swing at full speed
 
     function spline(table, p) {
       const n = table.length;
@@ -1294,29 +1433,32 @@
     // Advances a sprite's stride from its speed and poses every joint.
     // Returns true when a foot has just landed (used for dust puffs).
     function runCycle(rig, speed, dt, opts) {
-      const freq = clamp(speed / opts.stride, 1.5, 3.8);   // strides per second
+      const freq = clamp(speed / opts.stride, 1.1, 3.0);   // strides per second
       rig.phase = (rig.phase + freq * dt) % 1;
       const p = rig.phase;
       const power = clamp(0.62 + speed / 330, 0.8, 1.2);   // harder running = bigger swings
       const arms = ARM_STRIDE * power;
 
-      rotateJoint(rig, 'thighN', spline(THIGH, p) * power);
-      rotateJoint(rig, 'shinN',  spline(KNEE,  p) * power);
-      rotateJoint(rig, 'thighF', spline(THIGH, p + 0.5) * power);
-      rotateJoint(rig, 'shinF',  spline(KNEE,  p + 0.5) * power);
+      // opts.swing / opts.knee let a character move its legs less (Kodi's stout bear legs)
+      const swing = power * (opts.swing || 1);
+      const bend = power * (opts.knee || 1);
+      rotateJoint(rig, 'thighN', spline(THIGH, p) * swing);
+      rotateJoint(rig, 'shinN',  spline(KNEE,  p) * bend);
+      rotateJoint(rig, 'thighF', spline(THIGH, p + 0.5) * swing);
+      rotateJoint(rig, 'shinF',  spline(KNEE,  p + 0.5) * bend);
 
       // Arms oppose the leg on the same side
       const aN = Math.cos((p + 0.5) * 2 * Math.PI);
       const aF = Math.cos(p * 2 * Math.PI);
       if (opts.armsFree) {
         rotateJoint(rig, 'armN',  -5 - arms * aN);
-        rotateJoint(rig, 'foreN', -(40 + 30 * aN));
+        rotateJoint(rig, 'foreN', -(30 + 20 * aN));
       } else {
         // Kodi keeps the marshmallow stick out front and only bobs it
         rotateJoint(rig, 'armN', -2 + 3 * Math.sin(p * 4 * Math.PI));
       }
       rotateJoint(rig, 'armF',  -5 - arms * aF);
-      rotateJoint(rig, 'foreF', -(40 + 30 * aF));
+      rotateJoint(rig, 'foreF', -(30 + 20 * aF));
 
       // Two bounces per stride, lowest at midstance; lean grows with speed
       const bounce = (1 - Math.cos(4 * Math.PI * (p - 0.25))) / 2;
@@ -1342,16 +1484,75 @@
     function vw() { return window.innerWidth; }
 
     // Sprites are positioned by translate so the element's centre is the given x
-    function place(el, cx) {
-      el.style.transform = 'translate3d(' + (cx - spriteW / 2) + 'px,0,0)';
+    function place(el, cx, w) {
+      el.style.transform = 'translate3d(' + (cx - w / 2) + 'px,0,0)';
     }
 
-    function say(msg) {
-      if (!speech) return;
-      speech.textContent = msg || chaseQuips[Math.floor(Math.random() * chaseQuips.length)];
-      speech.classList.add('visible');
-      clearTimeout(speechTimer);
-      speechTimer = setTimeout(() => speech.classList.remove('visible'), 3000);
+    function hideBubbles() {
+      Object.values(bubbles).forEach((b) => b && b.classList.remove('visible'));
+    }
+
+    // Only one of the two speaks at a time, so the bubbles never overlap
+    function showLine(who, text, ms) {
+      const bubble = bubbles[who];
+      if (!bubble) return;
+      hideBubbles();
+      bubble.textContent = text;
+      bubble.classList.add('visible');
+      bubbleW[who] = bubble.offsetWidth;
+      clearTimeout(speechTimers[who]);
+      if (ms) speechTimers[who] = setTimeout(() => bubble.classList.remove('visible'), ms);
+    }
+
+    // Slides a bubble sideways so it stays on screen while its pointer follows the speaker
+    function keepBubblesOnScreen(deerX) {
+      [['kodi', kodiX], ['deer', deerX]].forEach(([who, cx]) => {
+        const b = bubbles[who];
+        if (!b || !b.classList.contains('visible')) return;
+        const half = bubbleW[who] / 2;
+        const shift = clamp(cx, half + 8, vw() - half - 8) - cx;
+        b.style.setProperty('--shift', shift.toFixed(1) + 'px');
+      });
+    }
+
+    function say(who) {
+      const lines = tapQuips[who];
+      showLine(who, lines[Math.floor(Math.random() * lines.length)], 2800);
+    }
+
+    // A speaker only talks while it is on screen, so its pointer is always visible
+    function onScreen(x) {
+      return x > 40 && x < vw() - 40;
+    }
+
+    function updateTalk(dt, deerX) {
+      talkTimer -= dt;
+      if (talkTimer > 0) return;
+
+      if (talkStage === 0) {
+        if (!onScreen(kodiX)) return;
+        let i;
+        do { i = Math.floor(Math.random() * dialogues.length); } while (i === lastPair && dialogues.length > 1);
+        lastPair = i;
+        talkPair = dialogues[i];
+        showLine('kodi', talkPair.kodi);
+        talkStage = 1;
+        talkTimer = 2.2;
+      } else if (talkStage === 1) {
+        if (onScreen(deerX)) {
+          showLine('deer', talkPair.deer);
+          talkStage = 2;
+          talkTimer = 2.4;
+        } else {
+          hideBubbles();
+          talkStage = 0;
+          talkTimer = 0.5;
+        }
+      } else {
+        hideBubbles();
+        talkStage = 0;
+        talkTimer = 0.6;
+      }
     }
 
     function spawnDust(x) {
@@ -1366,14 +1567,17 @@
     // Both sprites start and end fully off-screen, so the scene has no visible cut-in.
     function startRun() {
       if (!kodi || !deer) return;
-      spriteW  = kodi.offsetWidth || 124;
+      spriteW  = kodi.offsetWidth || 142;
+      deerW    = deer.offsetWidth || 124;
       kodiX    = dir === 1 ? -spriteW - GAP_START : vw() + spriteW + GAP_START;
       gap      = GAP_START;
       deerV    = 0;
       kodiV    = 0;
-      quipTimer = 2.5 + Math.random() * 1.5;
+      talkStage = 0;
+      talkTimer = 0.5;
       lastT    = null;
       running  = true;
+      document.body.classList.add('chase-active');
       scene.classList.toggle('face-left', dir === -1);
       rafId = requestAnimationFrame(frame);
     }
@@ -1385,28 +1589,26 @@
       const dt = Math.min(0.05, (t - lastT) / 1000);
       lastT = t;
 
-      const deerTarget = gap < 115 ? 235 : gap > 240 ? 125 : 155;
-      deerV += (deerTarget - deerV) * Math.min(1, 3 * dt);
+      // A relaxed pace so you can actually watch them: Nodi jogs ahead, Kodi follows
+      const deerTarget = gap < 120 ? 105 : gap > 250 ? 70 : 85;
+      deerV += (deerTarget - deerV) * Math.min(1, 2 * dt);
 
-      const kodiTarget = Math.min(285, Math.max(60, deerV + (gap - 135) * 1.2));
-      kodiV += (kodiTarget - kodiV) * Math.min(1, 4 * dt);
+      const kodiTarget = Math.min(135, Math.max(45, deerV + (gap - 140) * 0.8));
+      kodiV += (kodiTarget - kodiV) * Math.min(1, 2.5 * dt);
 
       kodiX += dir * kodiV * dt;
       gap = Math.max(GAP_MIN, gap + (deerV - kodiV) * dt);
       const deerX = kodiX + dir * gap;
 
-      place(kodi, kodiX);
-      place(deer, deerX);
-      runCycle(deerRig, deerV, dt, { stride: 78, armsFree: true });
-      if (runCycle(kodiRig, kodiV, dt, { stride: 84, armsFree: false })) {
+      place(kodi, kodiX, spriteW);
+      place(deer, deerX, deerW);
+      runCycle(deerRig, deerV, dt, { stride: 62, armsFree: true });
+      if (runCycle(kodiRig, kodiV, dt, { stride: 56, armsFree: false, swing: 0.8, knee: 0.55 })) {
         spawnDust(kodiX);
       }
 
-      quipTimer -= dt;
-      if (quipTimer <= 0) {
-        say();
-        quipTimer = 2.5 + Math.random() * 1.5;
-      }
+      updateTalk(dt, deerX);
+      keepBubblesOnScreen(deerX);
 
       const offEnd = dir === 1
         ? kodiX - spriteW / 2 > vw() + 20
@@ -1422,24 +1624,26 @@
     function endRun() {
       running = false;
       cancelAnimationFrame(rafId);
-      if (speech) speech.classList.remove('visible');
+      hideBubbles();
+      document.body.classList.remove('chase-active');
       dir = -dir;
       const wait = REST_MIN + Math.random() * (REST_MAX - REST_MIN);
       restTimer = setTimeout(startRun, wait);
     }
 
-    // Click Kodi to make him hop and say something
-    if (kodi) {
-      kodi.addEventListener('click', () => {
-        say();
-        kodi.classList.remove('hop');
-        void kodi.offsetWidth;
-        kodi.classList.add('hop');
+    // Click Kodi or Nodi to make them hop and say something
+    [['kodi', kodi], ['deer', deer]].forEach(([who, el]) => {
+      if (!el) return;
+      el.addEventListener('click', () => {
+        say(who);
+        el.classList.remove('hop');
+        void el.offsetWidth;
+        el.classList.add('hop');
       });
-      kodi.addEventListener('animationend', (e) => {
-        if (e.animationName === 'kodi-hop') kodi.classList.remove('hop');
+      el.addEventListener('animationend', (e) => {
+        if (e.animationName === 'sprite-hop') el.classList.remove('hop');
       });
-    }
+    });
 
     const initialDelay = 2500 + Math.random() * 3500;
     restTimer = setTimeout(startRun, initialDelay);
