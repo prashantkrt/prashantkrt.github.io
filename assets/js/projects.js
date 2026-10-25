@@ -114,6 +114,42 @@
       }
     });
 
+    // Make every repository card/tab fully clickable to open its repository link
+    cards.forEach((card) => {
+      const link = card.querySelector('.project-link');
+      if (!link) return;
+
+      const title = card.querySelector('h3')?.textContent.trim() || 'Repository';
+      card.setAttribute('role', 'link');
+      card.setAttribute('tabindex', '0');
+      card.setAttribute('aria-label', `${title} - Open repository on GitHub`);
+      card.setAttribute('title', `Click to open ${title} repository`);
+
+      card.addEventListener('click', (e) => {
+        // If clicking on a tag span, let the tag filter run instead of navigating
+        if (e.target.closest('.tags span')) return;
+
+        // If clicking directly on the <a> link, let default navigation run
+        if (e.target.closest('.project-link')) return;
+
+        if (window.showToast) {
+          window.showToast(`Opening ${title}…`, '↗');
+        }
+        window.open(link.href, '_blank', 'noopener,noreferrer');
+      });
+
+      card.addEventListener('keydown', (e) => {
+        if (e.key === 'Enter' || e.key === ' ') {
+          if (e.target.closest('.tags span')) return;
+          e.preventDefault();
+          if (window.showToast) {
+            window.showToast(`Opening ${title}…`, '↗');
+          }
+          window.open(link.href, '_blank', 'noopener,noreferrer');
+        }
+      });
+    });
+
     // 3D tilt effect on repository cards
     if (!window.matchMedia('(prefers-reduced-motion: reduce)').matches && window.innerWidth >= 768) {
       cards.forEach((card) => {

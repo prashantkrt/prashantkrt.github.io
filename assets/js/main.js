@@ -535,8 +535,26 @@
           appendTerminalLine('  <b class="log-green">repos</b>      - List featured GitHub repositories');
           appendTerminalLine('  <b class="log-green">certs</b>      - List cloud & Java credentials');
           appendTerminalLine('  <b class="log-green">contact</b>    - Get direct email and LinkedIn info');
+          appendTerminalLine('  <b class="log-green">dog</b>        - Pet Byte the Java watchdog mascot 🐶');
           appendTerminalLine('  <b class="log-green">status</b>     - Check system uptime and current role');
           appendTerminalLine('  <b class="log-green">clear</b>      - Clear terminal window');
+          break;
+
+        case 'bear':
+        case 'kodi':
+        case 'marshmallow':
+        case 'campfire':
+        case 'dog':
+        case 'bark':
+        case 'pet':
+        case 'fetch':
+          if (window.petByteMascot) {
+            window.petByteMascot();
+          }
+          appendTerminalLine('[CAMPFIRE-BEAR]: 🐻 Roasting marshmallows by the Java fire!', 'log-green');
+          appendTerminalLine('   ʕ •ᴥ• ʔ', 'log-yellow');
+          appendTerminalLine('   (  u u)~🍢  "0 NullPointerExceptions detected!"', 'log-blue');
+          appendTerminalLine('● 100% tests passing · Kafka consumer lag: 0ms', 'log-green');
           break;
 
         case 'skills':
@@ -843,16 +861,25 @@
     const menuButton = document.querySelector('.menu-toggle');
     const nav = document.querySelector('.nav');
     if (menuButton && nav) {
-      menuButton.addEventListener('click', () => {
+      menuButton.addEventListener('click', (e) => {
+        e.stopPropagation();
         const open = nav.classList.toggle('open');
         menuButton.setAttribute('aria-expanded', String(open));
       });
-      nav.querySelectorAll('a').forEach((a) =>
-        a.addEventListener('click', () => {
+      // Close menu when clicking any nav link, button, or mobile social link
+      nav.querySelectorAll('a, button').forEach((el) =>
+        el.addEventListener('click', () => {
           nav.classList.remove('open');
           menuButton.setAttribute('aria-expanded', 'false');
         })
       );
+      // Close menu when clicking outside
+      document.addEventListener('click', (e) => {
+        if (nav.classList.contains('open') && !nav.contains(e.target) && !menuButton.contains(e.target)) {
+          nav.classList.remove('open');
+          menuButton.setAttribute('aria-expanded', 'false');
+        }
+      });
     }
 
     const year = document.getElementById('year');
@@ -906,6 +933,90 @@
     }
   }
 
+  // --- 15. BYTE THE JAVA WATCHDOG ANIMATED MASCOT ---
+  function initByteTheDog() {
+    const wrapper = document.getElementById('byteDogWrapper');
+    const bubble = document.getElementById('dogSpeechBubble');
+    const mascot = document.getElementById('dogMascot');
+    const petBtn = document.getElementById('dogPetBtn');
+    if (!wrapper || !bubble) return;
+
+    const dogMessages = [
+      "Roasting marshmallows over clean Java code! 🏕️",
+      "Campfire check: 0 vulnerabilities, 100% tests passing! 🔥",
+      "Bear hugs for microservices! Kafka lag is 0ms! 🐻",
+      "Sweet marshmallows & zero memory leaks! 🍡",
+      "Under the stars shipping reliable distributed systems! ✨",
+      "Spring Boot 3.3 initialized in 1.42s by the fire! ⚡",
+      "K8s pods 3/3 Running with zero restarts! 🛡️"
+    ];
+
+    let bubbleTimer = null;
+
+    function playBarkChime() {
+      try {
+        const AudioCtx = window.AudioContext || window.webkitAudioContext;
+        if (!AudioCtx) return;
+        const ctx = new AudioCtx();
+        if (ctx.state === 'suspended') ctx.resume();
+        [0, 0.11].forEach((delay) => {
+          const osc = ctx.createOscillator();
+          const gain = ctx.createGain();
+          osc.type = 'triangle';
+          osc.frequency.setValueAtTime(540, ctx.currentTime + delay);
+          osc.frequency.exponentialRampToValueAtTime(270, ctx.currentTime + delay + 0.08);
+          gain.gain.setValueAtTime(0.14, ctx.currentTime + delay);
+          gain.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + delay + 0.08);
+          osc.connect(gain);
+          gain.connect(ctx.destination);
+          osc.start(ctx.currentTime + delay);
+          osc.stop(ctx.currentTime + delay + 0.09);
+        });
+      } catch (err) {}
+    }
+
+    function petByte() {
+      wrapper.classList.remove('barking');
+      void wrapper.offsetWidth;
+      wrapper.classList.add('barking', 'excited');
+
+      const msg = dogMessages[Math.floor(Math.random() * dogMessages.length)];
+      bubble.textContent = msg;
+      bubble.classList.add('bubble-visible');
+
+      playBarkChime();
+
+      if (window.showToast) {
+        window.showToast(`🐻 Kodi Bear: "${msg}"`);
+      }
+
+      clearTimeout(bubbleTimer);
+      bubbleTimer = setTimeout(() => {
+        bubble.classList.remove('bubble-visible');
+        wrapper.classList.remove('excited');
+      }, 3500);
+    }
+
+    window.petByteMascot = petByte;
+
+    if (mascot) {
+      mascot.addEventListener('click', petByte);
+      mascot.addEventListener('keydown', (e) => {
+        if (e.key === 'Enter' || e.key === ' ') {
+          e.preventDefault();
+          petByte();
+        }
+      });
+    }
+
+    if (petBtn) {
+      petBtn.addEventListener('click', (e) => {
+        e.stopPropagation();
+        petByte();
+      });
+    }
+  }
+
   // --- INITIALIZE ALL DYNAMIC SYSTEMS ---
   document.addEventListener('DOMContentLoaded', () => {
     initNetworkCanvas();
@@ -921,5 +1032,6 @@
     initScrollReveal();
     initCopyButtons();
     initMenuAndModal();
+    initByteTheDog();
   });
 })();
