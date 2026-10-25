@@ -1109,10 +1109,12 @@
           stroke="#8B5E3C" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
         <path d="M18 28 9 18l13 3m32 7 9-10-13 3" fill="#C8956A" stroke="#8B5E3C" stroke-width="2" stroke-linejoin="round"/>
         <ellipse cx="36" cy="37" rx="25" ry="24" fill="#C8956A"/>
-        <ellipse cx="28" cy="36" rx="3" ry="4" fill="#1A1A2E"/>
-        <ellipse cx="44" cy="36" rx="3" ry="4" fill="#1A1A2E"/>
-        <circle cx="27" cy="35" r="1" fill="#FFF"/>
-        <circle cx="43" cy="35" r="1" fill="#FFF"/>
+        <g class="deer-eyes">
+          <ellipse cx="28" cy="36" rx="3" ry="4" fill="#1A1A2E"/>
+          <ellipse cx="44" cy="36" rx="3" ry="4" fill="#1A1A2E"/>
+          <circle cx="27" cy="35" r="1" fill="#FFF"/>
+          <circle cx="43" cy="35" r="1" fill="#FFF"/>
+        </g>
         <ellipse cx="36" cy="47" rx="11" ry="7" fill="#B07850"/>
         <ellipse cx="36" cy="44" rx="4" ry="3" fill="#1A1A2E"/>
         <path d="M36 47v3m-4 0q4 4 8 0" stroke="#1A1A2E" stroke-width="1.5" stroke-linecap="round"/>
@@ -1120,21 +1122,26 @@
 
     const corners = ['top-left', 'top-right', 'bottom-right', 'bottom-left'];
     let cornerIndex = 0;
-    deer.classList.add(`deer-corner-peek-${corners[cornerIndex]}`);
     document.body.appendChild(deer);
 
-    function showNextCorner() {
-      if (document.visibilityState === 'visible') {
-        deer.classList.remove(`deer-corner-peek-${corners[cornerIndex]}`, 'visible');
-        cornerIndex = (cornerIndex + 1) % corners.length;
-        deer.classList.add(`deer-corner-peek-${corners[cornerIndex]}`);
-        requestAnimationFrame(() => deer.classList.add('visible'));
-        setTimeout(() => deer.classList.remove('visible'), 2200);
+    deer.addEventListener('animationend', (event) => {
+      if (event.target !== deer || event.animationName !== 'deer-corner-peek') return;
+      deer.classList.remove('is-peeking');
+      cornerIndex = (cornerIndex + 1) % corners.length;
+      setTimeout(peek, 3500);
+    });
+
+    function peek() {
+      if (document.visibilityState !== 'visible') {
+        setTimeout(peek, 1000);
+        return;
       }
-      setTimeout(showNextCorner, 6500);
+      deer.className = `deer-corner-peek deer-corner-peek-${corners[cornerIndex]}`;
+      void deer.offsetWidth;
+      deer.classList.add('is-peeking');
     }
 
-    setTimeout(showNextCorner, 3000);
+    setTimeout(peek, 3000);
   }
 
   // --- INITIALIZE ALL DYNAMIC SYSTEMS ---
