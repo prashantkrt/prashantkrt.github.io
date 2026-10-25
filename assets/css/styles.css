@@ -1233,13 +1233,21 @@ body.modal-open{overflow:hidden}
 }
 
 /* ==========================================================================
-   BYTE THE JAVA WATCHDOG MASCOT & ANIMATIONS
+   BYTE THE JAVA WATCHDOG / CAMPFIRE MOON BEAR MASCOT & CODE SHOWCASE
    ========================================================================== */
+.code-showcase {
+  position: relative;
+  width: min(100%, 460px);
+  max-width: 100%;
+  display: flex;
+  flex-direction: column;
+}
+
 .byte-dog-wrapper {
   position: absolute;
-  top: -54px;
+  top: -58px;
   right: 18px;
-  z-index: 15;
+  z-index: 20;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -1472,5 +1480,132 @@ body.modal-open{overflow:hidden}
   outline: 2px solid var(--green);
   outline-offset: 3px;
 }
+
+/* ==========================================================================
+   CORNER POPPING MOON BEAR MASCOT (PERSISTENT COMPANION)
+   ========================================================================== */
+.corner-bear-container {
+  position: fixed;
+  bottom: 0;
+  left: 28px;
+  z-index: 990;
+  user-select: none;
+  -webkit-tap-highlight-color: transparent;
+  pointer-events: auto;
+}
+
+.corner-bear-btn {
+  background: none;
+  border: none;
+  padding: 0;
+  cursor: pointer;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  outline: none;
+  transform: translateY(22px);
+  transition: transform 0.35s cubic-bezier(0.34, 1.56, 0.64, 1);
+  filter: drop-shadow(0 8px 24px rgba(0, 0, 0, 0.6));
+}
+
+.corner-bear-btn:hover,
+.corner-bear-btn:focus-visible,
+.corner-bear-container.peek-active .corner-bear-btn {
+  transform: translateY(0);
+}
+
+.corner-bear-btn:active {
+  transform: translateY(6px) scale(0.96);
+}
+
+.corner-bear-svg {
+  width: 90px;
+  height: 72px;
+  display: block;
+}
+
+.corner-bear-tag {
+  background: rgba(14, 23, 42, 0.94);
+  border: 1px solid rgba(161, 244, 194, 0.4);
+  color: var(--green);
+  font: 8.5px var(--mono);
+  font-weight: 700;
+  padding: 2px 8px;
+  border-radius: 999px;
+  margin-top: -6px;
+  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.5);
+  transition: all 0.2s ease;
+}
+
+.corner-bear-btn:hover .corner-bear-tag {
+  background: var(--green);
+  color: #07120c;
+  border-color: var(--green);
+  transform: scale(1.05);
+}
+
+.corner-bear-bubble {
+  position: absolute;
+  bottom: calc(100% + 4px);
+  left: 0;
+  background: rgba(14, 23, 42, 0.96);
+  border: 1px solid var(--green);
+  color: #f4f7ff;
+  font: 9.5px var(--mono);
+  padding: 8px 14px;
+  border-radius: 12px;
+  white-space: nowrap;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.65), 0 0 18px rgba(161, 244, 194, 0.25);
+  pointer-events: none;
+  opacity: 0;
+  transform: translateY(8px) scale(0.92);
+  transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+  z-index: 1000;
+}
+
+.corner-bear-bubble::after {
+  content: '';
+  position: absolute;
+  top: 100%;
+  left: 36px;
+  border-width: 6px;
+  border-style: solid;
+  border-color: var(--green) transparent transparent transparent;
+}
+
+.corner-bear-bubble.bubble-visible {
+  opacity: 1;
+  transform: translateY(0) scale(1);
+}
+
+/* Popping bounce effect on interaction */
+.corner-bear-btn.popping {
+  animation: corner-bear-pop 0.5s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+@keyframes corner-bear-pop {
+  0% { transform: translateY(0) scale(1); }
+  40% { transform: translateY(-16px) scale(1.12, 0.92); }
+  75% { transform: translateY(2px) scale(0.97, 1.03); }
+  100% { transform: translateY(0) scale(1); }
+}
+
+@media (max-width: 680px) {
+  .corner-bear-container {
+    left: 14px;
+    bottom: -2px;
+  }
+  .corner-bear-svg {
+    width: 76px;
+    height: 60px;
+  }
+  .corner-bear-bubble {
+    font-size: 8.5px;
+    padding: 6px 10px;
+    max-width: 220px;
+    white-space: normal;
+  }
+}
+
 
 

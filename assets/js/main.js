@@ -1017,6 +1017,86 @@
     }
   }
 
+  // --- CORNER POPPING MOON BEAR MASCOT SYSTEM ---
+  function initCornerBear() {
+    const container = document.getElementById('cornerBear');
+    const bearBtn = document.getElementById('cornerBearBtn');
+    const bubble = document.getElementById('cornerBearBubble');
+    if (!container || !bearBtn || !bubble) return;
+
+    const cornerQuotes = [
+      "Roasting marshmallows & shipping clean Java code! 🍢",
+      "Kafka lag is 0ms today! Everything running smooth! ⚡",
+      "Need a backend engineer? Prashant is your guy! 🚀",
+      "Event-driven architecture + Kubernetes = pure joy! ⚙️",
+      "99.99% uptime vibes right here! 🛡️",
+      "Spring Boot 3, Virtual Threads, and campfire warmth! ☕",
+      "Checking out the code? Tap Engineer.java above! 💻",
+      "Keep exploring! Lots of cool distributed systems below! 🎯"
+    ];
+
+    let bubbleTimer = null;
+    let peekTimer = null;
+
+    function popCornerBear() {
+      bearBtn.classList.remove('popping');
+      void bearBtn.offsetWidth;
+      bearBtn.classList.add('popping');
+      container.classList.add('peek-active');
+
+      const quote = cornerQuotes[Math.floor(Math.random() * cornerQuotes.length)];
+      bubble.textContent = quote;
+      bubble.classList.add('bubble-visible');
+
+      // Play soft bear sound
+      try {
+        const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+        const now = audioCtx.currentTime;
+        const osc = audioCtx.createOscillator();
+        const gain = audioCtx.createGain();
+        osc.type = 'triangle';
+        osc.frequency.setValueAtTime(320, now);
+        osc.frequency.exponentialRampToValueAtTime(640, now + 0.15);
+        gain.gain.setValueAtTime(0.06, now);
+        gain.gain.exponentialRampToValueAtTime(0.001, now + 0.25);
+        osc.connect(gain);
+        gain.connect(audioCtx.destination);
+        osc.start(now);
+        osc.stop(now + 0.25);
+      } catch (err) {
+        // AudioContext restricted before first gesture
+      }
+
+      if (window.showToast) {
+        window.showToast(`🐻 Kodi Bear: "${quote}"`);
+      }
+
+      clearTimeout(bubbleTimer);
+      bubbleTimer = setTimeout(() => {
+        bubble.classList.remove('bubble-visible');
+        container.classList.remove('peek-active');
+      }, 4000);
+    }
+
+    bearBtn.addEventListener('click', popCornerBear);
+
+    // Periodic gentle peek animation every 18 seconds to delight the visitor
+    function schedulePeek() {
+      peekTimer = setTimeout(() => {
+        if (!container.classList.contains('peek-active')) {
+          container.classList.add('peek-active');
+          setTimeout(() => {
+            if (!bubble.classList.contains('bubble-visible')) {
+              container.classList.remove('peek-active');
+            }
+          }, 2400);
+        }
+        schedulePeek();
+      }, 18000);
+    }
+    schedulePeek();
+  }
+
   // --- INITIALIZE ALL DYNAMIC SYSTEMS ---
   document.addEventListener('DOMContentLoaded', () => {
     initNetworkCanvas();
@@ -1033,5 +1113,6 @@
     initCopyButtons();
     initMenuAndModal();
     initByteTheDog();
+    initCornerBear();
   });
 })();
