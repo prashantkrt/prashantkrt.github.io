@@ -1201,53 +1201,43 @@
       'null pointer! Deer escaped! 😅',
     ];
 
-    const SCENE_W   = 160;  // total width: deer(54) + gap(18) + kodi(88)
-    const DEER_W    = 54;
-    const KODI_W    = 88;
-    const GAP       = 18;   // deer is this far ahead of Kodi
-    const RUN_SPEED = 2.2;  // px / frame
-    const PEEK_TIME = 4200;
+    const GAP_START = 150;  // centre-to-centre distance at the start of a run
+    const GAP_MIN   = 70;   // deer never closer than this, so the sprites don't overlap
     const REST_MIN  = 6000;
     const REST_MAX  = 16000;
 
-    let posX        = -(SCENE_W + 20); // start off-screen left
-    let dir         = 1;               // 1=L→R, -1=R→L
-    let state       = 'resting';
+    let kodiX       = 0;    // Kodi's centre, px from the left of the viewport
+    let gap         = GAP_START;
+    let dir         = 1;    // 1 = left→right, -1 = right→left
+    let deerV       = 0;    // deer speed, px/s
+    let kodiV       = 0;    // Kodi speed, px/s
+    let spriteW     = 104;
+    let deerCycle   = 0;
+    let kodiCycle   = 0;
+    let running     = false;
     let rafId       = null;
+    let lastT       = null;
+    let dustAcc     = 0;
+    let quipTimer   = 0;
     let speechTimer = null;
     let restTimer   = null;
-    let dustTimer   = null;
 
     function vw() { return window.innerWidth; }
 
-    // ── Position scene — deer leads, Kodi follows ─────────────────────────
-    function updatePos(x) {
-      scene.style.left = x + 'px';
-      // Deer is AHEAD (in direction of travel), Kodi is BEHIND
-      if (dir === 1) {
-        // running left→right: deer is to the right of Kodi
-        if (deer) deer.style.order = '1';
-        if (kodi) kodi.style.order = '2';
-        // deer further right = bigger left offset on deer
-        scene.style.gap = GAP + 'px';
-      } else {
-        // running right→left: deer is to the left of Kodi (flipped)
-        if (deer) deer.style.order = '2';
-        if (kodi) kodi.style.order = '1';
-        scene.style.gap = GAP + 'px';
-      }
+    // Sprites are positioned by translate so the element's centre is the given x
+    function place(el, cx) {
+      el.style.transform = 'translate3d(' + (cx - spriteW / 2) + 'px,0,0)';
     }
 
-    // ── Flip direction visually ───────────────────────────────────────────
-    function setFlipped(flip) {
-      if (flip) {
-        scene.classList.add('flipped');
-      } else {
-        scene.classList.remove('flipped');
-      }
+    // Stride length follows speed: faster running means a shorter stride cycle.
+    // Only updated when the change is noticeable, to avoid constant animation restarts.
+    function setCycle(el, current, speed) {
+      const next = Math.min(0.8, Math.max(0.32, (0.55 * 150) / Math.max(speed, 60)));
+      if (current && Math.abs(next - current) < 0.04) return current;
+      el.style.setProperty('--cycle', next.toFixed(2) + 's');
+      return next;
     }
 
-    // ── Speech bubble ─────────────────────────────────────────────────────
     function say(msg) {
       if (!speech) return;
       speech.textContent = msg || chaseQuips[Math.floor(Math.random() * chaseQuips.length)];
@@ -1256,121 +1246,102 @@
       speechTimer = setTimeout(() => speech.classList.remove('visible'), 3000);
     }
 
-    // ── Dust puff at current position ─────────────────────────────────────
-    function spawnDust() {
+    function spawnDust(x) {
       const puff = document.createElement('div');
       puff.className = 'dust-puff';
-      const currentLeft = parseFloat(scene.style.left) || 0;
-      puff.style.left = (currentLeft + (dir === 1 ? 10 : SCENE_W - 20)) + 'px';
+      puff.style.left = (x - dir * spriteW * 0.35) + 'px';
       document.body.appendChild(puff);
       setTimeout(() => puff.remove(), 750);
     }
 
-    // ── Enter peeking state (Kodi peers up from bottom corner) ───────────
-    function enterPeek(fromRight) {
-      state = 'peeking';
-      cancelAnimationFrame(rafId);
-      clearInterval(dustTimer);
+    // Each run: the deer sprints ahead, Kodi chases and closes the gap.
+    // Both sprites start and end fully off-screen, so the scene has no visible cut-in.
+    function startRun() {
+      if (!kodi || !deer) return;
+      spriteW  = kodi.offsetWidth || 104;
+      kodiX    = dir === 1 ? -spriteW - GAP_START : vw() + spriteW + GAP_START;
+      gap      = GAP_START;
+      deerV    = 0;
+      kodiV    = 0;
+      deerCycle = 0;
+      kodiCycle = 0;
+      dustAcc  = 0;
+      quipTimer = 2.5 + Math.random() * 1.5;
+      lastT    = null;
+      running  = true;
+      scene.classList.toggle('face-left', dir === -1);
+      rafId = requestAnimationFrame(frame);
+    }
 
-      scene.classList.add('peeking');
-      // Position flush to corner
-      if (fromRight) {
-        scene.style.left = '';
-        scene.style.right = '24px';
-      } else {
-        scene.style.right = '';
-        scene.style.left = '24px';
+    function frame(t) {
+      if (!running) return;
+      if (lastT === null) lastT = t;
+      // Clamp so a background tab doesn't cause a teleport when it resumes
+      const dt = Math.min(0.05, (t - lastT) / 1000);
+      lastT = t;
+
+      const deerTarget = gap < 90 ? 230 : gap > 220 ? 120 : 150;
+      deerV += (deerTarget - deerV) * Math.min(1, 3 * dt);
+
+      const kodiTarget = Math.min(280, Math.max(60, deerV + (gap - 120) * 1.2));
+      kodiV += (kodiTarget - kodiV) * Math.min(1, 4 * dt);
+
+      kodiX += dir * kodiV * dt;
+      gap = Math.max(GAP_MIN, gap + (deerV - kodiV) * dt);
+      const deerX = kodiX + dir * gap;
+
+      place(kodi, kodiX);
+      place(deer, deerX);
+      deerCycle = setCycle(deer, deerCycle, deerV);
+      kodiCycle = setCycle(kodi, kodiCycle, kodiV);
+
+      dustAcc += dt;
+      if (dustAcc > 0.12) {
+        dustAcc = 0;
+        spawnDust(kodiX);
       }
 
-      setTimeout(() => say(), 400);
+      quipTimer -= dt;
+      if (quipTimer <= 0) {
+        say();
+        quipTimer = 2.5 + Math.random() * 1.5;
+      }
 
-      restTimer = setTimeout(() => exitPeek(fromRight), PEEK_TIME);
-    }
-
-    // ── Exit peek → rest ──────────────────────────────────────────────────
-    function exitPeek(fromRight) {
-      scene.classList.remove('peeking');
-      scene.classList.add('hiding');
-      if (speech) speech.classList.remove('visible');
-
-      setTimeout(() => {
-        scene.classList.remove('hiding');
-
-        // Flip and reset to opposite side
-        dir = fromRight ? -1 : 1;
-        posX = fromRight ? vw() + 20 : -(SCENE_W + 20);
-        setFlipped(dir === -1);
-        scene.style.right = '';
-        scene.style.left = posX + 'px';
-
-        state = 'resting';
-        const wait = REST_MIN + Math.random() * (REST_MAX - REST_MIN);
-        restTimer = setTimeout(startRun, wait);
-      }, 500);
-    }
-
-    // ── Run loop ──────────────────────────────────────────────────────────
-    function startRun() {
-      state = 'running';
-      setFlipped(dir === -1);
-      scene.style.right = '';
-      scene.style.left = posX + 'px';
-
-      // Dust puffs every 3 frames (~50ms)
-      let frameCount = 0;
-      const runQuip = setTimeout(() => say(), 1800 + Math.random() * 2500);
-
-      function frame() {
-        if (state !== 'running') return;
-
-        posX += dir * RUN_SPEED;
-        updatePos(posX);
-
-        // Dust puffs every ~8 frames
-        frameCount++;
-        if (frameCount % 8 === 0) spawnDust();
-
-        // Hit right wall
-        if (dir === 1 && posX >= vw() - 40) {
-          clearTimeout(runQuip);
-          enterPeek(true);
-          return;
-        }
-        // Hit left wall
-        if (dir === -1 && posX <= -(SCENE_W + 20)) {
-          clearTimeout(runQuip);
-          enterPeek(false);
-          return;
-        }
-
-        rafId = requestAnimationFrame(frame);
+      const offEnd = dir === 1
+        ? kodiX - spriteW / 2 > vw() + 20
+        : kodiX + spriteW / 2 < -20;
+      if (offEnd) {
+        endRun();
+        return;
       }
 
       rafId = requestAnimationFrame(frame);
     }
 
-    // ── Click Kodi → bounce + say ─────────────────────────────────────────
+    function endRun() {
+      running = false;
+      cancelAnimationFrame(rafId);
+      if (speech) speech.classList.remove('visible');
+      dir = -dir;
+      const wait = REST_MIN + Math.random() * (REST_MAX - REST_MIN);
+      restTimer = setTimeout(startRun, wait);
+    }
+
+    // Click Kodi to make him hop and say something
     if (kodi) {
       kodi.addEventListener('click', () => {
         say();
-        kodi.style.transition = 'transform 0.35s cubic-bezier(0.34,1.56,0.64,1)';
-        kodi.style.transform  = 'translateY(-22px) scale(1.1)';
-        setTimeout(() => {
-          kodi.style.transform  = '';
-          kodi.style.transition = '';
-        }, 380);
+        kodi.classList.remove('hop');
+        void kodi.offsetWidth;
+        kodi.classList.add('hop');
+      });
+      kodi.addEventListener('animationend', (e) => {
+        if (e.animationName === 'kodi-hop') kodi.classList.remove('hop');
       });
     }
 
-    // ── Kick off after initial delay ──────────────────────────────────────
     const initialDelay = 2500 + Math.random() * 3500;
-    setTimeout(() => {
-      posX = -(SCENE_W + 20);
-      dir  = 1;
-      setFlipped(false);
-      scene.style.left = posX + 'px';
-      startRun();
-    }, initialDelay);
+    restTimer = setTimeout(startRun, initialDelay);
   };
 
   // ============================================================

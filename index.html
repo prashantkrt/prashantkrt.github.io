@@ -13,7 +13,7 @@
   <link href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet">
   <link rel="icon" type="image/svg+xml" href="assets/favicon.svg">
   <link rel="stylesheet" href="assets/css/styles.css?v=3.4">
-  <link rel="stylesheet" href="assets/css/patrol-bear.css?v=3.5">
+  <link rel="stylesheet" href="assets/css/patrol-bear.css?v=3.6">
 </head>
 <body>
   <div class="scroll-progress-bar" id="scrollProgressBar"></div>
@@ -441,141 +441,113 @@
   <div class="patrol-scene" id="patrolScene" aria-hidden="true">
 
     <!-- DEER — runs ahead of Kodi -->
-    <div class="patrol-deer" id="patrolDeer">
-      <svg class="deer-svg" viewBox="0 0 54 68" fill="none" xmlns="http://www.w3.org/2000/svg">
-        <!-- Shadow -->
-        <ellipse cx="27" cy="66" rx="13" ry="2.5" fill="#000" fill-opacity="0.2"/>
-        <!-- Body -->
-        <ellipse cx="27" cy="44" rx="14" ry="10" fill="#C8956A"/>
-        <!-- White belly -->
-        <ellipse cx="27" cy="47" rx="8" ry="6" fill="#F5E0C8"/>
-        <!-- Neck -->
-        <rect x="20" y="26" width="14" height="18" rx="7" fill="#C8956A"/>
-        <!-- Head -->
-        <ellipse cx="27" cy="24" rx="12" ry="10" fill="#C8956A"/>
-        <!-- Snout -->
-        <ellipse cx="27" cy="30" rx="6" ry="4" fill="#B07850"/>
-        <!-- Nose -->
-        <ellipse cx="27" cy="27.5" rx="2.5" ry="1.8" fill="#1a1a2e"/>
-        <ellipse cx="26.2" cy="26.8" rx="0.8" ry="0.6" fill="#fff" opacity="0.7"/>
-        <!-- Eye -->
-        <ellipse cx="21" cy="22" rx="2.5" ry="3" fill="#1a1a2e"/>
-        <circle cx="20.3" cy="21.2" r="0.9" fill="#fff"/>
-        <!-- Eyelash (cute) -->
-        <path d="M19 19.5 Q21 17 23 19" stroke="#8B5E3C" stroke-width="0.9" stroke-linecap="round" fill="none"/>
-        <!-- Ear left -->
-        <path d="M17 16 L13 8 L20 13 Z" fill="#C8956A"/>
-        <path d="M17 16 L14 10 L19.5 14 Z" fill="#F0C0A0"/>
-        <!-- Ear right -->
-        <path d="M22 13 L21 6 L27 12 Z" fill="#C8956A"/>
-        <path d="M22 13 L21.5 7.5 L26 12 Z" fill="#F0C0A0"/>
-        <!-- Antler left (cute small nubs) -->
-        <path d="M15 14 L11 6 M11 6 L8 3 M11 6 L14 3" stroke="#8B5E3C" stroke-width="1.8" stroke-linecap="round" fill="none"/>
-        <!-- Antler right -->
-        <path d="M19 10 L17 3 M17 3 L14.5 0 M17 3 L20 0" stroke="#8B5E3C" stroke-width="1.8" stroke-linecap="round" fill="none"/>
-        <!-- White spots on back -->
-        <circle cx="22" cy="40" r="2" fill="#F5E0C8" opacity="0.7"/>
-        <circle cx="30" cy="38" r="1.5" fill="#F5E0C8" opacity="0.7"/>
-        <circle cx="26" cy="42" r="1.2" fill="#F5E0C8" opacity="0.6"/>
-        <!-- Tail (fluffy white) -->
-        <ellipse cx="39" cy="42" rx="4" ry="3" fill="#FFF" opacity="0.9"/>
-        <!-- Front legs -->
-        <rect class="deer-leg-fl" x="18" y="52" width="5" height="14" rx="2.5" fill="#B07850"/>
-        <rect class="deer-leg-fr" x="24" y="54" width="5" height="12" rx="2.5" fill="#B07850"/>
-        <!-- Back legs -->
-        <rect class="deer-leg-bl" x="30" y="52" width="5" height="14" rx="2.5" fill="#C8956A"/>
-        <rect class="deer-leg-br" x="36" y="54" width="5" height="12" rx="2.5" fill="#C8956A"/>
-        <!-- Hooves -->
-        <rect x="18" y="63" width="5" height="3" rx="1.5" fill="#5C3D1E"/>
-        <rect x="24" y="63" width="5" height="3" rx="1.5" fill="#5C3D1E"/>
-        <rect x="30" y="63" width="5" height="3" rx="1.5" fill="#5C3D1E"/>
-        <rect x="36" y="63" width="5" height="3" rx="1.5" fill="#5C3D1E"/>
-      </svg>
+    <div class="patrol-sprite patrol-deer" id="patrolDeer">
+      <div class="sprite-flip">
+        <svg class="deer-svg" viewBox="0 0 130 130" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <ellipse cx="66" cy="116" rx="38" ry="3" fill="#000" fill-opacity="0.22"/>
+          <g class="bob">
+            <!-- Tail -->
+            <g class="deer-tail">
+              <ellipse cx="30" cy="70" rx="4.5" ry="6.5" fill="#FFF" opacity="0.92"/>
+            </g>
+            <!-- Body -->
+            <ellipse cx="62" cy="74" rx="30" ry="15" fill="#C8956A"/>
+            <ellipse cx="64" cy="81" rx="22" ry="5.5" fill="#F5E0C8"/>
+            <ellipse cx="36" cy="72" rx="5.5" ry="6.5" fill="#F5E0C8" opacity="0.85"/>
+            <circle cx="52" cy="66" r="2" fill="#F5E0C8" opacity="0.7"/>
+            <circle cx="62" cy="63" r="1.6" fill="#F5E0C8" opacity="0.7"/>
+            <circle cx="70" cy="67" r="1.4" fill="#F5E0C8" opacity="0.7"/>
+            <!-- Near legs (in front of the body) -->
+            <g class="leg" style="--hx:42px;--hy:84px;--ph:0.5">
+              <line x1="42" y1="84" x2="42" y2="98" stroke="#B07850" stroke-width="6.5" stroke-linecap="round"/>
+              <g class="leg-shin" style="--kx:42px;--ky:98px">
+                <line x1="42" y1="98" x2="42" y2="112" stroke="#B07850" stroke-width="5.5" stroke-linecap="round"/>
+                <ellipse cx="42" cy="114" rx="3.8" ry="2.2" fill="#5C3D1E"/>
+              </g>
+            </g>
+            <g class="leg" style="--hx:84px;--hy:84px;--ph:0">
+              <line x1="84" y1="84" x2="84" y2="98" stroke="#B07850" stroke-width="6.5" stroke-linecap="round"/>
+              <g class="leg-shin" style="--kx:84px;--ky:98px">
+                <line x1="84" y1="98" x2="84" y2="112" stroke="#B07850" stroke-width="5.5" stroke-linecap="round"/>
+                <ellipse cx="84" cy="114" rx="3.8" ry="2.2" fill="#5C3D1E"/>
+              </g>
+            </g>
+            <!-- Neck -->
+            <line x1="84" y1="68" x2="100" y2="42" stroke="#C8956A" stroke-width="13" stroke-linecap="round"/>
+            <!-- Back ear -->
+            <g class="deer-ear">
+              <path d="M97 34 L88 24 L100 30 Z" fill="#C8956A"/>
+              <path d="M96 33 L90 26 L99 30 Z" fill="#F0C0A0"/>
+            </g>
+            <!-- Antlers (drawn before the head so their bases sit inside it) -->
+            <path d="M101 31 L98 17 M98 17 L93 11 M98 17 L103 12 M101 31 L107 19 M107 19 L111 13 M107 19 L104 13" stroke="#8B5E3C" stroke-width="2" stroke-linecap="round" fill="none"/>
+            <!-- Head -->
+            <ellipse cx="104" cy="38" rx="11" ry="8.5" fill="#C8956A"/>
+            <ellipse cx="113" cy="42" rx="6" ry="4.6" fill="#B07850"/>
+            <ellipse cx="117.5" cy="41" rx="2" ry="1.6" fill="#1a1a2e"/>
+            <ellipse cx="116.8" cy="40.4" rx="0.7" ry="0.5" fill="#fff" opacity="0.7"/>
+            <path d="M99 32.5 Q101.5 30 104 32.5" stroke="#8B5E3C" stroke-width="0.9" stroke-linecap="round" fill="none"/>
+            <ellipse class="blink" style="transform-origin:102px 36px" cx="102" cy="36" rx="2.2" ry="2.6" fill="#1a1a2e"/>
+            <circle cx="101.3" cy="35.2" r="0.8" fill="#fff"/>
+          </g>
+        </svg>
+      </div>
     </div>
 
     <!-- KODI — campfire Moon Bear chasing with marshmallow stick -->
-    <div class="patrol-kodi" id="patrolKodi">
-      <!-- Speech bubble above Kodi -->
+    <div class="patrol-sprite patrol-kodi" id="patrolKodi">
       <div class="pb-speech" id="pbSpeech"></div>
-
-      <svg class="kodi-svg" viewBox="0 0 88 80" fill="none" xmlns="http://www.w3.org/2000/svg">
-        <!-- Shadow -->
-        <ellipse cx="38" cy="78" rx="24" ry="3.5" fill="#000" fill-opacity="0.28"/>
-        <!-- Body (dark campfire bear) -->
-        <ellipse cx="38" cy="57" rx="20" ry="17" fill="#1C2128"/>
-        <!-- Belly patch (tan) -->
-        <ellipse cx="38" cy="62" rx="12" ry="10" fill="#E0A96D"/>
-        <!-- Left leg -->
-        <ellipse class="kodi-leg-l" cx="27" cy="72" rx="7" ry="5" fill="#1C2128"/>
-        <ellipse cx="27" cy="72" rx="4" ry="2.8" fill="#111317"/>
-        <!-- Right leg -->
-        <ellipse class="kodi-leg-r" cx="49" cy="72" rx="7" ry="5" fill="#1C2128"/>
-        <ellipse cx="49" cy="72" rx="4" ry="2.8" fill="#111317"/>
-        <!-- Left arm (reaching forward, excited chase) -->
-        <path class="kodi-arm-l" d="M18 52 Q8 44 12 38" stroke="#1C2128" stroke-width="8" stroke-linecap="round" fill="none"/>
-        <!-- Right arm HOLDING MARSHMALLOW STICK (raised high toward deer) -->
-        <path class="kodi-arm-r" d="M58 50 Q66 38 72 20" stroke="#1C2128" stroke-width="8" stroke-linecap="round" fill="none"/>
-        <!-- Marshmallow stick -->
-        <line x1="72" y1="20" x2="82" y2="2" stroke="#8D5B2A" stroke-width="2.5" stroke-linecap="round"/>
-        <!-- Marshmallow on stick -->
-        <rect x="79" y="-2" width="9" height="7" rx="3" fill="#FFF8EB" stroke="#D4A373" stroke-width="0.8" transform="rotate(-20 79 -2)"/>
-        <ellipse cx="83" cy="1" rx="1.8" ry="1.1" fill="#B07D48" opacity="0.7"/>
-        <!-- Small fire/sparkle on marshmallow (roasting!) -->
-        <ellipse class="kodi-fire" cx="83" cy="-1" rx="2" ry="2.5" fill="#FF8C42" opacity="0.8"/>
-        <ellipse class="kodi-fire" cx="83" cy="-2" rx="1.2" ry="1.8" fill="#FFD700" opacity="0.9"/>
-        <!-- Left ear -->
-        <circle cx="24" cy="30" r="11" fill="#1C2128"/>
-        <circle cx="24" cy="30" r="6.5" fill="#E0A96D"/>
-        <!-- Right ear -->
-        <circle cx="52" cy="30" r="11" fill="#1C2128"/>
-        <circle cx="52" cy="30" r="6.5" fill="#E0A96D"/>
-        <!-- Head -->
-        <ellipse cx="38" cy="41" rx="22" ry="19" fill="#2B323C"/>
-        <!-- Snout -->
-        <ellipse cx="38" cy="50" rx="13" ry="9.5" fill="#E0A96D"/>
-        <!-- Nose -->
-        <path d="M33 45 C35 43, 41 43, 43 45 C44 47, 41 50, 38 50 C35 50, 32 47, 33 45 Z" fill="#111317"/>
-        <ellipse cx="36" cy="44.5" rx="1.4" ry="1" fill="#FFF" opacity="0.85"/>
-        <!-- Mouth (happy open, chasing) -->
-        <path d="M32 51 Q38 57 44 51" stroke="#111317" stroke-width="1.6" stroke-linecap="round" fill="none"/>
-        <!-- Happy tongue lolling out -->
-        <path class="kodi-tongue" d="M35 54 C35 59, 41 59, 41 54 Z" fill="#FF6B81"/>
-        <!-- Eyes (excited wide) -->
-        <ellipse class="kodi-eye-l" cx="29" cy="39" rx="4" ry="4.5" fill="#111317"/>
-        <circle cx="27.5" cy="37.5" r="1.6" fill="#FFF"/>
-        <ellipse class="kodi-eye-r" cx="47" cy="39" rx="4" ry="4.5" fill="#111317"/>
-        <circle cx="45.5" cy="37.5" r="1.6" fill="#FFF"/>
-        <!-- Star-shaped excited eye shine -->
-        <path d="M27 37 L28 36 L29 37 L28 38 Z" fill="#FFF" opacity="0.6"/>
-        <path d="M45 37 L46 36 L47 37 L46 38 Z" fill="#FFF" opacity="0.6"/>
-        <!-- Blush cheeks -->
-        <ellipse cx="22" cy="47" rx="4" ry="2.5" fill="#E0A96D" opacity="0.65"/>
-        <ellipse cx="54" cy="47" rx="4" ry="2.5" fill="#E0A96D" opacity="0.65"/>
-        <!-- Sweat drop (working hard to catch the deer!) -->
-        <path class="kodi-sweat" d="M57 28 Q58 25 56 23 Q54 25 55 28 Z" fill="#8eb5ff" opacity="0.8"/>
-      </svg>
-
-      <!-- Peek version: just Kodi's eyes peeking over edge -->
-      <div class="pb-peek-eyes" id="kodiPeekEyes">
-        <svg viewBox="0 0 88 36" fill="none" xmlns="http://www.w3.org/2000/svg">
-          <circle cx="24" cy="10" r="11" fill="#1C2128"/>
-          <circle cx="24" cy="10" r="6.5" fill="#E0A96D"/>
-          <circle cx="52" cy="10" r="11" fill="#1C2128"/>
-          <circle cx="52" cy="10" r="6.5" fill="#E0A96D"/>
-          <ellipse cx="38" cy="24" rx="22" ry="19" fill="#2B323C"/>
-          <!-- Eyes peeking with raised brows -->
-          <ellipse cx="29" cy="22" rx="4" ry="4.5" fill="#111317"/>
-          <circle cx="27.5" cy="20.5" r="1.6" fill="#FFF"/>
-          <ellipse cx="47" cy="22" rx="4" ry="4.5" fill="#111317"/>
-          <circle cx="45.5" cy="20.5" r="1.6" fill="#FFF"/>
-          <!-- Paw tips peeking over edge -->
-          <ellipse cx="15" cy="34" rx="8" ry="5" fill="#1C2128"/>
-          <ellipse cx="15" cy="34" rx="5" ry="3" fill="#111317"/>
-          <ellipse cx="61" cy="34" rx="8" ry="5" fill="#1C2128"/>
-          <ellipse cx="61" cy="34" rx="5" ry="3" fill="#111317"/>
-          <!-- Raised eyebrows (curious peeking) -->
-          <path d="M24 16 Q29 13 33 16" stroke="#E0A96D" stroke-width="1.8" stroke-linecap="round" fill="none"/>
-          <path d="M43 16 Q47 13 52 16" stroke="#E0A96D" stroke-width="1.8" stroke-linecap="round" fill="none"/>
+      <div class="sprite-flip">
+        <svg class="kodi-svg" viewBox="0 0 130 130" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <ellipse cx="62" cy="116" rx="38" ry="3" fill="#000" fill-opacity="0.28"/>
+          <g class="bob">
+            <!-- Body -->
+            <ellipse cx="60" cy="74" rx="29" ry="24" fill="#1C2128"/>
+            <ellipse cx="72" cy="80" rx="13" ry="15" fill="#E0A96D"/>
+            <!-- Near legs (in front of the body) -->
+            <g class="leg" style="--hx:46px;--hy:84px;--ph:0.5">
+              <line x1="46" y1="84" x2="46" y2="99" stroke="#1C2128" stroke-width="9" stroke-linecap="round"/>
+              <g class="leg-shin" style="--kx:46px;--ky:99px">
+                <line x1="46" y1="99" x2="46" y2="112" stroke="#1C2128" stroke-width="8" stroke-linecap="round"/>
+                <ellipse cx="47" cy="113" rx="6" ry="3.4" fill="#111317"/>
+              </g>
+            </g>
+            <g class="leg" style="--hx:84px;--hy:84px;--ph:0">
+              <line x1="84" y1="84" x2="84" y2="99" stroke="#1C2128" stroke-width="9" stroke-linecap="round"/>
+              <g class="leg-shin" style="--kx:84px;--ky:99px">
+                <line x1="84" y1="99" x2="84" y2="112" stroke="#1C2128" stroke-width="8" stroke-linecap="round"/>
+                <ellipse cx="85" cy="113" rx="6" ry="3.4" fill="#111317"/>
+              </g>
+            </g>
+            <!-- Arm holding the marshmallow stick -->
+            <g class="kodi-arm">
+              <path d="M76 74 Q92 82 112 74" stroke="#1C2128" stroke-width="9" stroke-linecap="round" fill="none"/>
+            </g>
+            <!-- Marshmallow stick -->
+            <line x1="112" y1="74" x2="120" y2="34" stroke="#8D5B2A" stroke-width="2.5" stroke-linecap="round"/>
+            <rect x="115.5" y="27.5" width="9" height="7" rx="3" fill="#FFF8EB" stroke="#D4A373" stroke-width="0.8" transform="rotate(-20 120 31)"/>
+            <ellipse cx="123" cy="31" rx="1.8" ry="1.1" fill="#B07D48" opacity="0.7" transform="rotate(-20 120 31)"/>
+            <!-- Roasting flame -->
+            <ellipse class="kodi-fire" style="transform-origin:120px 27px" cx="120" cy="21" rx="3" ry="4.5" fill="#FF8C42" opacity="0.85"/>
+            <ellipse class="kodi-fire" style="transform-origin:120px 27px" cx="120" cy="21.5" rx="1.6" ry="2.6" fill="#FFD700"/>
+            <!-- Ears -->
+            <circle cx="72" cy="30" r="8" fill="#1C2128"/>
+            <circle cx="72" cy="31" r="4.5" fill="#E0A96D"/>
+            <circle cx="94" cy="28" r="8" fill="#1C2128"/>
+            <circle cx="94" cy="29" r="4.5" fill="#E0A96D"/>
+            <!-- Head -->
+            <circle cx="84" cy="46" r="20" fill="#2B323C"/>
+            <ellipse cx="100" cy="54" rx="11" ry="8.5" fill="#E0A96D"/>
+            <ellipse cx="107" cy="48" rx="4" ry="3" fill="#111317"/>
+            <ellipse cx="106" cy="47" rx="1.2" ry="0.8" fill="#FFF" opacity="0.85"/>
+            <path d="M98 58 Q103 63 108 58" stroke="#111317" stroke-width="1.5" stroke-linecap="round" fill="none"/>
+            <path class="kodi-tongue" d="M100 59 C100 65 106 65 106 59 Z" fill="#FF6B81"/>
+            <ellipse class="blink" style="transform-origin:84px 41px" cx="84" cy="41" rx="2.6" ry="3.2" fill="#0A0C10"/>
+            <ellipse class="blink" style="transform-origin:94px 40px" cx="94" cy="40" rx="3.6" ry="4.2" fill="#111317"/>
+            <circle cx="92.8" cy="38.6" r="1.4" fill="#FFF"/>
+            <ellipse cx="94" cy="49" rx="3.4" ry="2" fill="#C0604A" opacity="0.5"/>
+            <path class="kodi-sweat" d="M111 30 Q112 27 110 25 Q108 27 109 30 Z" fill="#8eb5ff" opacity="0.8"/>
+          </g>
         </svg>
       </div>
     </div>
@@ -585,6 +557,6 @@
   <!-- DYNAMIC FLOATING TOAST NOTIFICATION CONTAINER -->
   <div id="toastContainer" class="toast-container" aria-live="polite"></div>
 
-  <script src="assets/js/main.js?v=3.7"></script>
+  <script src="assets/js/main.js?v=3.8"></script>
 </body>
 </html>

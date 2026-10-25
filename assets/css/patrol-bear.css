@@ -5,15 +5,13 @@
 /* ── Outer scene container — positioned at bottom, fixed ────────────────── */
 .patrol-scene {
   position: fixed;
+  left: 0;
   bottom: 0;
-  left: -180px;           /* starts fully off-screen left */
+  width: 100%;
+  height: 0;              /* zero-height strip on the bottom edge: sprites sit on its baseline */
   z-index: 980;
-  display: flex;
-  align-items: flex-end;
-  gap: 0px;               /* deer is leading, Kodi is behind — gap controlled by JS */
   pointer-events: none;
   user-select: none;
-  will-change: left;
 }
 
 /* Deer peeks in from a screen edge: it slides from off-screen (--dx/--dy),
@@ -101,164 +99,162 @@
   69%                { transform: scaleY(0.1); }
 }
 
-/* ── DEER ────────────────────────────────────────────────────────────────── */
-.patrol-deer {
-  position: relative;
-  width: 54px;
-  flex-shrink: 0;
+/* ── Sprites: placed on the ground line and moved with translate3d ──────── */
+.patrol-sprite {
+  --cycle: 0.5s;          /* one full stride, updated from JS as speed changes */
+  position: absolute;
+  left: 0;
+  bottom: 0;
+  width: 104px;
+  height: 104px;
   pointer-events: none;
+  will-change: transform;
 }
 
-.deer-svg {
-  width: 54px;
-  height: 68px;
-  display: block;
-  filter: drop-shadow(0 4px 12px rgba(0,0,0,0.45));
+/* Facing lives on a plain wrapper, so it never fights the SVG animations */
+.sprite-flip {
+  width: 100%;
+  height: 100%;
 }
 
-/* Deer running legs — 4-beat gallop */
-.deer-leg-fl { transform-origin: 20.5px 52px; animation: deer-fl 0.32s ease-in-out infinite alternate; }
-.deer-leg-fr { transform-origin: 26.5px 54px; animation: deer-fr 0.32s ease-in-out infinite alternate; }
-.deer-leg-bl { transform-origin: 32.5px 52px; animation: deer-bl 0.32s ease-in-out infinite alternate; }
-.deer-leg-br { transform-origin: 38.5px 54px; animation: deer-br 0.32s ease-in-out infinite alternate; }
-
-@keyframes deer-fl {
-  0%   { transform: rotate(-28deg) translateY(-3px); }
-  100% { transform: rotate(18deg) translateY(0); }
-}
-@keyframes deer-fr {
-  0%   { transform: rotate(18deg) translateY(0); }
-  100% { transform: rotate(-28deg) translateY(-3px); }
-}
-@keyframes deer-bl {
-  0%   { transform: rotate(20deg) translateY(0); }
-  100% { transform: rotate(-22deg) translateY(-4px); }
-}
-@keyframes deer-br {
-  0%   { transform: rotate(-22deg) translateY(-4px); }
-  100% { transform: rotate(20deg) translateY(0); }
+.patrol-scene.face-left .sprite-flip {
+  transform: scaleX(-1);
 }
 
-/* Deer body gallop bounce */
-.deer-svg {
-  animation: deer-gallop 0.32s ease-in-out infinite alternate;
-}
-
-@keyframes deer-gallop {
-  0%   { transform: translateY(0) rotate(0deg); }
-  50%  { transform: translateY(-6px) rotate(-2deg); }
-  100% { transform: translateY(0) rotate(1deg); }
-}
-
-/* ── KODI (Campfire Moon Bear) ───────────────────────────────────────────── */
-.patrol-kodi {
-  position: relative;
-  width: 88px;
-  flex-shrink: 0;
-  pointer-events: auto;
-  cursor: pointer;
-}
-
+.deer-svg,
 .kodi-svg {
-  width: 88px;
-  height: 80px;
   display: block;
-  filter: drop-shadow(0 6px 20px rgba(0,0,0,0.55));
+  width: 100%;
+  height: 100%;
+  overflow: visible;
+  filter: drop-shadow(0 4px 10px rgba(0,0,0,0.45));
 }
 
-/* Kodi running legs */
-.kodi-leg-l {
-  transform-origin: 27px 72px;
-  animation: kodi-leg-left 0.36s ease-in-out infinite alternate;
-}
-.kodi-leg-r {
-  transform-origin: 49px 72px;
-  animation: kodi-leg-right 0.36s ease-in-out infinite alternate;
+/* Legs: the thigh swings from the hip and the shin folds at the knee.
+   Each leg has its own phase (--ph) so the gait reads as a real stride. */
+.leg {
+  transform-origin: var(--hx) var(--hy);
+  animation: leg-swing var(--cycle) ease-in-out infinite;
+  animation-delay: calc(var(--cycle) * var(--ph, 0) * -1);
 }
 
-@keyframes kodi-leg-left {
-  0%   { transform: rotate(-20deg) translateY(-2px); }
-  100% { transform: rotate(22deg) translateY(2px); }
-}
-@keyframes kodi-leg-right {
-  0%   { transform: rotate(22deg) translateY(2px); }
-  100% { transform: rotate(-20deg) translateY(-2px); }
+.leg-shin {
+  transform-origin: var(--kx) var(--ky);
+  animation: shin-tuck var(--cycle) ease-in-out infinite;
+  animation-delay: calc(var(--cycle) * var(--ph, 0) * -1);
 }
 
-/* Kodi chasing arm swing */
-.kodi-arm-l {
-  transform-origin: 18px 52px;
-  animation: kodi-arm-l 0.36s ease-in-out infinite alternate;
-}
-.kodi-arm-r {
-  transform-origin: 58px 50px;
-  animation: kodi-arm-r 0.36s ease-in-out infinite alternate;
+@keyframes leg-swing {
+  0%, 100% { transform: rotate(-30deg); }
+  50%      { transform: rotate(30deg); }
 }
 
-@keyframes kodi-arm-l {
-  0%   { transform: rotate(-15deg); }
-  100% { transform: rotate(20deg); }
-}
-@keyframes kodi-arm-r {
-  0%   { transform: rotate(10deg); }
-  100% { transform: rotate(-10deg); }
+@keyframes shin-tuck {
+  0%, 100% { transform: rotate(18deg); }
+  50%      { transform: rotate(-2deg); }
 }
 
-/* Kodi body bounce while running */
-.kodi-svg {
-  animation: kodi-run-bounce 0.36s ease-in-out infinite alternate;
+/* Body bobs twice per stride */
+.bob {
+  animation: body-bob calc(var(--cycle) / 2) ease-in-out infinite;
 }
 
-@keyframes kodi-run-bounce {
-  0%   { transform: translateY(0) rotate(-1deg); }
-  100% { transform: translateY(-5px) rotate(1.5deg); }
+@keyframes body-bob {
+  0%, 100% { transform: translateY(0); }
+  50%      { transform: translateY(-2.5px); }
 }
 
-/* Tongue flap */
+/* ── Deer details ────────────────────────────────────────────────────────── */
+.deer-ear {
+  transform-origin: 96px 30px;
+  animation: ear-flick 3.4s ease-in-out infinite;
+}
+
+@keyframes ear-flick {
+  0%, 100% { transform: rotate(0deg); }
+  42%      { transform: rotate(-14deg); }
+  48%      { transform: rotate(4deg); }
+  54%      { transform: rotate(0deg); }
+}
+
+.deer-tail {
+  transform-origin: 34px 66px;
+  animation: tail-wag 0.45s ease-in-out infinite alternate;
+}
+
+@keyframes tail-wag {
+  from { transform: rotate(-14deg); }
+  to   { transform: rotate(14deg); }
+}
+
+/* ── Eye blink (each eye sets its own transform-origin inline) ───────────── */
+.blink {
+  animation: blink-eye 4.6s ease-in-out infinite;
+}
+
+@keyframes blink-eye {
+  0%, 92%, 100% { transform: scaleY(1); }
+  95%           { transform: scaleY(0.1); }
+}
+
+/* ── Kodi details ────────────────────────────────────────────────────────── */
+.kodi-arm {
+  transform-origin: 76px 74px;
+  animation: arm-pump var(--cycle) ease-in-out infinite;
+}
+
+@keyframes arm-pump {
+  0%, 100% { transform: rotate(-5deg); }
+  50%      { transform: rotate(5deg); }
+}
+
 .kodi-tongue {
-  transform-origin: 38px 56px;
-  animation: kodi-tongue-flap 0.72s ease-in-out infinite;
+  transform-origin: 103px 59px;
+  animation: tongue-flap 0.72s ease-in-out infinite;
 }
 
-@keyframes kodi-tongue-flap {
-  0%, 100% { transform: scaleY(1) rotate(0deg); }
-  45%       { transform: scaleY(1.4) rotate(6deg) translateY(2px); }
+@keyframes tongue-flap {
+  0%, 100% { transform: scaleY(1); }
+  45%      { transform: scaleY(1.35) translateY(1px); }
 }
 
-/* Marshmallow fire flicker */
+/* Marshmallow fire flicker (each flame sets its own transform-origin inline) */
 .kodi-fire {
   animation: fire-flicker 0.4s ease-in-out infinite alternate;
-  transform-origin: 83px 0px;
 }
 
 @keyframes fire-flicker {
-  0%   { transform: scaleY(1) scaleX(1);   opacity: 0.9; }
-  50%  { transform: scaleY(1.3) scaleX(0.8); opacity: 1; }
-  100% { transform: scaleY(0.8) scaleX(1.2); opacity: 0.75; }
+  0%   { transform: scale(1, 1);     opacity: 0.9; }
+  50%  { transform: scale(0.8, 1.3); opacity: 1; }
+  100% { transform: scale(1.2, 0.8); opacity: 0.75; }
 }
 
-/* Sweat drop animation */
 .kodi-sweat {
   animation: sweat-drop 1.6s ease-in-out infinite;
 }
 
 @keyframes sweat-drop {
   0%, 70%, 100% { opacity: 0.8; transform: translateY(0); }
-  80%            { opacity: 0.2; transform: translateY(6px); }
+  80%           { opacity: 0.2; transform: translateY(6px); }
 }
 
-/* Eye blink */
-.kodi-eye-l, .kodi-eye-r {
-  transform-origin: 38px 39px;
-  animation: kodi-blink 4s ease-in-out infinite;
+/* Click on Kodi: hop */
+.patrol-kodi.hop .kodi-svg {
+  animation: kodi-hop 0.38s cubic-bezier(0.34, 1.56, 0.64, 1);
 }
 
-@keyframes kodi-blink {
-  0%, 92%, 100% { transform: scaleY(1); }
-  95%            { transform: scaleY(0.1); }
+@keyframes kodi-hop {
+  0%, 100% { transform: translateY(0); }
+  50%      { transform: translateY(-16px); }
 }
 
-/* ── Speech bubble above Kodi ────────────────────────────────────────────── */
+/* ── Kodi click target and speech bubble ─────────────────────────────────── */
+/* The bubble sits outside the flip wrapper, so it's never mirrored */
+.patrol-kodi {
+  pointer-events: auto;
+  cursor: pointer;
+}
+
 .pb-speech {
   position: absolute;
   bottom: calc(100% + 6px);
@@ -293,75 +289,6 @@
   transform: translateX(-50%) translateY(0) scale(1);
 }
 
-/* ── Peeking state — only Kodi's head shows over the edge ───────────────── */
-.pb-peek-eyes {
-  position: absolute;
-  bottom: 100%;
-  left: 50%;
-  transform: translateX(-50%);
-  width: 88px;
-  height: 36px;
-  overflow: hidden;
-  opacity: 0;
-  pointer-events: none;
-  transition: opacity 0.3s ease;
-}
-
-.pb-peek-eyes svg {
-  width: 88px;
-  height: 36px;
-  display: block;
-}
-
-/* When peeking: hide full body, show just head-peek */
-.patrol-scene.peeking .kodi-svg,
-.patrol-scene.peeking .patrol-deer {
-  opacity: 0;
-  pointer-events: none;
-}
-
-.patrol-scene.peeking .pb-peek-eyes {
-  opacity: 1;
-  animation: kodi-peek-bob 2.4s ease-in-out infinite;
-}
-
-.patrol-scene.peeking .kodi-leg-l,
-.patrol-scene.peeking .kodi-leg-r,
-.patrol-scene.peeking .kodi-arm-l,
-.patrol-scene.peeking .kodi-arm-r {
-  animation: none;
-}
-
-@keyframes kodi-peek-bob {
-  0%, 100% { transform: translateX(-50%) translateY(0); }
-  40%       { transform: translateX(-50%) translateY(-7px); }
-  60%       { transform: translateX(-50%) translateY(-4px); }
-}
-
-/* Peeking scene: position Kodi flush at corner edge */
-.patrol-scene.peeking {
-  bottom: -42px;  /* only top of head peeks above fold */
-}
-
-/* ── Hiding/diving animation ─────────────────────────────────────────────── */
-.patrol-scene.hiding {
-  transition: transform 0.4s cubic-bezier(0.55, 0, 1, 0.45),
-              opacity 0.3s ease;
-  transform: translateY(90px);
-  opacity: 0;
-}
-
-/* ── Flipped (running right→left) ───────────────────────────────────────── */
-.patrol-scene.flipped .kodi-svg,
-.patrol-scene.flipped .deer-svg {
-  transform: scaleX(-1);
-}
-
-.patrol-scene.flipped .pb-speech {
-  /* Keep speech bubble unflipped */
-  transform: translateX(-50%) scaleX(-1) translateY(0) scale(1);
-}
-
 /* ── Footstep dust puffs (created by JS) ─────────────────────────────────── */
 .dust-puff {
   position: fixed;
@@ -391,9 +318,9 @@
 
 /* ── Mobile scale down ───────────────────────────────────────────────────── */
 @media (max-width: 480px) {
-  .patrol-scene {
-    transform-origin: bottom left;
-    transform: scale(0.75);
+  .patrol-sprite {
+    width: 80px;
+    height: 80px;
   }
 }
 
