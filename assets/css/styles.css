@@ -851,16 +851,129 @@ body.modal-open{overflow:hidden}
 /* ==========================================================================
    SCROLL REVEAL ANIMATIONS
    ========================================================================== */
+.reveal, .reveal-pop {
+  transition: opacity 0.65s cubic-bezier(0.16, 1, 0.3, 1), transform 0.65s cubic-bezier(0.16, 1, 0.3, 1);
+  will-change: opacity, transform;
+}
+
 .reveal {
   opacity: 0;
   transform: translateY(28px);
-  transition: opacity 0.65s cubic-bezier(0.16, 1, 0.3, 1), transform 0.65s cubic-bezier(0.16, 1, 0.3, 1);
-  will-change: opacity, transform;
+}
+
+.reveal-pop {
+  opacity: 0;
+  transform: translateY(22px) scale(0.96);
 }
 
 .reveal.reveal-visible {
   opacity: 1;
   transform: translateY(0);
+}
+
+.reveal-pop.reveal-visible {
+  opacity: 1;
+  transform: translateY(0) scale(1);
+}
+
+/* ==========================================================================
+   SKILL PROFICIENCY METERS
+   ========================================================================== */
+.skill-meter {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-top: 14px;
+}
+
+.skill-meter-track {
+  flex: 1;
+  height: 4px;
+  border-radius: 3px;
+  background: rgba(174, 191, 227, 0.14);
+  overflow: hidden;
+}
+
+.skill-meter-fill {
+  display: block;
+  height: 100%;
+  width: 0%;
+  border-radius: 3px;
+  background: linear-gradient(90deg, var(--green), var(--blue));
+  box-shadow: 0 0 10px rgba(161, 244, 194, 0.35);
+  transition: width 1.1s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.skill-meter-pct {
+  font: 8px var(--mono);
+  color: #8e9cb6;
+  min-width: 28px;
+  text-align: right;
+}
+
+/* ==========================================================================
+   TIMELINE SCROLL PROGRESS
+   ========================================================================== */
+.timeline {
+  position: relative;
+}
+
+.timeline-progress {
+  position: absolute;
+  left: -1px;
+  top: 0;
+  width: 2px;
+  height: 0%;
+  background: linear-gradient(180deg, var(--green), var(--blue));
+  box-shadow: 0 0 10px rgba(161, 244, 194, 0.5);
+  border-radius: 2px;
+  transition: height 0.15s linear;
+}
+
+/* ==========================================================================
+   CURSOR AMBIENT GLOW
+   ========================================================================== */
+.cursor-glow {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 360px;
+  height: 360px;
+  border-radius: 50%;
+  pointer-events: none;
+  z-index: -1;
+  background: radial-gradient(circle, rgba(161, 244, 194, 0.10), rgba(142, 181, 255, 0.05) 45%, transparent 72%);
+  transform: translate(-50%, -50%);
+  opacity: 0;
+  transition: opacity 0.5s ease;
+  will-change: transform;
+}
+
+.cursor-glow.active {
+  opacity: 1;
+}
+
+@media (max-width: 900px), (pointer: coarse) {
+  .cursor-glow {
+    display: none;
+  }
+}
+
+/* ==========================================================================
+   GRADIENT TEXT SHIMMER & HERO PARALLAX EASING
+   ========================================================================== */
+@keyframes gradientShimmer {
+  0% { background-position: 0% 50%; }
+  100% { background-position: 200% 50%; }
+}
+
+.gradient {
+  background-size: 200% auto;
+  animation: gradientShimmer 7s linear infinite;
+}
+
+.code-window, .orbit-1, .orbit-2 {
+  transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1);
 }
 
 /* Responsive adjustments */

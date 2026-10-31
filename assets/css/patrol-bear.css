@@ -603,15 +603,3 @@ body.chase-active .deer-corner-peek * {
   transform: translateY(-2px);
 }
 
-/* ── Section scroll-reveal ───────────────────────────────────────────────── */
-.reveal-up {
-  opacity: 0;
-  transform: translateY(30px);
-  transition: opacity 0.65s cubic-bezier(0.16, 1, 0.3, 1),
-              transform 0.65s cubic-bezier(0.16, 1, 0.3, 1);
-}
-
-.reveal-up.visible {
-  opacity: 1;
-  transform: translateY(0);
-}
