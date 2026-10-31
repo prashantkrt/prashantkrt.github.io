@@ -1501,12 +1501,13 @@
     const REST_MAX  = 16000;
 
     let kodiX       = 0;    // Kodi's centre, px from the left of the viewport
+    let deerX       = 0;    // Nodi's centre, tracked for the click-to-hop dust puff
     let gap         = GAP_START;
     let dir         = 1;    // 1 = left→right, -1 = right→left
     let deerV       = 0;    // deer speed, px/s
     let kodiV       = 0;    // Kodi speed, px/s
-    let spriteW     = 142;  // Kodi's width, used for entry/exit and dust
-    let deerW       = 124;
+    let spriteW     = 110;  // Kodi's width, used for entry/exit and dust
+    let deerW       = 96;
     let running     = false;
     let rafId       = null;
     let lastT       = null;
@@ -1739,7 +1740,7 @@
 
       kodiX += dir * kodiV * dt;
       gap = Math.max(GAP_MIN, gap + (deerV - kodiV) * dt);
-      const deerX = kodiX + dir * gap;
+      deerX = kodiX + dir * gap;
 
       place(kodi, kodiX, spriteW);
       place(deer, deerX, deerW);
@@ -1782,7 +1783,9 @@
         el.classList.add('hop');
       });
       el.addEventListener('animationend', (e) => {
-        if (e.animationName === 'sprite-hop') el.classList.remove('hop');
+        if (e.animationName !== 'sprite-hop') return;
+        el.classList.remove('hop');
+        spawnDust(who === 'kodi' ? kodiX : deerX);
       });
     });
 
