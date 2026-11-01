@@ -1129,6 +1129,73 @@
       } catch (e) {}
     },
 
+    // 1b. Kodi cartoon Jump, Fall & 360° Somersault Roll sound
+    kodiJumpRoll() {
+      try {
+        const ac = this.getCtx();
+        if (!ac) return;
+        const t = ac.currentTime;
+
+        // Stage 1: Spring launch boing (0.0s - 0.35s)
+        const osc1 = ac.createOscillator();
+        const gain1 = ac.createGain();
+        osc1.type = 'sine';
+        osc1.frequency.setValueAtTime(220, t);
+        osc1.frequency.exponentialRampToValueAtTime(780, t + 0.16);
+        osc1.frequency.exponentialRampToValueAtTime(540, t + 0.35);
+        gain1.gain.setValueAtTime(0.32, t);
+        gain1.gain.exponentialRampToValueAtTime(0.16, t + 0.35);
+        gain1.gain.exponentialRampToValueAtTime(0.001, t + 0.42);
+        osc1.connect(gain1);
+        gain1.connect(ac.destination);
+        osc1.start(t);
+        osc1.stop(t + 0.43);
+
+        // Stage 2: Mid-air tumble & whoosh (0.32s - 0.60s)
+        const osc2 = ac.createOscillator();
+        const gain2 = ac.createGain();
+        osc2.type = 'triangle';
+        osc2.frequency.setValueAtTime(640, t + 0.32);
+        osc2.frequency.exponentialRampToValueAtTime(180, t + 0.58);
+        gain2.gain.setValueAtTime(0.001, t + 0.32);
+        gain2.gain.linearRampToValueAtTime(0.24, t + 0.42);
+        gain2.gain.exponentialRampToValueAtTime(0.001, t + 0.62);
+        osc2.connect(gain2);
+        gain2.connect(ac.destination);
+        osc2.start(t + 0.32);
+        osc2.stop(t + 0.63);
+
+        // Stage 3: Ground impact & roll (0.58s - 0.74s)
+        const osc3 = ac.createOscillator();
+        const gain3 = ac.createGain();
+        osc3.type = 'sine';
+        osc3.frequency.setValueAtTime(170, t + 0.58);
+        osc3.frequency.exponentialRampToValueAtTime(75, t + 0.68);
+        gain3.gain.setValueAtTime(0.36, t + 0.58);
+        gain3.gain.exponentialRampToValueAtTime(0.001, t + 0.73);
+        osc3.connect(gain3);
+        gain3.connect(ac.destination);
+        osc3.start(t + 0.58);
+        osc3.stop(t + 0.74);
+
+        // Stage 4: Spring recovery double-bounce (0.78s - 1.05s)
+        [0.78, 0.88].forEach((delay, idx) => {
+          const osc = ac.createOscillator();
+          const g = ac.createGain();
+          osc.type = 'sine';
+          const f0 = idx === 0 ? 340 : 500;
+          osc.frequency.setValueAtTime(f0, t + delay);
+          osc.frequency.exponentialRampToValueAtTime(f0 * 1.6, t + delay + 0.08);
+          g.gain.setValueAtTime(0.24, t + delay);
+          g.gain.exponentialRampToValueAtTime(0.001, t + delay + 0.12);
+          osc.connect(g);
+          g.connect(ac.destination);
+          osc.start(t + delay);
+          osc.stop(t + delay + 0.13);
+        });
+      } catch (e) {}
+    },
+
     // 2. Nodi cartoon "PONG PONG / DEER LEAP" spring sound
     nodiJump() {
       try {
@@ -1585,13 +1652,13 @@
     // What they say when clicked directly by the user (distinct direct responses!)
     const tapQuips = {
       kodi: [
-        'Whoa! Boing!! Don\'t poke, prod is on fire! 🔥',
-        'Pong pong! 🐻 Marshmallow rocket jump!',
-        'Boiiing! Jump level: 99! Watch the code! 💻',
-        'Hey! Poking me won\'t fix the memory leak! 🚀',
-        'Ouch! Boing! My marshmallow stick almost flew! 🍢',
-        'Boing! 404: Gravity not found! 🐾',
-        'Pong! Deploying bear hugs across all pods! 🐻✨',
+        'Whoa-WHOA! 🐻💨 360° Stunt Roll into production!',
+        'Tumbled and rolled! Still holding the marshmallow! 🍢✨',
+        'Jump, fall, ROOOLL! Rolling restart in full effect! 🔄',
+        'Whoops! Tactical somersault! Zero downtime! 🐾',
+        'Acrobatic stunt! Nodi, check out this 360° roll! 🤸‍♂️',
+        'Parkour bear! Pushed bugfix while upside down! 🚀',
+        'Pong boing roll! 🐻 Falling with style!',
       ],
       deer: [
         'Pong pong! 🦌 High leap over the Kubernetes cluster!',
@@ -1886,13 +1953,19 @@
       restTimer = setTimeout(startRun, wait);
     }
 
-    // Click Kodi or Nodi to make them jump high with cartoon "pong pong" sound and show user-specific response
+    // Click Kodi: jump, fall and 360° somersault roll stunt!
+    // Click Nodi: nimble high leap over containers!
     [['kodi', kodi], ['deer', deer]].forEach(([who, el]) => {
       if (!el) return;
       el.addEventListener('click', () => {
         if (who === 'kodi') {
-          SoundFX.kodiJump();
+          SoundFX.kodiJumpRoll();
           spawnDust(kodiX);
+          // Kodi gains forward momentum during the stunt roll, surging closer to Nodi!
+          kodiV = Math.min(180, kodiV + 45);
+          // Ground impact and somersault roll dust puffs
+          setTimeout(() => { if (running) spawnDust(kodiX); }, 580);
+          setTimeout(() => { if (running) spawnDust(kodiX + dir * 20); }, 750);
         } else {
           SoundFX.nodiJump();
           spawnDust(deerX);
@@ -1901,9 +1974,14 @@
         el.classList.remove('hop');
         void el.offsetWidth;
         el.classList.add('hop');
+
+        // Safety fallback timer to guarantee hop state is cleared
+        setTimeout(() => {
+          el.classList.remove('hop');
+        }, who === 'kodi' ? 1100 : 780);
       });
       el.addEventListener('animationend', (e) => {
-        if (!e.animationName.includes('hop')) return;
+        if (!e.animationName.includes('hop') && !e.animationName.includes('roll')) return;
         el.classList.remove('hop');
         spawnDust(who === 'kodi' ? kodiX : deerX);
       });
