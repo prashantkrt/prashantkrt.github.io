@@ -1233,14 +1233,13 @@
     if (!wrapper || !bubble) return;
 
     const dogMessages = [
+      "Nom nom nom! 🍢 Marshmallow devoured! Back to coding! 💻",
+      "Mmm delicious! That's 100% bug-free sugar! 🍡",
       "Roasting marshmallows over clean Java code! 🏕️",
+      "Crunch crunch! 🐻 Bear power recharged for microservices! ⚡",
       "Campfire check: 0 vulnerabilities, 100% tests passing! 🔥",
-      "Bear hugs for microservices! Kafka lag is 0ms! 🐻",
-      "Sweet marshmallows & zero memory leaks! 🍡",
-      "Under the stars shipping reliable distributed systems! ✨",
-      "Spring Boot 3.3 initialized in 1.42s by the fire! ⚡",
-      "K8s pods 3/3 Running with zero restarts! 🛡️",
-      "I'm Kodi, I write the code. My friend Nodi deploys it! 🦌"
+      "Sweet marshmallows & zero memory leaks! ✨",
+      "K8s pods 3/3 Running! Kodi writes code, Nodi deploys! 🦌"
     ];
 
     let bubbleTimer = null;
