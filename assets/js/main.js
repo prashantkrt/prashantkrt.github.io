@@ -1071,6 +1071,159 @@
     }
   }
 
+  // --- 14b. CENTRAL HIGH-FIDELITY SOUND EFFECTS ENGINE ---
+  const SoundFX = {
+    _ctx: null,
+    getCtx() {
+      if (!this._ctx) {
+        const AudioCtx = window.AudioContext || window.webkitAudioContext;
+        if (AudioCtx) {
+          this._ctx = new AudioCtx();
+        }
+      }
+      if (this._ctx && this._ctx.state === 'suspended') {
+        this._ctx.resume().catch(() => {});
+      }
+      return this._ctx;
+    },
+
+    // 1. Kodi cartoon "PONG PONG / BOING" high jump sound
+    kodiJump() {
+      try {
+        const ac = this.getCtx();
+        if (!ac) return;
+        const t = ac.currentTime;
+
+        // Primary spring wobble: bouncy cartoon frequency sweep
+        const osc1 = ac.createOscillator();
+        const gain1 = ac.createGain();
+        osc1.type = 'sine';
+        osc1.frequency.setValueAtTime(200, t);
+        osc1.frequency.exponentialRampToValueAtTime(720, t + 0.12);
+        osc1.frequency.exponentialRampToValueAtTime(320, t + 0.28);
+        osc1.frequency.exponentialRampToValueAtTime(580, t + 0.44);
+        osc1.frequency.exponentialRampToValueAtTime(240, t + 0.62);
+
+        gain1.gain.setValueAtTime(0.3, t);
+        gain1.gain.linearRampToValueAtTime(0.35, t + 0.08);
+        gain1.gain.exponentialRampToValueAtTime(0.001, t + 0.65);
+
+        osc1.connect(gain1);
+        gain1.connect(ac.destination);
+        osc1.start(t);
+        osc1.stop(t + 0.66);
+
+        // Secondary "pong" pop overtone
+        const osc2 = ac.createOscillator();
+        const gain2 = ac.createGain();
+        osc2.type = 'triangle';
+        osc2.frequency.setValueAtTime(380, t);
+        osc2.frequency.exponentialRampToValueAtTime(880, t + 0.14);
+        gain2.gain.setValueAtTime(0.24, t);
+        gain2.gain.exponentialRampToValueAtTime(0.001, t + 0.28);
+
+        osc2.connect(gain2);
+        gain2.connect(ac.destination);
+        osc2.start(t);
+        osc2.stop(t + 0.3);
+      } catch (e) {}
+    },
+
+    // 2. Nodi cartoon "PONG PONG / DEER LEAP" spring sound
+    nodiJump() {
+      try {
+        const ac = this.getCtx();
+        if (!ac) return;
+        const t = ac.currentTime;
+
+        const osc = ac.createOscillator();
+        const gain = ac.createGain();
+        osc.type = 'sine';
+        osc.frequency.setValueAtTime(340, t);
+        osc.frequency.exponentialRampToValueAtTime(1020, t + 0.14);
+        osc.frequency.exponentialRampToValueAtTime(460, t + 0.28);
+        osc.frequency.exponentialRampToValueAtTime(860, t + 0.44);
+
+        gain.gain.setValueAtTime(0.28, t);
+        gain.gain.linearRampToValueAtTime(0.32, t + 0.06);
+        gain.gain.exponentialRampToValueAtTime(0.001, t + 0.54);
+
+        osc.connect(gain);
+        gain.connect(ac.destination);
+        osc.start(t);
+        osc.stop(t + 0.56);
+
+        // Nimble harmonic chime
+        const chime = ac.createOscillator();
+        const chimeGain = ac.createGain();
+        chime.type = 'triangle';
+        chime.frequency.setValueAtTime(700, t);
+        chime.frequency.exponentialRampToValueAtTime(1400, t + 0.16);
+        chimeGain.gain.setValueAtTime(0.2, t);
+        chimeGain.gain.exponentialRampToValueAtTime(0.001, t + 0.32);
+
+        chime.connect(chimeGain);
+        chimeGain.connect(ac.destination);
+        chime.start(t);
+        chime.stop(t + 0.34);
+      } catch (e) {}
+    },
+
+    // 3. Top Kodi Marshmallow Munch & Chime sound
+    kodiMunch() {
+      try {
+        const ac = this.getCtx();
+        if (!ac) return;
+        const t = ac.currentTime;
+
+        // Cute crunchy munch: rapid chewing sound
+        [0, 0.1, 0.22].forEach((delay, idx) => {
+          const osc = ac.createOscillator();
+          const gain = ac.createGain();
+          osc.type = 'triangle';
+          const baseFreq = 440 + idx * 70;
+          osc.frequency.setValueAtTime(baseFreq, t + delay);
+          osc.frequency.exponentialRampToValueAtTime(baseFreq * 1.5, t + delay + 0.04);
+          osc.frequency.exponentialRampToValueAtTime(baseFreq * 0.75, t + delay + 0.08);
+
+          gain.gain.setValueAtTime(0.25, t + delay);
+          gain.gain.exponentialRampToValueAtTime(0.001, t + delay + 0.08);
+
+          osc.connect(gain);
+          gain.connect(ac.destination);
+          osc.start(t + delay);
+          osc.stop(t + delay + 0.09);
+        });
+
+        // Happy celebratory bell chime
+        const bell = ac.createOscillator();
+        const bellGain = ac.createGain();
+        bell.type = 'sine';
+        bell.frequency.setValueAtTime(880, t + 0.3);
+        bell.frequency.exponentialRampToValueAtTime(1174, t + 0.44);
+        bellGain.gain.setValueAtTime(0.24, t + 0.3);
+        bellGain.gain.exponentialRampToValueAtTime(0.001, t + 0.6);
+
+        bell.connect(bellGain);
+        bellGain.connect(ac.destination);
+        bell.start(t + 0.3);
+        bell.stop(t + 0.62);
+      } catch (e) {}
+    }
+  };
+  window.SoundFX = SoundFX;
+
+  // Unmute / unlock AudioContext on first user interaction
+  if (typeof window !== 'undefined') {
+    const unlockAudio = () => {
+      SoundFX.getCtx();
+      window.removeEventListener('pointerdown', unlockAudio);
+      window.removeEventListener('keydown', unlockAudio);
+    };
+    window.addEventListener('pointerdown', unlockAudio, { once: true });
+    window.addEventListener('keydown', unlockAudio, { once: true });
+  }
+
   // --- 15. BYTE THE JAVA WATCHDOG ANIMATED MASCOT ---
   function initByteTheDog() {
     const wrapper = document.getElementById('byteDogWrapper');
@@ -1092,28 +1245,6 @@
 
     let bubbleTimer = null;
 
-    function playBarkChime() {
-      try {
-        const AudioCtx = window.AudioContext || window.webkitAudioContext;
-        if (!AudioCtx) return;
-        const ctx = new AudioCtx();
-        if (ctx.state === 'suspended') ctx.resume();
-        [0, 0.11].forEach((delay) => {
-          const osc = ctx.createOscillator();
-          const gain = ctx.createGain();
-          osc.type = 'triangle';
-          osc.frequency.setValueAtTime(540, ctx.currentTime + delay);
-          osc.frequency.exponentialRampToValueAtTime(270, ctx.currentTime + delay + 0.08);
-          gain.gain.setValueAtTime(0.14, ctx.currentTime + delay);
-          gain.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + delay + 0.08);
-          osc.connect(gain);
-          gain.connect(ctx.destination);
-          osc.start(ctx.currentTime + delay);
-          osc.stop(ctx.currentTime + delay + 0.09);
-        });
-      } catch (err) {}
-    }
-
     function petByte() {
       wrapper.classList.remove('barking');
       void wrapper.offsetWidth;
@@ -1123,7 +1254,7 @@
       bubble.textContent = msg;
       bubble.classList.add('bubble-visible');
 
-      playBarkChime();
+      SoundFX.kodiMunch();
 
       if (window.showToast) {
         window.showToast(`🐻 Kodi Bear: "${msg}"`);
@@ -1139,6 +1270,17 @@
     window.petByteMascot = petByte;
 
     if (mascot) {
+      let hoverSoundTimer = null;
+      mascot.addEventListener('mouseenter', () => {
+        clearTimeout(hoverSoundTimer);
+        hoverSoundTimer = setTimeout(() => {
+          SoundFX.kodiMunch();
+        }, 400);
+      });
+      mascot.addEventListener('mouseleave', () => {
+        clearTimeout(hoverSoundTimer);
+      });
+
       mascot.addEventListener('click', petByte);
       mascot.addEventListener('keydown', (e) => {
         if (e.key === 'Enter' || e.key === ' ') {
@@ -1188,24 +1330,8 @@
       bubble.textContent = quote;
       bubble.classList.add('bubble-visible');
 
-      // Play soft bear sound
-      try {
-        const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
-        const now = audioCtx.currentTime;
-        const osc = audioCtx.createOscillator();
-        const gain = audioCtx.createGain();
-        osc.type = 'triangle';
-        osc.frequency.setValueAtTime(320, now);
-        osc.frequency.exponentialRampToValueAtTime(640, now + 0.15);
-        gain.gain.setValueAtTime(0.06, now);
-        gain.gain.exponentialRampToValueAtTime(0.001, now + 0.25);
-        osc.connect(gain);
-        gain.connect(audioCtx.destination);
-        osc.start(now);
-        osc.stop(now + 0.25);
-      } catch (err) {
-        // AudioContext restricted before first gesture
-      }
+      // Play Kodi cartoon jump sound
+      SoundFX.kodiJump();
 
       if (window.showToast) {
         window.showToast(`🐻 Kodi Bear: "${quote}"`);
@@ -1325,26 +1451,7 @@
     }
 
     function chime() {
-      try {
-        const Ctx = window.AudioContext || window.webkitAudioContext;
-        if (!Ctx) return;
-        audio = audio || new Ctx();
-        if (audio.state === 'suspended') audio.resume();
-        const now = audio.currentTime;
-        const osc = audio.createOscillator();
-        const gain = audio.createGain();
-        osc.type = 'sine';
-        osc.frequency.setValueAtTime(520, now);
-        osc.frequency.exponentialRampToValueAtTime(880, now + 0.12);
-        gain.gain.setValueAtTime(0.06, now);
-        gain.gain.exponentialRampToValueAtTime(0.001, now + 0.22);
-        osc.connect(gain);
-        gain.connect(audio.destination);
-        osc.start(now);
-        osc.stop(now + 0.23);
-      } catch (err) {
-        // AudioContext is restricted until the first user gesture
-      }
+      SoundFX.nodiJump();
     }
 
     function release() {
@@ -1456,39 +1563,45 @@
     const speech = document.getElementById('pbSpeech');
     const speechDeer = document.getElementById('pbSpeechDeer');
 
-    // Kodi writes the code, Nodi deploys it: a short back-and-forth during each run
+    // Kodi writes the code, Nodi deploys it: action-packed dev emergency dialogues during runs
     const dialogues = [
-      { kodi: 'Hey Nodi! Make the pods up and running, else we go down! 🚨',
-        deer: 'On it, Kodi! Pods are 3/3 Running ✅' },
-      { kodi: 'Nodi, my new build is ready to deploy! 🚀',
-        deer: 'Rolling out with zero downtime! 🔄' },
-      { kodi: 'Tests are green, Nodi! Ship it! ✅',
-        deer: 'Deploying… but never on a Friday, Kodi! 😅' },
-      { kodi: 'Nodi, is the cluster healthy? ⚙️',
-        deer: 'All nodes Ready, Kafka lag is 0ms! ⚡' },
-      { kodi: 'Nodi! CrashLoopBackOff again?! 😱',
-        deer: 'Fixed! It was a missing env var 🔧' },
-      { kodi: 'Scale up, Nodi! Traffic is spiking! 📈',
-        deer: 'Autoscaler says 3 → 8 pods! 🚀' },
-      { kodi: 'I write the code, Nodi. You run it! 💻',
-        deer: 'And I keep it alive, Kodi! Teamwork 🦌' },
-      { kodi: 'Nodi, wait! Marshmallow for the road? 🍢',
-        deer: 'Later! Pods first, snacks second! 🏃' },
+      { kodi: 'Pods crashing in prod! 🚨 Nodi, rescue the cluster!',
+        deer: 'Rolling back deployment to v2.4.1 right now! 🔄' },
+      { kodi: 'Kafka consumer lag is spiking to 50k! 📈',
+        deer: 'Scaling consumer pods 3 → 12! Hold on tight! ⚡' },
+      { kodi: 'NullPointerException in payment gateway! 💥',
+        deer: 'Hotpatch container built and deploying live! 🛡️' },
+      { kodi: 'Memory leak detected in reactive pipeline! 🐛',
+        deer: 'Container restarted, GC clean, 0 memory leaks! ✅' },
+      { kodi: 'Who pushed untested code straight to main?! 😱',
+        deer: 'Reverted! Branch protection re-enabled, Kodi! 🔒' },
+      { kodi: 'CPU is at 99%! Database connections maxed! 🔥',
+        deer: 'Traffic rerouted through replica pool! Stabilized! 🧘' },
+      { kodi: 'Nodi, 502 Bad Gateway on the user endpoint! ⚠️',
+        deer: 'Ingress service healthy again, 0 dropped packets! 🚀' },
+      { kodi: 'Marshmallow on fire! And so is production! 🍢🔥',
+        deer: 'Ship the bugfix fast, then we eat marshmallows! 🏃💨' },
     ];
 
-    // What they say when you tap them
+    // What they say when clicked directly by the user (distinct direct responses!)
     const tapQuips = {
       kodi: [
-        'I\'m Kodi, I write the code! 💻',
-        '🍢 Nodi, come back! Try my marshmallow!',
-        '🐻 Kodi.chase(Nodi) — running…',
-        '🌙 Campfire friends forever!',
+        'Whoa! Boing!! Don\'t poke, prod is on fire! 🔥',
+        'Pong pong! 🐻 Marshmallow rocket jump!',
+        'Boiiing! Jump level: 99! Watch the code! 💻',
+        'Hey! Poking me won\'t fix the memory leak! 🚀',
+        'Ouch! Boing! My marshmallow stick almost flew! 🍢',
+        'Boing! 404: Gravity not found! 🐾',
+        'Pong! Deploying bear hugs across all pods! 🐻✨',
       ],
       deer: [
-        'I\'m Nodi, I deploy the pods! 🚀',
-        'Can\'t catch me, Kodi! 😜',
-        '🦌 Nodi.escape() — O(1)!',
-        '404: Nodi not found! 💨',
+        'Pong pong! 🦌 High leap over the Kubernetes cluster!',
+        'Boing!! Agile sprint jump! Can\'t catch me! 💨',
+        'Whoaaa! Leaping over the firewall! 🛡️',
+        'Pong! Pod rescheduled mid-air! ☁️',
+        'Boiiing! Zero-downtime high jump! 🚀',
+        'Can\'t catch me or my containers! 🦌✨',
+        'Hop! Rolling release jumping over bugs! 🎯',
       ],
     };
     const bubbles = { kodi: speech, deer: speechDeer };
@@ -1596,8 +1709,9 @@
         rotateJoint(rig, 'armN',  -5 - arms * aN);
         rotateJoint(rig, 'foreN', -(30 + 20 * aN));
       } else {
-        // Kodi keeps the marshmallow stick out front and only bobs it
-        rotateJoint(rig, 'armN', -2 + 3 * Math.sin(p * 4 * Math.PI));
+        // Kodi holds marshmallow stick: dynamic running pump and roasting sway!
+        const armPump = Math.sin((p + 0.5) * 2 * Math.PI);
+        rotateJoint(rig, 'armN', -8 - 14 * armPump);
       }
       rotateJoint(rig, 'armF',  -5 - arms * aF);
       rotateJoint(rig, 'foreF', -(30 + 20 * aF));
@@ -1773,17 +1887,24 @@
       restTimer = setTimeout(startRun, wait);
     }
 
-    // Click Kodi or Nodi to make them hop and say something
+    // Click Kodi or Nodi to make them jump high with cartoon "pong pong" sound and show user-specific response
     [['kodi', kodi], ['deer', deer]].forEach(([who, el]) => {
       if (!el) return;
       el.addEventListener('click', () => {
+        if (who === 'kodi') {
+          SoundFX.kodiJump();
+          spawnDust(kodiX);
+        } else {
+          SoundFX.nodiJump();
+          spawnDust(deerX);
+        }
         say(who);
         el.classList.remove('hop');
         void el.offsetWidth;
         el.classList.add('hop');
       });
       el.addEventListener('animationend', (e) => {
-        if (e.animationName !== 'sprite-hop') return;
+        if (!e.animationName.includes('hop')) return;
         el.classList.remove('hop');
         spawnDust(who === 'kodi' ? kodiX : deerX);
       });

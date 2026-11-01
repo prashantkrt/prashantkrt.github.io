@@ -12,8 +12,8 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet">
   <link rel="icon" type="image/svg+xml" href="assets/favicon.svg">
-  <link rel="stylesheet" href="assets/css/styles.css?v=3.8">
-  <link rel="stylesheet" href="assets/css/patrol-bear.css?v=4.4">
+  <link rel="stylesheet" href="assets/css/styles.css?v=5.0">
+  <link rel="stylesheet" href="assets/css/patrol-bear.css?v=5.0">
 </head>
 <body>
   <div class="scroll-progress-bar" id="scrollProgressBar"></div>
@@ -71,12 +71,21 @@
                 <path d="M45 74 C54 84, 66 84, 75 74 C70 88, 50 88, 45 74 Z" fill="#F4CA89"/>
                 <rect x="38" y="103" width="15" height="7.5" rx="3.75" fill="#1C2128"/>
                 <rect x="67" y="103" width="15" height="7.5" rx="3.75" fill="#1C2128"/>
-                <g class="dog-tail-group">
-                  <path d="M76 86 L108 52" stroke="#8D5B2A" stroke-width="2.5" stroke-linecap="round"/>
-                  <path d="M102 59 L107 50" stroke="#8D5B2A" stroke-width="2" stroke-linecap="round"/>
-                  <rect x="100" y="47" width="9" height="7" rx="3" fill="#FFF8EB" stroke="#D4A373" stroke-width="0.8" transform="rotate(-40 100 47)"/>
-                  <ellipse cx="106" cy="51" rx="2" ry="1.2" fill="#B07D48" opacity="0.7"/>
-                  <rect x="93" y="55" width="9" height="7" rx="3" fill="#FFF8EB" stroke="#D4A373" stroke-width="0.8" transform="rotate(-40 93 55)"/>
+                <g class="dog-arm-and-stick" id="dogArmAndStick">
+                  <g class="dog-arm-group">
+                    <path d="M68 76 C72 79, 76 82, 78 87" stroke="#1C2128" stroke-width="7" stroke-linecap="round" fill="none"/>
+                    <ellipse cx="78" cy="88" rx="6.2" ry="5.2" fill="#1C2128"/>
+                    <ellipse cx="78" cy="88" rx="3.2" ry="2.6" fill="#3A4150"/>
+                  </g>
+                  <g class="dog-stick-group">
+                    <path d="M78 88 L108 52" stroke="#8D5B2A" stroke-width="2.5" stroke-linecap="round"/>
+                    <path d="M102 59 L107 50" stroke="#8D5B2A" stroke-width="2" stroke-linecap="round"/>
+                    <g class="dog-marshmallow-tip">
+                      <rect x="100" y="47" width="9" height="7" rx="3" fill="#FFF8EB" stroke="#D4A373" stroke-width="0.8" transform="rotate(-40 100 47)"/>
+                      <ellipse cx="106" cy="51" rx="2" ry="1.2" fill="#B07D48" opacity="0.7"/>
+                    </g>
+                    <rect x="93" y="55" width="9" height="7" rx="3" fill="#FFF8EB" stroke="#D4A373" stroke-width="0.8" transform="rotate(-40 93 55)"/>
+                  </g>
                 </g>
                 <g class="dog-head-group">
                   <circle class="dog-ear dog-ear-left" cx="40" cy="28" r="10" fill="#1C2128"/>
@@ -445,7 +454,6 @@
     <!-- DEER — runs ahead of Kodi -->
     <div class="patrol-sprite patrol-deer" id="patrolDeer">
       <div class="pb-speech" id="pbSpeechDeer"></div>
-      <span class="pb-tag">Nodi · Deploy 🚀</span>
       <div class="sprite-flip">
         <svg class="deer-svg" viewBox="0 0 130 130" fill="none" xmlns="http://www.w3.org/2000/svg">
           <ellipse class="patrol-shadow" cx="62" cy="119" rx="30" ry="3" fill="#000" fill-opacity="0.25"/>
@@ -523,7 +531,6 @@
     <!-- KODI — campfire Moon Bear chasing with marshmallow stick -->
     <div class="patrol-sprite patrol-kodi" id="patrolKodi">
       <div class="pb-speech" id="pbSpeech"></div>
-      <span class="pb-tag">Kodi · Code 💻</span>
       <div class="sprite-flip">
         <svg class="kodi-svg" viewBox="0 0 130 130" fill="none" xmlns="http://www.w3.org/2000/svg">
           <ellipse class="patrol-shadow" cx="62" cy="119" rx="32" ry="3" fill="#000" fill-opacity="0.3"/>
@@ -598,6 +605,6 @@
   <!-- DYNAMIC FLOATING TOAST NOTIFICATION CONTAINER -->
   <div id="toastContainer" class="toast-container" aria-live="polite"></div>
 
-  <script src="assets/js/main.js?v=4.6"></script>
+  <script src="assets/js/main.js?v=5.0"></script>
 </body>
 </html>

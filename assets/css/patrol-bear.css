@@ -323,21 +323,39 @@
   80%           { opacity: 0.2; transform: translateY(6px); }
 }
 
-/* Click on Kodi or Nodi: a springy hop with squash-and-stretch, while the
-   ground shadow is counter-translated so it stays pinned to the floor and
-   shrinks/fades to sell the height instead of floating up with the body. */
-.patrol-sprite.hop svg {
+/* Click on Kodi or Nodi: a high springy cartoon jump with squash-and-stretch,
+   while the ground shadow stays pinned to the floor and shrinks/fades to sell
+   the dramatic height. */
+.patrol-kodi.hop svg {
   transform-origin: 50% 100%;
-  animation: sprite-hop 0.56s cubic-bezier(0.22, 0.61, 0.36, 1);
+  animation: kodi-super-hop 0.72s cubic-bezier(0.2, 0.7, 0.35, 1);
 }
 
-@keyframes sprite-hop {
-  0%   { transform: translateY(0)     scaleX(1)    scaleY(1); }
-  12%  { transform: translateY(3px)   scaleX(1.12) scaleY(0.86); }
-  45%  { transform: translateY(-27px) scaleX(0.92) scaleY(1.12); }
-  70%  { transform: translateY(-9px)  scaleX(0.96) scaleY(1.05); }
-  88%  { transform: translateY(2px)   scaleX(1.1)  scaleY(0.88); }
-  100% { transform: translateY(0)     scaleX(1)    scaleY(1); }
+@keyframes kodi-super-hop {
+  0%   { transform: translateY(0) scale(1, 1); }
+  12%  { transform: translateY(5px) scale(1.22, 0.78); } /* Deep crouch prep */
+  42%  { transform: translateY(-70px) scale(0.88, 1.2); } /* PONG TAKEOFF! */
+  58%  { transform: translateY(-75px) scale(0.96, 1.05) rotate(3deg); } /* Apex float */
+  76%  { transform: translateY(-24px) scale(1.05, 0.95); } /* Fast descent */
+  88%  { transform: translateY(4px) scale(1.25, 0.78); } /* Landing squash */
+  95%  { transform: translateY(-10px) scale(0.96, 1.04); } /* Rebound bounce */
+  100% { transform: translateY(0) scale(1, 1); }
+}
+
+.patrol-deer.hop svg {
+  transform-origin: 50% 100%;
+  animation: deer-super-hop 0.72s cubic-bezier(0.2, 0.7, 0.35, 1);
+}
+
+@keyframes deer-super-hop {
+  0%   { transform: translateY(0) scale(1, 1); }
+  12%  { transform: translateY(5px) scale(1.2, 0.8); } /* Nimble crouch */
+  40%  { transform: translateY(-78px) scale(0.86, 1.24) rotate(-3deg); } /* PONG LEAP! */
+  56%  { transform: translateY(-84px) scale(0.98, 1.02); } /* Apex hover */
+  75%  { transform: translateY(-28px) scale(1.04, 0.96); }
+  88%  { transform: translateY(3px) scale(1.2, 0.82); } /* Land squash */
+  95%  { transform: translateY(-12px) scale(0.96, 1.04); } /* Soft rebound */
+  100% { transform: translateY(0) scale(1, 1); }
 }
 
 .patrol-shadow {
@@ -345,17 +363,30 @@
   transform-origin: center;
 }
 
-.patrol-sprite.hop .patrol-shadow {
-  animation: patrol-shadow-hop 0.56s cubic-bezier(0.22, 0.61, 0.36, 1);
+.patrol-kodi.hop .patrol-shadow {
+  animation: kodi-shadow-hop 0.72s cubic-bezier(0.2, 0.7, 0.35, 1);
 }
 
-@keyframes patrol-shadow-hop {
-  0%   { transform: translateY(0)    scale(1, 1);     opacity: 1; }
-  12%  { transform: translateY(-3px) scale(1.1, 0.85); opacity: 0.95; }
-  45%  { transform: translateY(27px) scale(0.5, 0.5);  opacity: 0.3; }
-  70%  { transform: translateY(9px)  scale(0.72, 0.72); opacity: 0.5; }
-  88%  { transform: translateY(-2px) scale(1.08, 0.86); opacity: 0.95; }
-  100% { transform: translateY(0)    scale(1, 1);     opacity: 1; }
+@keyframes kodi-shadow-hop {
+  0%   { transform: translateY(0) scale(1, 1); opacity: 1; }
+  12%  { transform: translateY(-4px) scale(1.25, 0.8); opacity: 0.95; }
+  50%  { transform: translateY(70px) scale(0.35, 0.35); opacity: 0.18; }
+  88%  { transform: translateY(-3px) scale(1.3, 0.8); opacity: 0.98; }
+  95%  { transform: translateY(6px) scale(0.82, 0.82); opacity: 0.7; }
+  100% { transform: translateY(0) scale(1, 1); opacity: 1; }
+}
+
+.patrol-deer.hop .patrol-shadow {
+  animation: deer-shadow-hop 0.72s cubic-bezier(0.2, 0.7, 0.35, 1);
+}
+
+@keyframes deer-shadow-hop {
+  0%   { transform: translateY(0) scale(1, 1); opacity: 1; }
+  12%  { transform: translateY(-3px) scale(1.2, 0.8); opacity: 0.95; }
+  50%  { transform: translateY(78px) scale(0.3, 0.3); opacity: 0.15; }
+  88%  { transform: translateY(-2px) scale(1.25, 0.8); opacity: 0.98; }
+  95%  { transform: translateY(7px) scale(0.8, 0.8); opacity: 0.7; }
+  100% { transform: translateY(0) scale(1, 1); opacity: 1; }
 }
 
 /* ── Click targets and speech bubbles ────────────────────────────────────── */
@@ -367,12 +398,12 @@
 
 .pb-speech {
   position: absolute;
-  bottom: calc(100% + 30px);
+  bottom: calc(100% + 8px);
   left: 50%;
   margin-left: var(--shift, 0px);
-  transform: translateX(-50%) translateY(10px) scale(0.88);
-  background: rgba(8, 13, 30, 0.95);
-  border: 1px solid rgba(161, 244, 194, 0.55);
+  transform: translateX(-50%) translateY(8px) scale(0.88);
+  background: rgba(8, 13, 30, 0.96);
+  border: 1px solid rgba(161, 244, 194, 0.65);
   color: #e8f4fc;
   font: 9px "DM Mono", monospace;
   line-height: 1.45;
@@ -381,29 +412,35 @@
   border-radius: 12px;
   white-space: normal;
   width: max-content;
-  max-width: min(210px, 60vw);
-  box-shadow: 0 8px 24px rgba(0,0,0,0.65), 0 0 16px rgba(161,244,194,0.2);
+  max-width: min(220px, 65vw);
+  box-shadow: 0 8px 24px rgba(0,0,0,0.7), 0 0 16px rgba(161,244,194,0.22);
   opacity: 0;
-  transition: opacity 0.28s ease, transform 0.28s cubic-bezier(0.16,1,0.3,1);
+  transition: opacity 0.25s ease, transform 0.25s cubic-bezier(0.16,1,0.3,1);
   pointer-events: none;
   z-index: 990;
 }
 
-/* Role label above each runner: Kodi writes the code, Nodi deploys it */
-.pb-tag {
+.pb-speech::after {
+  content: '';
   position: absolute;
-  bottom: calc(100% + 4px);
+  top: 100%;
   left: 50%;
   transform: translateX(-50%);
-  background: rgba(14, 23, 42, 0.94);
-  border: 1px solid rgba(161, 244, 194, 0.4);
-  color: #a1f4c2;
-  font: 700 8.5px "DM Mono", monospace;
-  padding: 2px 8px;
-  border-radius: 999px;
-  white-space: nowrap;
-  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.5);
-  pointer-events: none;
+  border: 5px solid transparent;
+  border-top-color: rgba(161, 244, 194, 0.65);
+}
+
+#pbSpeechDeer {
+  border-color: rgba(255, 206, 107, 0.7);
+}
+
+#pbSpeechDeer::after {
+  border-top-color: rgba(255, 206, 107, 0.7);
+}
+
+/* Remove distracting name badges above runners to stop cluttering the screen */
+.pb-tag {
+  display: none !important;
 }
 
 /* While the chase is running, the other bottom-of-screen mascots step aside */
