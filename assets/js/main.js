@@ -1438,42 +1438,73 @@
     deer.innerHTML = `
       <div class="dp-body">
         <svg viewBox="0 0 100 140" fill="none" xmlns="http://www.w3.org/2000/svg">
-          <path d="M33 92C28 108 22 124 17 140H83C78 124 72 108 67 92Z" fill="#BB7A3E"/>
-          <path d="M43 104C42 118 40 130 38 140H62C60 130 58 118 57 104Z" fill="#F2D6AA"/>
-          <g stroke="#7A5233" stroke-width="3.2" stroke-linecap="round" fill="none">
-            <path d="M41 54C37 42 33 28 28 12M35 38L23 34M31 25L19 18M28 12L22 6M28 12L33 6"/>
-            <path d="M59 54C63 42 67 28 72 12M65 38L77 34M69 25L81 18M72 12L78 6M72 12L67 6"/>
+          <!-- Legs with hooves -->
+          <path d="M32 96C28 110 23 126 19 140H38C36 128 34 114 33 100Z" fill="#BB7A3E"/>
+          <path d="M68 96C72 110 77 126 81 140H62C64 128 66 114 67 100Z" fill="#BB7A3E"/>
+          <path d="M38 100C36 114 35 128 34 140H55C54 130 52 118 51 104Z" fill="#C98644"/>
+          <path d="M62 100C64 114 65 128 66 140H48C49 130 50 118 51 104Z" fill="#C98644"/>
+          <!-- Hooves -->
+          <rect x="16" y="136" width="24" height="4" rx="2" fill="#3A2616"/>
+          <rect x="60" y="136" width="24" height="4" rx="2" fill="#3A2616"/>
+          <!-- Antlers — refined branching -->
+          <g stroke="#7A5233" stroke-width="2.8" stroke-linecap="round" fill="none">
+            <path d="M39 50C35 38 30 24 26 10"/>
+            <path d="M33 34L22 30"/>
+            <path d="M29 22L18 16"/>
+            <path d="M26 10L20 4M26 10L31 5"/>
+            <path d="M61 50C65 38 70 24 74 10"/>
+            <path d="M67 34L78 30"/>
+            <path d="M71 22L82 16"/>
+            <path d="M74 10L80 4M74 10L69 5"/>
           </g>
+          <!-- Ears -->
           <g class="dp-ear-l">
-            <path d="M35 58C24 50 12 47 4 50C8 62 20 70 36 72Z" fill="#BB7A3E"/>
-            <path d="M32 60C24 55 16 53 10 55C14 62 22 66 32 68Z" fill="#E7A982"/>
+            <path d="M34 56C22 48 10 46 3 49C7 62 20 70 36 71Z" fill="#BB7A3E"/>
+            <path d="M31 58C22 53 14 51 8 54C12 62 22 66 31 67Z" fill="#E7A982"/>
           </g>
           <g class="dp-ear-r">
-            <path d="M65 58C76 50 88 47 96 50C92 62 80 70 64 72Z" fill="#BB7A3E"/>
-            <path d="M68 60C76 55 84 53 90 55C86 62 78 66 68 68Z" fill="#E7A982"/>
+            <path d="M66 56C78 48 90 46 97 49C93 62 80 70 64 71Z" fill="#BB7A3E"/>
+            <path d="M69 58C78 53 86 51 92 54C88 62 78 66 69 67Z" fill="#E7A982"/>
           </g>
-          <path d="M37 52C30 58 27 70 29 82C31 94 38 104 50 106C62 104 69 94 71 82C73 70 70 58 63 52C58 47 42 47 37 52Z" fill="#BB7A3E"/>
-          <path d="M50 50C46 57 47 63 50 67C53 63 54 57 50 50Z" fill="#A9662E" opacity="0.45"/>
-          <ellipse cx="50" cy="94" rx="14" ry="10.5" fill="#F2D6AA"/>
+          <!-- Head -->
+          <path d="M36 50C28 57 25 70 28 82C30 94 38 104 50 106C62 104 70 94 72 82C75 70 72 57 64 50C58 44 42 44 36 50Z" fill="#BB7A3E"/>
+          <!-- Forehead marking -->
+          <path d="M50 48C46 56 47 63 50 67C53 63 54 56 50 48Z" fill="#A9662E" opacity="0.4"/>
+          <!-- Fawn spots -->
+          <circle cx="38" cy="62" r="2.2" fill="#FFF2DE" opacity="0.8"/>
+          <circle cx="62" cy="62" r="2.2" fill="#FFF2DE" opacity="0.8"/>
+          <circle cx="34" cy="72" r="1.8" fill="#FFF2DE" opacity="0.7"/>
+          <circle cx="66" cy="72" r="1.8" fill="#FFF2DE" opacity="0.7"/>
+          <!-- Muzzle / snout area -->
+          <ellipse cx="50" cy="92" rx="15" ry="12" fill="#F2D6AA"/>
+          <!-- Nose -->
           <g class="dp-nose">
-            <path d="M44 90C46 87 54 87 56 90C57 93 53 96.5 50 96.5C47 96.5 43 93 44 90Z" fill="#2A1A10"/>
-            <ellipse cx="48.2" cy="89.6" rx="1.6" ry="1" fill="#fff" opacity="0.5"/>
+            <path d="M44 88C46 85 54 85 56 88C57 91 53 95 50 95C47 95 43 91 44 88Z" fill="#2A1A10"/>
+            <ellipse cx="48" cy="87.5" rx="1.8" ry="1.1" fill="#fff" opacity="0.45"/>
           </g>
-          <ellipse cx="50" cy="102" rx="2.8" ry="1.8" fill="#FF6B81"/>
-          <path d="M50 96.5V99M45 99.5Q50 104 55 99.5" stroke="#2A1A10" stroke-width="1.6" stroke-linecap="round" fill="none"/>
-          <ellipse cx="35" cy="88" rx="5" ry="3" fill="#F28B82" opacity="0.45"/>
-          <ellipse cx="65" cy="88" rx="5" ry="3" fill="#F28B82" opacity="0.45"/>
-          <path d="M33 67Q39 63 45 66M55 66Q61 63 67 67" stroke="#8A5424" stroke-width="1.8" stroke-linecap="round" fill="none"/>
+          <!-- Mouth & tongue -->
+          <path d="M50 95V98" stroke="#2A1A10" stroke-width="1.5" stroke-linecap="round"/>
+          <path d="M44 98Q50 103 56 98" stroke="#2A1A10" stroke-width="1.4" stroke-linecap="round" fill="none"/>
+          <ellipse cx="50" cy="101" rx="3" ry="2" fill="#FF6B81"/>
+          <!-- Blush cheeks -->
+          <ellipse cx="34" cy="86" rx="5.5" ry="3.2" fill="#F28B82" opacity="0.4"/>
+          <ellipse cx="66" cy="86" rx="5.5" ry="3.2" fill="#F28B82" opacity="0.4"/>
+          <!-- Eyebrows -->
+          <path d="M32 65Q38 61 44 64" stroke="#8A5424" stroke-width="1.8" stroke-linecap="round" fill="none"/>
+          <path d="M56 64Q62 61 68 65" stroke="#8A5424" stroke-width="1.8" stroke-linecap="round" fill="none"/>
+          <!-- Eyes with life -->
           <g class="dp-look">
             <g class="dp-eyes">
-              <ellipse cx="39" cy="77" rx="5" ry="5.8" fill="#1B1410"/>
-              <ellipse cx="61" cy="77" rx="5" ry="5.8" fill="#1B1410"/>
-              <circle cx="37.4" cy="74.6" r="1.9" fill="#fff"/>
-              <circle cx="41" cy="80" r="0.9" fill="#fff"/>
-              <circle cx="59.4" cy="74.6" r="1.9" fill="#fff"/>
-              <circle cx="63" cy="80" r="0.9" fill="#fff"/>
+              <ellipse cx="39" cy="76" rx="5.5" ry="6.2" fill="#1B1410"/>
+              <ellipse cx="61" cy="76" rx="5.5" ry="6.2" fill="#1B1410"/>
+              <circle cx="37" cy="73.5" r="2.2" fill="#fff"/>
+              <circle cx="41" cy="79" r="1.0" fill="#fff"/>
+              <circle cx="59" cy="73.5" r="2.2" fill="#fff"/>
+              <circle cx="63" cy="79" r="1.0" fill="#fff"/>
             </g>
           </g>
+          <!-- Belly fur tufts -->
+          <ellipse cx="50" cy="108" rx="10" ry="4" fill="#F2D6AA" opacity="0.5"/>
         </svg>
       </div>
       <span class="dp-tag">Nodi · Deploy 🦌</span>
@@ -1482,7 +1513,7 @@
     const tag = deer.querySelector('.dp-tag');
     const bubble = deer.querySelector('.dp-bubble');
 
-    const corners = ['bottom-left', 'top-right', 'bottom-right', 'top-left'];
+    const corners = ['bottom-left', 'side-right', 'bottom-right', 'side-left'];
     const quotes = [
       "Hi! I'm Nodi, I keep the pods running! 🦌",
       "Kodi writes the code, I deploy it! 🚀",
@@ -1493,8 +1524,8 @@
       "Ask Kodi about code, ask me about deployments! 🧭",
       "Kubernetes, Docker, CI/CD: that's my forest! 🌲"
     ];
-    const PEEK_MS = 3800;
-    const HOLD_ANIMS = ['deer-corner-peek', 'deer-corner-blink', 'dp-ear-flick-l', 'dp-ear-flick-r', 'dp-tag-show'];
+    const PEEK_MS = 4200;
+    const SLIDE_ANIMS = ['dp-slide-up', 'dp-slide-left', 'dp-slide-right', 'deer-corner-blink', 'dp-ear-flick-l', 'dp-ear-flick-r', 'dp-tag-show'];
     let cornerIndex = 0;
     let holdTimer = null;
     let holding = false;
@@ -1506,14 +1537,14 @@
         deer.classList.remove('is-popping');
         return;
       }
-      if (event.animationName !== 'deer-corner-peek') return;
+      if (!['dp-slide-up', 'dp-slide-left', 'dp-slide-right'].includes(event.animationName)) return;
       deer.classList.remove('is-peeking');
       cornerIndex = (cornerIndex + 1) % corners.length;
       setTimeout(peek, 3500);
     });
 
     function peekAnimations() {
-      return deer.getAnimations({ subtree: true }).filter((a) => HOLD_ANIMS.includes(a.animationName));
+      return deer.getAnimations({ subtree: true }).filter((a) => SLIDE_ANIMS.includes(a.animationName));
     }
 
     function chime() {
@@ -1978,10 +2009,10 @@
         // Safety fallback timer to guarantee hop state is cleared
         setTimeout(() => {
           el.classList.remove('hop');
-        }, who === 'kodi' ? 1100 : 780);
+        }, who === 'kodi' ? 1100 : 900);
       });
       el.addEventListener('animationend', (e) => {
-        if (!e.animationName.includes('hop') && !e.animationName.includes('roll')) return;
+        if (!e.animationName.includes('hop') && !e.animationName.includes('roll') && !e.animationName.includes('leap')) return;
         el.classList.remove('hop');
         spawnDust(who === 'kodi' ? kodiX : deerX);
       });
