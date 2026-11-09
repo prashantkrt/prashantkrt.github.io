@@ -1460,11 +1460,11 @@
   <!-- Ears -->
   <g class="dp-ear-l"><ellipse cx="14" cy="32" rx="8" ry="13" transform="rotate(-42 14 32)" fill="#B06E34"/><ellipse cx="14.5" cy="32.5" rx="4.4" ry="8.5" transform="rotate(-42 14.5 32.5)" fill="#F0A58E"/></g>
   <g class="dp-ear-r"><ellipse cx="62" cy="28" rx="6.5" ry="11" transform="rotate(30 62 28)" fill="#A56030"/><ellipse cx="61.5" cy="28.5" rx="3.4" ry="7" transform="rotate(30 61.5 28.5)" fill="#E8977F"/></g>
-  <!-- Neck, chest and shoulder behind the head, running back to the screen edge -->
+  <!-- Neck and shoulder: a wedge from under the chin into the screen edge, so head and arm are one animal -->
   <g class="dp-body-part">
-    <path d="M40 66 C52 72 64 70 78 66 L82 94 L64 96 C48 96 36 90 32 80 C31 74 35 69 40 66 Z" fill="#B06E34"/>
-    <path d="M45 74 C54 80 64 78 74 74 L76 93 C62 94 50 91 45 84 C43 80 43 77 45 74 Z" fill="#F2D6AA"/>
-    <path d="M36 70 C42 76 48 79 56 80" stroke="#8A5326" stroke-width="1.2" fill="none" stroke-linecap="round" opacity="0.5"/>
+    <path d="M38 68 C42 82 52 92 66 97 L86 97 L86 56 L50 58 Z" fill="#B06E34"/>
+    <path d="M46 74 C50 84 58 91 68 94 L86 94 L86 70 C70 78 56 78 46 74 Z" fill="#F2D6AA"/>
+    <path d="M40 72 C44 82 52 90 64 95" stroke="#8A5326" stroke-width="1.1" fill="none" stroke-linecap="round" opacity="0.45"/>
   </g>
   <g class="dp-head">
     <ellipse cx="42" cy="48" rx="31" ry="27" fill="#C98644"/>
@@ -1489,22 +1489,23 @@
     </g>
     <ellipse cx="38" cy="55" rx="4" ry="2.4" fill="#F28B82" opacity="0.5"/>
   </g>
-  <!-- Foreleg growing out of the shoulder, paw resting on the chest -->
+  <!-- Foreleg coming out of the shoulder; paw rests on the chest -->
   <g class="dp-paw" stroke="#4E2F15" stroke-width="1" stroke-linejoin="round">
-    <path d="M70 76 C62 76 57 78 54 80.5 L54 88.5 C58 90 64 91 72 90 Z" fill="#B06E34"/>
-    <ellipse cx="50.5" cy="84.5" rx="7.6" ry="6.8" fill="#C98644"/>
-    <path d="M44 82.2 C42.6 83.2 42.6 85.8 44 86.8 C45.2 86 45.2 83 44 82.2 Z" fill="#3A2616" stroke="none"/>
-    <path d="M45.4 84.5 H49" stroke="#7A4A22" stroke-width="1" stroke-linecap="round"/>
-    <ellipse cx="52" cy="81.6" rx="3" ry="1.2" fill="#E4AC6E" stroke="none"/>
+    <path d="M78 79 C68 78 60 80 55 83 L55 93 C61 95.5 70 96 78 95 Z" fill="#B87A3C"/>
+    <ellipse cx="50" cy="88" rx="8.6" ry="7.8" fill="#C98644"/>
+    <path d="M42.2 85.2 C40.6 86.4 40.6 89.6 42.2 90.8 C43.6 89.8 43.6 86.2 42.2 85.2 Z" fill="#3A2616" stroke="none"/>
+    <path d="M44 88 H48.6" stroke="#7A4A22" stroke-width="1" stroke-linecap="round"/>
+    <ellipse cx="51.5" cy="84.4" rx="3.4" ry="1.3" fill="#E4AC6E" stroke="none"/>
+    <ellipse cx="55.4" cy="88" rx="1.7" ry="5.4" fill="#F2D6AA" stroke="none"/>
   </g>
 `;
 
       if (corner === 'top-right') {
         // Deer faces LEFT — head on left side of SVG (visible), body extends right (screen clips it)
-        return `<svg viewBox="0 0 100 90" fill="none" xmlns="http://www.w3.org/2000/svg" style="overflow:visible">${deerSvgContent}</svg>`;
+        return `<svg viewBox="0 0 100 104" fill="none" xmlns="http://www.w3.org/2000/svg" style="overflow:visible">${deerSvgContent}</svg>`;
       }
       // top-left: Mirror the same SVG — head on right side, body on left (screen clips it)
-      return `<svg viewBox="0 0 100 90" fill="none" xmlns="http://www.w3.org/2000/svg" style="overflow:visible"><g transform="scale(-1,1) translate(-100,0)">${deerSvgContent}</g></svg>`;
+      return `<svg viewBox="0 0 100 104" fill="none" xmlns="http://www.w3.org/2000/svg" style="overflow:visible"><g transform="scale(-1,1) translate(-100,0)">${deerSvgContent}</g></svg>`;
     }
 
     const deer = document.createElement('div');
