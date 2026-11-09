@@ -1448,233 +1448,191 @@
     // 2. Top-Right: Side peek around the vertical right window frame (solid body curving in, looking left)
     // 3. Top-Left: Side peek around the vertical left window frame (solid body curving in, looking right)
     function getNodiSvg(corner) {
-      if (corner === 'bottom-right') {
-        return `
-          <svg class="dp-svg dp-svg-bottom" viewBox="0 0 100 85" fill="none" xmlns="http://www.w3.org/2000/svg">
-            <!-- Torso & Shoulders (solid, fully connects to bottom border!) -->
-            <path d="M22 85 C22 56, 30 46, 50 46 C70 46, 78 56, 78 85 Z" fill="#BB7A3E"/>
-            <!-- Cream chest bib -->
-            <path d="M34 50 C44 60, 56 60, 66 50 C64 78, 36 78, 34 50 Z" fill="#FFF2DD"/>
+      // SIDE-RIGHT: Nodi peeks in from the RIGHT edge — proper deer side profile, head+body visible
+      if (corner === 'top-right') {
+        return `<svg viewBox="0 0 130 150" fill="none" xmlns="http://www.w3.org/2000/svg" style="overflow:visible">
+  <!-- BODY — large oval torso emerging from right wall -->
+  <ellipse cx="95" cy="110" rx="38" ry="30" fill="#C8884A"/>
+  <!-- Cream belly patch -->
+  <ellipse cx="90" cy="115" rx="22" ry="18" fill="#F5DFB0"/>
 
-            <!-- Antlers (curved golden fawn branching crown) -->
-            <g stroke="#7A4E27" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round" fill="none">
-              <path d="M38 28 C34 18 28 10 22 2 M32 16 L22 13 M28 9 L18 5 M22 2 L17 -1 M22 2 L26 -1"/>
-              <path d="M62 28 C66 18 72 10 78 2 M68 16 L78 13 M72 9 L82 5 M78 2 L83 -1 M78 2 L74 -1"/>
-            </g>
+  <!-- NECK -->
+  <path d="M68 90 C64 85 60 78 58 70" stroke="#C8884A" stroke-width="18" stroke-linecap="round" fill="none"/>
 
-            <!-- Left Ear (animated flick) -->
-            <g class="dp-ear-l">
-              <path d="M32 32 C20 22 8 22 2 26 C6 38 18 45 34 43 Z" fill="#BB7A3E"/>
-              <path d="M28 34 C19 27 11 27 6 30 C9 37 18 41 28 40 Z" fill="#F0A892"/>
-              <path d="M24 35 Q18 32 14 35" stroke="#FFF0D6" stroke-width="1.2" stroke-linecap="round" fill="none"/>
-            </g>
+  <!-- ANTLERS — branching from top of head, left-facing -->
+  <g stroke="#6B3D1E" stroke-linecap="round" stroke-linejoin="round" fill="none">
+    <!-- Main left antler trunk -->
+    <path d="M38 28 C32 18 24 8 16 0" stroke-width="3.5"/>
+    <!-- Left antler branches -->
+    <path d="M32 20 C26 14 18 12 12 14" stroke-width="2.8"/>
+    <path d="M26 10 C20 6 14 6 10 8" stroke-width="2.4"/>
+    <path d="M16 0 C12 -4 8 -4 6 -2" stroke-width="2.2"/>
+    <path d="M16 0 C18 -5 22 -5 24 -3" stroke-width="2.2"/>
+    <!-- Main right antler trunk -->
+    <path d="M56 24 C56 14 52 4 46 -4" stroke-width="3.5"/>
+    <!-- Right antler branches -->
+    <path d="M54 16 C50 10 44 8 40 10" stroke-width="2.8"/>
+    <path d="M50 6 C46 2 40 2 38 4" stroke-width="2.4"/>
+    <path d="M46 -4 C42 -8 38 -8 36 -6" stroke-width="2.2"/>
+  </g>
 
-            <!-- Right Ear (animated flick) -->
-            <g class="dp-ear-r">
-              <path d="M68 32 C80 22 92 22 98 26 C94 38 82 45 66 43 Z" fill="#BB7A3E"/>
-              <path d="M72 34 C81 27 89 27 94 30 C91 37 82 41 72 40 Z" fill="#F0A892"/>
-              <path d="M76 35 Q82 32 86 35" stroke="#FFF0D6" stroke-width="1.2" stroke-linecap="round" fill="none"/>
-            </g>
+  <!-- LEFT EAR (far ear, partially behind head) -->
+  <g class="dp-ear-l">
+    <ellipse cx="22" cy="40" rx="11" ry="16" fill="#B07838" transform="rotate(-30 22 40)"/>
+    <ellipse cx="22" cy="40" rx="7" ry="11" fill="#E8A878" transform="rotate(-30 22 40)"/>
+  </g>
 
-            <!-- Deer Head -->
-            <ellipse cx="50" cy="40" rx="28" ry="24" fill="#BB7A3E"/>
-            <!-- Forehead blaze & fawn spots -->
-            <path d="M50 24 L53 32 L50 36 L47 32 Z" fill="#FFF2DD" opacity="0.9"/>
-            <circle cx="37" cy="29" r="1.8" fill="#FFF2DD" opacity="0.8"/>
-            <circle cx="63" cy="29" r="1.8" fill="#FFF2DD" opacity="0.8"/>
+  <!-- RIGHT EAR (near ear, in front) -->
+  <g class="dp-ear-r">
+    <ellipse cx="58" cy="36" rx="11" ry="16" fill="#C8884A" transform="rotate(-15 58 36)"/>
+    <ellipse cx="58" cy="36" rx="7" ry="11" fill="#F0A878" transform="rotate(-15 58 36)"/>
+  </g>
 
-            <!-- Cheeks blush -->
-            <ellipse cx="32" cy="46" rx="4.5" ry="2.8" fill="#FF8E72" opacity="0.6"/>
-            <ellipse cx="68" cy="46" rx="4.5" ry="2.8" fill="#FF8E72" opacity="0.6"/>
+  <!-- HEAD — proper oval deer head, slightly elongated -->
+  <ellipse cx="44" cy="58" rx="30" ry="34" fill="#C8884A"/>
 
-            <!-- Muzzle & Snout -->
-            <ellipse cx="50" cy="50" rx="14" ry="10" fill="#FFF2DD"/>
-            <g class="dp-nose">
-              <path d="M45 46 C47 43 53 43 55 46 C56 49 53 52 50 52 C47 52 44 49 45 46 Z" fill="#2A1A10"/>
-              <ellipse cx="48.5" cy="46" rx="1.5" ry="0.9" fill="#FFF" opacity="0.85"/>
-            </g>
-            <path d="M50 52 V 54.5" stroke="#2A1A10" stroke-width="1.4" stroke-linecap="round"/>
-            <path d="M45.5 54.5 Q50 58.5 54.5 54.5" stroke="#2A1A10" stroke-width="1.4" stroke-linecap="round" fill="none"/>
-            <ellipse cx="50" cy="56.5" rx="2.5" ry="1.6" fill="#FF6584"/>
+  <!-- FOREHEAD white blaze -->
+  <path d="M44 36 C46 44 46 50 44 54 C42 50 42 44 44 36 Z" fill="#F5EDD0" opacity="0.9"/>
 
-            <!-- Eyes & Brows (Looking UP into the webpage) -->
-            <path d="M33 29 Q38 25 43 28 M57 28 Q62 25 67 29" stroke="#7A4E27" stroke-width="1.6" stroke-linecap="round" fill="none"/>
-            <g class="dp-look">
-              <g class="dp-eyes">
-                <ellipse cx="38" cy="38" rx="5" ry="5.8" fill="#1B1410"/>
-                <ellipse cx="62" cy="38" rx="5" ry="5.8" fill="#1B1410"/>
-                <circle cx="36.5" cy="35.5" r="1.9" fill="#fff"/>
-                <circle cx="40" cy="40.8" r="0.9" fill="#fff"/>
-                <circle cx="60.5" cy="35.5" r="1.9" fill="#fff"/>
-                <circle cx="64" cy="40.8" r="0.9" fill="#fff"/>
-              </g>
-            </g>
+  <!-- MUZZLE — elongated deer snout -->
+  <ellipse cx="22" cy="68" rx="16" ry="13" fill="#E8C88A"/>
+  <ellipse cx="22" cy="68" rx="12" ry="9" fill="#F5DFB0"/>
 
-            <!-- Front Arms & Hooves resting on bottom window sill! -->
-            <path d="M26 58 C23 66, 25 76, 32 78" stroke="#BB7A3E" stroke-width="11" stroke-linecap="round"/>
-            <ellipse cx="32" cy="78" rx="7.5" ry="5.5" fill="#2E1C12"/>
-            <path d="M32 75 L32 81" stroke="#1A0F0A" stroke-width="1.4" stroke-linecap="round"/>
+  <!-- NOSE -->
+  <g class="dp-nose">
+    <ellipse cx="14" cy="62" rx="6" ry="4.5" fill="#2A1A0E"/>
+    <ellipse cx="12.5" cy="60.5" rx="2" ry="1.4" fill="#fff" opacity="0.9"/>
+  </g>
 
-            <!-- Right arm holding flag & hoof -->
-            <g transform="rotate(10 70 70)">
-              <line x1="68" y1="80" x2="84" y2="22" stroke="#8D5B2A" stroke-width="2.4" stroke-linecap="round"/>
-              <path d="M84 22 L70 30 L84 38 Z" fill="#A1F4C2" stroke="#3EB872" stroke-width="0.9"/>
-              <circle cx="84" cy="21" r="2.2" fill="#FFD700"/>
-            </g>
-            <path d="M74 58 C77 66, 75 76, 68 78" stroke="#BB7A3E" stroke-width="11" stroke-linecap="round"/>
-            <ellipse cx="68" cy="78" rx="7.5" ry="5.5" fill="#2E1C12"/>
-            <path d="M68 75 L68 81" stroke="#1A0F0A" stroke-width="1.4" stroke-linecap="round"/>
-          </svg>`;
-      } else if (corner === 'top-right') {
-        return `
-          <svg class="dp-svg dp-svg-side-right" viewBox="0 0 96 90" fill="none" xmlns="http://www.w3.org/2000/svg">
-            <!-- Solid body curving smoothly from behind the right wall -->
-            <path d="M38 52 C50 48, 70 54, 96 58 L96 90 C78 90, 56 86, 38 74 Z" fill="#BB7A3E"/>
-            <path d="M46 58 C58 58, 76 64, 92 68 L92 88 C76 86, 56 80, 46 70 Z" fill="#FFF2DD"/>
+  <!-- MOUTH -->
+  <path d="M14 66 C16 70 20 72 24 70" stroke="#2A1A0E" stroke-width="1.5" stroke-linecap="round" fill="none"/>
 
-            <!-- Antlers branching leftward -->
-            <g stroke="#7A4E27" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" fill="none">
-              <path d="M44 28 C36 18 28 10 18 2 M34 16 L22 12 M28 8 L16 4 M18 2 L12 -1"/>
-              <path d="M64 24 C64 14 60 6 54 -2 M62 14 L52 10 M60 6 L50 2"/>
-            </g>
+  <!-- CHEEK BLUSH -->
+  <ellipse cx="20" cy="72" rx="5" ry="3" fill="#E8805A" opacity="0.5"/>
+  <ellipse cx="50" cy="66" rx="5" ry="3" fill="#E8805A" opacity="0.5"/>
 
-            <!-- Far Ear (Left) -->
-            <g class="dp-ear-l" transform="rotate(-12 34 30)">
-              <path d="M34 30 C22 22 10 24 4 30 C10 40 22 45 36 41 Z" fill="#A86A34"/>
-              <path d="M30 31 C21 26 13 27 8 31 C12 37 20 41 30 38 Z" fill="#F0A892"/>
-            </g>
+  <!-- EYEBROW -->
+  <path d="M38 44 C42 40 50 40 54 44" stroke="#6B3D1E" stroke-width="2" stroke-linecap="round" fill="none"/>
 
-            <!-- Head tilted naturally looking into the webpage -->
-            <g transform="rotate(-8 46 42)">
-              <ellipse cx="46" cy="42" rx="27" ry="23" fill="#BB7A3E"/>
-              <path d="M42 26 L46 34 L42 38 L39 34 Z" fill="#FFF2DD" opacity="0.9"/>
-              <circle cx="32" cy="30" r="1.8" fill="#FFF2DD" opacity="0.8"/>
-              <circle cx="54" cy="29" r="1.8" fill="#FFF2DD" opacity="0.8"/>
+  <!-- EYES — big expressive deer eyes looking LEFT -->
+  <g class="dp-look">
+    <g class="dp-eyes">
+      <!-- Main eye -->
+      <ellipse cx="44" cy="52" rx="8" ry="9" fill="#1A0F08"/>
+      <!-- Iris shine -->
+      <circle cx="40" cy="47" r="3.2" fill="#fff"/>
+      <circle cx="38.5" cy="45.5" r="1.5" fill="#fff" opacity="0.6"/>
+      <!-- Small lower shine -->
+      <circle cx="48" cy="57" r="1.6" fill="#fff" opacity="0.4"/>
+    </g>
+  </g>
 
-              <!-- Cheeks blush -->
-              <ellipse cx="28" cy="47" rx="4.5" ry="2.8" fill="#FF8E72" opacity="0.6"/>
-              <ellipse cx="60" cy="46" rx="4" ry="2.6" fill="#FF8E72" opacity="0.5"/>
+  <!-- FRONT LEG / ARM reaching out from right edge -->
+  <path d="M76 118 C86 122 112 128 130 130" stroke="#B07838" stroke-width="12" stroke-linecap="round" fill="none"/>
+  <!-- HOOF -->
+  <ellipse cx="128" cy="131" rx="8" ry="5" fill="#2E1A0A" transform="rotate(-10 128 131)"/>
 
-              <!-- Snout pointing leftward -->
-              <ellipse cx="41" cy="51" rx="14" ry="10" fill="#FFF2DD"/>
-              <g class="dp-nose">
-                <path d="M35 48 C37 45 43 45 45 48 C46 51 43 54 40 54 C37 54 34 51 35 48 Z" fill="#2A1A10"/>
-                <ellipse cx="38.5" cy="48" rx="1.5" ry="0.9" fill="#FFF" opacity="0.85"/>
-              </g>
-              <path d="M40 54 V 56.5" stroke="#2A1A10" stroke-width="1.4" stroke-linecap="round"/>
-              <path d="M35.5 56.5 Q40 60.5 44.5 56.5" stroke="#2A1A10" stroke-width="1.4" stroke-linecap="round" fill="none"/>
-              <ellipse cx="40" cy="58.5" rx="2.5" ry="1.6" fill="#FF6584"/>
+  <!-- BACK LEG -->
+  <path d="M100 130 C110 136 122 140 130 140" stroke="#B07838" stroke-width="10" stroke-linecap="round" fill="none"/>
+  <ellipse cx="129" cy="141" rx="7" ry="4.5" fill="#2E1A0A" transform="rotate(-8 129 141)"/>
 
-              <!-- Eyes looking LEFT into the webpage -->
-              <path d="M24 30 Q29 26 34 29 M48 29 Q53 26 58 30" stroke="#7A4E27" stroke-width="1.6" stroke-linecap="round" fill="none"/>
-              <g class="dp-look">
-                <g class="dp-eyes">
-                  <ellipse cx="29" cy="39" rx="5.2" ry="5.8" fill="#1B1410"/>
-                  <ellipse cx="53" cy="38" rx="4.8" ry="5.6" fill="#1B1410"/>
-                  <circle cx="27" cy="36.5" r="2" fill="#fff"/>
-                  <circle cx="30.5" cy="41.5" r="1" fill="#fff"/>
-                  <circle cx="51" cy="35.5" r="1.9" fill="#fff"/>
-                  <circle cx="54.5" cy="40.5" r="0.9" fill="#fff"/>
-                </g>
-              </g>
-            </g>
+  <!-- TAIL (small white fluffy tail) -->
+  <ellipse cx="130" cy="100" rx="8" ry="6" fill="#F5EDD0"/>
 
-            <!-- Near Ear (Right) animated flick -->
-            <g class="dp-ear-r">
-              <path d="M64 32 C74 22 84 20 90 24 C88 34 78 42 64 42 Z" fill="#BB7A3E"/>
-              <path d="M68 33 C76 26 82 25 86 28 C84 34 77 39 68 39 Z" fill="#F0A892"/>
-              <path d="M72 34 Q78 31 82 34" stroke="#FFF0D6" stroke-width="1.2" stroke-linecap="round" fill="none"/>
-            </g>
-
-            <!-- Left arm resting forward -->
-            <path d="M44 66 C52 74, 62 76, 70 74" stroke="#BB7A3E" stroke-width="10" stroke-linecap="round"/>
-            <ellipse cx="70" cy="74" rx="6.5" ry="5.5" fill="#2E1C12"/>
-
-            <!-- Right arm holding deployment flag forward into screen -->
-            <g transform="rotate(-18 42 62)">
-              <line x1="42" y1="78" x2="22" y2="18" stroke="#8D5B2A" stroke-width="2.2" stroke-linecap="round"/>
-              <path d="M22 18 L10 25 L22 32 Z" fill="#A1F4C2" stroke="#3EB872" stroke-width="0.9"/>
-              <circle cx="22" cy="17" r="2.2" fill="#FFD700"/>
-            </g>
-            <path d="M64 62 C62 70, 56 76, 50 78" stroke="#BB7A3E" stroke-width="10" stroke-linecap="round"/>
-            <ellipse cx="50" cy="78" rx="6.5" ry="5.5" fill="#2E1C12"/>
-          </svg>`;
-      } else {
-        // top-left: Side peek around the vertical left window frame
-        return `
-          <svg class="dp-svg dp-svg-side-left" viewBox="0 0 96 90" fill="none" xmlns="http://www.w3.org/2000/svg">
-            <!-- Solid body curving smoothly from behind the left wall -->
-            <path d="M58 52 C46 48, 26 54, 0 58 L0 90 C18 90, 40 86, 58 74 Z" fill="#BB7A3E"/>
-            <path d="M50 58 C38 58, 20 64, 4 68 L4 88 C20 86, 40 80, 50 70 Z" fill="#FFF2DD"/>
-
-            <!-- Antlers branching rightward -->
-            <g stroke="#7A4E27" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" fill="none">
-              <path d="M52 28 C60 18 68 10 78 2 M62 16 L74 12 M68 8 L80 4 M78 2 L84 -1"/>
-              <path d="M32 24 C32 14 36 6 42 -2 M34 14 L44 10 M36 6 L46 2"/>
-            </g>
-
-            <!-- Far Ear (Right) -->
-            <g class="dp-ear-r" transform="rotate(12 62 30)">
-              <path d="M62 30 C74 22 86 24 92 30 C86 40 74 45 60 41 Z" fill="#A86A34"/>
-              <path d="M66 31 C75 26 83 27 88 31 C84 37 76 41 66 38 Z" fill="#F0A892"/>
-            </g>
-
-            <!-- Head tilted naturally looking into the webpage -->
-            <g transform="rotate(8 50 42)">
-              <ellipse cx="50" cy="42" rx="27" ry="23" fill="#BB7A3E"/>
-              <path d="M54 26 L50 34 L54 38 L57 34 Z" fill="#FFF2DD" opacity="0.9"/>
-              <circle cx="64" cy="30" r="1.8" fill="#FFF2DD" opacity="0.8"/>
-              <circle cx="42" cy="29" r="1.8" fill="#FFF2DD" opacity="0.8"/>
-
-              <!-- Cheeks blush -->
-              <ellipse cx="68" cy="47" rx="4.5" ry="2.8" fill="#FF8E72" opacity="0.6"/>
-              <ellipse cx="36" cy="46" rx="4" ry="2.6" fill="#FF8E72" opacity="0.5"/>
-
-              <!-- Snout pointing rightward -->
-              <ellipse cx="55" cy="51" rx="14" ry="10" fill="#FFF2DD"/>
-              <g class="dp-nose">
-                <path d="M61 48 C59 45 53 45 51 48 C50 51 53 54 56 54 C59 54 62 51 61 48 Z" fill="#2A1A10"/>
-                <ellipse cx="57.5" cy="48" rx="1.5" ry="0.9" fill="#FFF" opacity="0.85"/>
-              </g>
-              <path d="M56 54 V 56.5" stroke="#2A1A10" stroke-width="1.4" stroke-linecap="round"/>
-              <path d="M51.5 56.5 Q56 60.5 60.5 56.5" stroke="#2A1A10" stroke-width="1.4" stroke-linecap="round" fill="none"/>
-              <ellipse cx="56" cy="58.5" rx="2.5" ry="1.6" fill="#FF6584"/>
-
-              <!-- Eyes looking RIGHT into the webpage -->
-              <path d="M72 30 Q67 26 62 29 M48 29 Q43 26 38 30" stroke="#7A4E27" stroke-width="1.6" stroke-linecap="round" fill="none"/>
-              <g class="dp-look">
-                <g class="dp-eyes">
-                  <ellipse cx="67" cy="39" rx="5.2" ry="5.8" fill="#1B1410"/>
-                  <ellipse cx="43" cy="38" rx="4.8" ry="5.6" fill="#1B1410"/>
-                  <circle cx="69" cy="36.5" r="2" fill="#fff"/>
-                  <circle cx="65.5" cy="41.5" r="1" fill="#fff"/>
-                  <circle cx="45" cy="35.5" r="1.9" fill="#fff"/>
-                  <circle cx="41.5" cy="40.5" r="0.9" fill="#fff"/>
-                </g>
-              </g>
-            </g>
-
-            <!-- Near Ear (Left) animated flick -->
-            <g class="dp-ear-l">
-              <path d="M32 32 C22 22 12 20 6 24 C8 34 18 42 32 42 Z" fill="#BB7A3E"/>
-              <path d="M28 33 C20 26 14 25 10 28 C12 34 19 39 28 39 Z" fill="#F0A892"/>
-              <path d="M24 34 Q18 31 14 34" stroke="#FFF0D6" stroke-width="1.2" stroke-linecap="round" fill="none"/>
-            </g>
-
-            <!-- Right arm resting forward -->
-            <path d="M52 66 C44 74, 34 76, 26 74" stroke="#BB7A3E" stroke-width="10" stroke-linecap="round"/>
-            <ellipse cx="26" cy="74" rx="6.5" ry="5.5" fill="#2E1C12"/>
-
-            <!-- Left arm holding deployment flag forward into screen -->
-            <g transform="rotate(18 54 62)">
-              <line x1="54" y1="78" x2="74" y2="18" stroke="#8D5B2A" stroke-width="2.2" stroke-linecap="round"/>
-              <path d="M74 18 L86 25 L74 32 Z" fill="#A1F4C2" stroke="#3EB872" stroke-width="0.9"/>
-              <circle cx="74" cy="17" r="2.2" fill="#FFD700"/>
-            </g>
-            <path d="M32 62 C34 70, 40 76, 46 78" stroke="#BB7A3E" stroke-width="10" stroke-linecap="round"/>
-            <ellipse cx="46" cy="78" rx="6.5" ry="5.5" fill="#2E1C12"/>
-          </svg>`;
+  <!-- DEPLOY FLAG held in front hoof -->
+  <line x1="85" y1="90" x2="40" y2="30" stroke="#8D5B2A" stroke-width="2.5" stroke-linecap="round"/>
+  <path d="M40 30 L18 40 L40 50 Z" fill="#A1F4C2" stroke="#3EB872" stroke-width="1"/>
+  <circle cx="40" cy="29" r="2.8" fill="#FFD700"/>
+</svg>`;
       }
+
+      // SIDE-LEFT: Nodi peeks in from the LEFT edge — mirrored side profile
+      return `<svg viewBox="0 0 130 150" fill="none" xmlns="http://www.w3.org/2000/svg" style="overflow:visible;transform:scaleX(-1)">
+  <!-- BODY — large oval torso emerging from right wall (mirrored) -->
+  <ellipse cx="95" cy="110" rx="38" ry="30" fill="#C8884A"/>
+  <!-- Cream belly patch -->
+  <ellipse cx="90" cy="115" rx="22" ry="18" fill="#F5DFB0"/>
+
+  <!-- NECK -->
+  <path d="M68 90 C64 85 60 78 58 70" stroke="#C8884A" stroke-width="18" stroke-linecap="round" fill="none"/>
+
+  <!-- ANTLERS -->
+  <g stroke="#6B3D1E" stroke-linecap="round" stroke-linejoin="round" fill="none">
+    <path d="M38 28 C32 18 24 8 16 0" stroke-width="3.5"/>
+    <path d="M32 20 C26 14 18 12 12 14" stroke-width="2.8"/>
+    <path d="M26 10 C20 6 14 6 10 8" stroke-width="2.4"/>
+    <path d="M16 0 C12 -4 8 -4 6 -2" stroke-width="2.2"/>
+    <path d="M16 0 C18 -5 22 -5 24 -3" stroke-width="2.2"/>
+    <path d="M56 24 C56 14 52 4 46 -4" stroke-width="3.5"/>
+    <path d="M54 16 C50 10 44 8 40 10" stroke-width="2.8"/>
+    <path d="M50 6 C46 2 40 2 38 4" stroke-width="2.4"/>
+    <path d="M46 -4 C42 -8 38 -8 36 -6" stroke-width="2.2"/>
+  </g>
+
+  <!-- LEFT EAR (far) -->
+  <g class="dp-ear-l">
+    <ellipse cx="22" cy="40" rx="11" ry="16" fill="#B07838" transform="rotate(-30 22 40)"/>
+    <ellipse cx="22" cy="40" rx="7" ry="11" fill="#E8A878" transform="rotate(-30 22 40)"/>
+  </g>
+
+  <!-- RIGHT EAR (near) -->
+  <g class="dp-ear-r">
+    <ellipse cx="58" cy="36" rx="11" ry="16" fill="#C8884A" transform="rotate(-15 58 36)"/>
+    <ellipse cx="58" cy="36" rx="7" ry="11" fill="#F0A878" transform="rotate(-15 58 36)"/>
+  </g>
+
+  <!-- HEAD -->
+  <ellipse cx="44" cy="58" rx="30" ry="34" fill="#C8884A"/>
+
+  <!-- FOREHEAD blaze -->
+  <path d="M44 36 C46 44 46 50 44 54 C42 50 42 44 44 36 Z" fill="#F5EDD0" opacity="0.9"/>
+
+  <!-- MUZZLE -->
+  <ellipse cx="22" cy="68" rx="16" ry="13" fill="#E8C88A"/>
+  <ellipse cx="22" cy="68" rx="12" ry="9" fill="#F5DFB0"/>
+
+  <!-- NOSE -->
+  <g class="dp-nose">
+    <ellipse cx="14" cy="62" rx="6" ry="4.5" fill="#2A1A0E"/>
+    <ellipse cx="12.5" cy="60.5" rx="2" ry="1.4" fill="#fff" opacity="0.9"/>
+  </g>
+
+  <!-- MOUTH -->
+  <path d="M14 66 C16 70 20 72 24 70" stroke="#2A1A0E" stroke-width="1.5" stroke-linecap="round" fill="none"/>
+
+  <!-- CHEEK BLUSH -->
+  <ellipse cx="20" cy="72" rx="5" ry="3" fill="#E8805A" opacity="0.5"/>
+  <ellipse cx="50" cy="66" rx="5" ry="3" fill="#E8805A" opacity="0.5"/>
+
+  <!-- EYEBROW -->
+  <path d="M38 44 C42 40 50 40 54 44" stroke="#6B3D1E" stroke-width="2" stroke-linecap="round" fill="none"/>
+
+  <!-- EYES -->
+  <g class="dp-look">
+    <g class="dp-eyes">
+      <ellipse cx="44" cy="52" rx="8" ry="9" fill="#1A0F08"/>
+      <circle cx="40" cy="47" r="3.2" fill="#fff"/>
+      <circle cx="38.5" cy="45.5" r="1.5" fill="#fff" opacity="0.6"/>
+      <circle cx="48" cy="57" r="1.6" fill="#fff" opacity="0.4"/>
+    </g>
+  </g>
+
+  <!-- FRONT LEG -->
+  <path d="M76 118 C86 122 112 128 130 130" stroke="#B07838" stroke-width="12" stroke-linecap="round" fill="none"/>
+  <ellipse cx="128" cy="131" rx="8" ry="5" fill="#2E1A0A" transform="rotate(-10 128 131)"/>
+
+  <!-- BACK LEG -->
+  <path d="M100 130 C110 136 122 140 130 140" stroke="#B07838" stroke-width="10" stroke-linecap="round" fill="none"/>
+  <ellipse cx="129" cy="141" rx="7" ry="4.5" fill="#2E1A0A" transform="rotate(-8 129 141)"/>
+
+  <!-- TAIL -->
+  <ellipse cx="130" cy="100" rx="8" ry="6" fill="#F5EDD0"/>
+
+  <!-- DEPLOY FLAG -->
+  <line x1="85" y1="90" x2="40" y2="30" stroke="#8D5B2A" stroke-width="2.5" stroke-linecap="round"/>
+  <path d="M40 30 L18 40 L40 50 Z" fill="#A1F4C2" stroke="#3EB872" stroke-width="1"/>
+  <circle cx="40" cy="29" r="2.8" fill="#FFD700"/>
+</svg>`;
     }
 
     const deer = document.createElement('div');
@@ -1688,8 +1646,8 @@
     const tag = deer.querySelector('.dp-tag');
     const bubble = deer.querySelector('.dp-bubble');
 
-    // Nodi peeks only in the 3 corners where Kodi is NOT located (Kodi is in bottom-left)
-    const corners = ['bottom-right', 'top-right', 'top-left'];
+    // Nodi peeks only from SIDE views (left and right edges)
+    const corners = ['top-right', 'top-left'];
     const quotes = [
       "Hi! I'm Nodi, I keep the pods running! 🦌",
       "Kodi writes the code, I deploy it! 🚀",

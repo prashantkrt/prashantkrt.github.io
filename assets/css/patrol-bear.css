@@ -25,14 +25,20 @@
    (Kodi is in Bottom-Left)
    ========================================================================== */
 
+/* ==========================================================================
+   NODI THE DEER — Side-View Corner Peeking Mascot
+   Peeks only from LEFT and RIGHT edges of the screen (side profile views)
+   ========================================================================== */
+
 .deer-corner-peek {
   position: fixed;
   z-index: 1001;
-  width: 96px;
-  height: 88px;
   opacity: 0;
   pointer-events: none;
-  transition: opacity 0.25s ease;
+  transition: opacity 0.3s ease;
+  /* larger container to show proper deer side profile */
+  width: 140px;
+  height: 160px;
 }
 
 .deer-corner-peek.is-peeking {
@@ -44,8 +50,8 @@
   width: 100%;
   height: 100%;
   cursor: pointer;
-  filter: drop-shadow(0 8px 24px rgba(0, 0, 0, 0.6));
-  transform-origin: center bottom;
+  filter: drop-shadow(0 10px 28px rgba(0,0,0,0.65));
+  transform-origin: center center;
 }
 
 .dp-body svg {
@@ -70,152 +76,136 @@
   transform-origin: 68px 38px;
 }
 
-/* ── 3 DISTINCT CORNER ANCHORS & POP TRAJECTORIES ────────────────────────── */
+/* ── 2 SIDE CORNER ANCHORS ──────────────────────────────────────────────── */
 
-/* 1. BOTTOM-RIGHT (Horizontal window sill, peeking UP from bottom) */
-.deer-corner-peek-bottom-right {
-  bottom: 0;
-  right: 88px;
-  width: 104px;
-  height: 88px;
-}
-.deer-corner-peek-bottom-right .dp-body {
-  transform: translateY(105%);
-}
-.deer-corner-peek-bottom-right.is-peeking .dp-body {
-  animation: nodi-peek-bottom 4.5s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
-}
-
-/* 2. TOP-RIGHT (Vertical window frame, peeking LEFT from right bezel) */
+/* RIGHT edge — Nodi slides in from the right */
 .deer-corner-peek-top-right {
-  top: 100px;
+  top: 50%;
   right: 0;
-  width: 104px;
-  height: 92px;
+  transform: translateY(-50%);
+  width: 160px;
+  height: 180px;
 }
 .deer-corner-peek-top-right .dp-body {
-  transform: translateX(105%);
+  transform: translateX(115%);
 }
 .deer-corner-peek-top-right.is-peeking .dp-body {
-  animation: nodi-peek-side-right 4.5s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
+  animation: nodi-peek-side-right 5s cubic-bezier(0.22, 1.2, 0.36, 1) forwards;
 }
 
-/* 3. TOP-LEFT (Vertical window frame, peeking RIGHT from left bezel) */
+/* LEFT edge — Nodi slides in from the left */
 .deer-corner-peek-top-left {
-  top: 100px;
+  top: 50%;
   left: 0;
-  width: 104px;
-  height: 92px;
+  transform: translateY(-50%);
+  width: 160px;
+  height: 180px;
 }
 .deer-corner-peek-top-left .dp-body {
-  transform: translateX(-105%);
+  transform: translateX(-115%);
 }
 .deer-corner-peek-top-left.is-peeking .dp-body {
-  animation: nodi-peek-side-left 4.5s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
+  animation: nodi-peek-side-left 5s cubic-bezier(0.22, 1.2, 0.36, 1) forwards;
 }
 
-/* ── KEYFRAME ANIMATIONS FOR THE 3 CORNERS ──────────────────────────────── */
-
-@keyframes nodi-peek-bottom {
-  0%   { transform: translateY(105%); }
-  12%  { transform: translateY(-8px) scale(1.04); }
-  18%  { transform: translateY(0) scale(1); }
-  32%  { transform: translateY(-3px) rotate(3deg); }
-  48%  { transform: translateY(0) rotate(-3deg); }
-  68%  { transform: translateY(-2px) rotate(0deg); }
-  82%  { transform: translateY(0); }
-  90%  { transform: translateY(0); }
-  100% { transform: translateY(105%); }
-}
+/* ── KEYFRAME ANIMATIONS — smooth slide in with lively bounce ──────────── */
 
 @keyframes nodi-peek-side-right {
-  0%   { transform: translateX(105%); }
-  12%  { transform: translateX(-10px) scale(1.04); }
-  18%  { transform: translateX(0) scale(1); }
-  32%  { transform: translateX(-4px) rotate(-4deg); }
-  48%  { transform: translateX(0) rotate(2deg); }
-  68%  { transform: translateX(-2px) rotate(-2deg); }
-  82%  { transform: translateX(0); }
-  90%  { transform: translateX(0); }
-  100% { transform: translateX(105%); }
+  0%   { transform: translateX(115%); }
+  /* Slide in with strong overshoot — the classic cartoon pull */
+  18%  { transform: translateX(-18px) scaleX(0.92) scaleY(1.05); }
+  26%  { transform: translateX(6px) scaleX(1.04) scaleY(0.97); }
+  34%  { transform: translateX(-4px) scaleX(0.98) scaleY(1.01); }
+  42%  { transform: translateX(0) scaleX(1) scaleY(1); }
+  /* Idle wiggle — alive and curious */
+  52%  { transform: translateX(0) rotate(1.5deg); }
+  60%  { transform: translateX(-3px) rotate(-2deg); }
+  68%  { transform: translateX(0) rotate(1deg); }
+  76%  { transform: translateX(-2px) rotate(0deg); }
+  84%  { transform: translateX(0); }
+  /* Smooth slide back out */
+  92%  { transform: translateX(30px) scaleX(0.9); }
+  100% { transform: translateX(115%); }
 }
 
 @keyframes nodi-peek-side-left {
-  0%   { transform: translateX(-105%); }
-  12%  { transform: translateX(10px) scale(1.04); }
-  18%  { transform: translateX(0) scale(1); }
-  32%  { transform: translateX(4px) rotate(4deg); }
-  48%  { transform: translateX(0) rotate(-2deg); }
-  68%  { transform: translateX(2px) rotate(2deg); }
-  82%  { transform: translateX(0); }
-  90%  { transform: translateX(0); }
-  100% { transform: translateX(-105%); }
+  0%   { transform: translateX(-115%); }
+  18%  { transform: translateX(18px) scaleX(0.92) scaleY(1.05); }
+  26%  { transform: translateX(-6px) scaleX(1.04) scaleY(0.97); }
+  34%  { transform: translateX(4px) scaleX(0.98) scaleY(1.01); }
+  42%  { transform: translateX(0) scaleX(1) scaleY(1); }
+  52%  { transform: translateX(0) rotate(-1.5deg); }
+  60%  { transform: translateX(3px) rotate(2deg); }
+  68%  { transform: translateX(0) rotate(-1deg); }
+  76%  { transform: translateX(2px) rotate(0deg); }
+  84%  { transform: translateX(0); }
+  92%  { transform: translateX(-30px) scaleX(0.9); }
+  100% { transform: translateX(-115%); }
 }
 
-/* Blinks, ear flicks, idle life */
+/* Blinks — expressive eye animations */
 .is-peeking .dp-eyes {
-  animation: deer-corner-blink 4.5s ease-in-out forwards;
+  animation: deer-corner-blink 5s ease-in-out forwards;
 }
 
 .is-peeking .dp-ear-l {
-  animation: dp-ear-flick-l 4.5s ease-in-out forwards;
+  animation: dp-ear-flick-l 5s ease-in-out forwards;
 }
 
 .is-peeking .dp-ear-r {
-  animation: dp-ear-flick-r 4.5s ease-in-out forwards;
+  animation: dp-ear-flick-r 5s ease-in-out forwards;
 }
 
 @keyframes deer-corner-blink {
-  0%, 28%, 38%, 100% { transform: scaleY(1); }
-  32%                { transform: scaleY(0.1); }
-  58%, 66%           { transform: scaleY(1); }
-  62%                { transform: scaleY(0.1); }
+  0%, 30%, 42%, 65%, 76%, 100% { transform: scaleY(1); }
+  36%                           { transform: scaleY(0.08); }
+  70%                           { transform: scaleY(0.08); }
 }
 
 @keyframes dp-ear-flick-l {
-  0%, 18%, 100% { transform: rotate(0deg); }
-  24%           { transform: rotate(-14deg); }
-  30%           { transform: rotate(5deg); }
-  36%           { transform: rotate(0deg); }
-  56%           { transform: rotate(-12deg); }
-  62%           { transform: rotate(0deg); }
+  0%, 20%, 100% { transform: rotate(0deg); }
+  26%           { transform: rotate(-18deg); }
+  32%           { transform: rotate(6deg); }
+  38%           { transform: rotate(0deg); }
+  58%           { transform: rotate(-14deg); }
+  64%           { transform: rotate(0deg); }
 }
 
 @keyframes dp-ear-flick-r {
-  0%, 36%, 100% { transform: rotate(0deg); }
-  42%           { transform: rotate(14deg); }
-  48%           { transform: rotate(-5deg); }
-  54%           { transform: rotate(0deg); }
-  68%           { transform: rotate(10deg); }
-  74%           { transform: rotate(0deg); }
+  0%, 38%, 100% { transform: rotate(0deg); }
+  44%           { transform: rotate(18deg); }
+  50%           { transform: rotate(-6deg); }
+  56%           { transform: rotate(0deg); }
+  70%           { transform: rotate(12deg); }
+  76%           { transform: rotate(0deg); }
 }
 
 .dp-look {
-  animation: dp-look 5s ease-in-out infinite;
+  animation: dp-look 4.5s ease-in-out infinite;
 }
 
 @keyframes dp-look {
-  0%, 18%, 100% { transform: translateX(0); }
-  26%, 44%      { transform: translateX(-1.8px); }
-  52%, 72%      { transform: translateX(1.8px); }
+  0%, 20%, 100% { transform: translateX(0); }
+  28%, 46%      { transform: translateX(-2px); }
+  54%, 72%      { transform: translateX(2px); }
   80%           { transform: translateX(0); }
 }
 
 .dp-nose {
   transform-box: fill-box;
   transform-origin: center;
-  animation: dp-nose 2.8s ease-in-out infinite;
+  animation: dp-nose 3s ease-in-out infinite;
 }
 
 @keyframes dp-nose {
-  0%, 68%, 100% { transform: scale(1); }
-  74%           { transform: scale(1.14, 0.88); }
+  0%, 65%, 100% { transform: scale(1); }
+  72%           { transform: scale(1.18, 0.84); }
   80%           { transform: scale(1); }
-  86%           { transform: scale(1.1, 0.9); }
-  92%           { transform: scale(1); }
+  88%           { transform: scale(1.12, 0.9); }
+  94%           { transform: scale(1); }
 }
 
-/* ── NAME TAG & SPEECH BUBBLES ADAPTED TO CORNERS ───────────────────────── */
+/* ── NAME TAG & SPEECH BUBBLES ─────────────────────────────────────────── */
 .dp-tag,
 .dp-bubble {
   position: absolute;
@@ -242,18 +232,16 @@
   cursor: pointer;
 }
 
-/* Tag positioning per corner */
-.deer-corner-peek-bottom-right .dp-tag {
-  bottom: 8px;
-  right: calc(100% + 8px);
-}
+/* Tag positioning for side views */
 .deer-corner-peek-top-right .dp-tag {
-  top: calc(100% + 6px);
-  right: 8px;
+  bottom: 12px;
+  right: calc(100% + 10px);
+  white-space: nowrap;
 }
 .deer-corner-peek-top-left .dp-tag {
-  top: calc(100% + 6px);
-  left: 8px;
+  bottom: 12px;
+  left: calc(100% + 10px);
+  white-space: nowrap;
 }
 
 .dp-tag:hover {
@@ -284,20 +272,9 @@
   border-style: solid;
 }
 
-/* Bubble positioning per corner */
-.deer-corner-peek-bottom-right .dp-bubble {
-  bottom: calc(100% + 8px);
-  right: 0;
-  transform: translateY(8px) scale(0.92);
-}
-.deer-corner-peek-bottom-right .dp-bubble::after {
-  top: 100%;
-  right: 40px;
-  border-color: rgba(255, 206, 107, 0.7) transparent transparent transparent;
-}
-
+/* Bubble positioning for side views */
 .deer-corner-peek-top-right .dp-bubble {
-  top: 8px;
+  top: 20px;
   right: calc(100% + 14px);
   transform: translateX(8px) scale(0.92);
 }
@@ -308,7 +285,7 @@
 }
 
 .deer-corner-peek-top-left .dp-bubble {
-  top: 8px;
+  top: 20px;
   left: calc(100% + 14px);
   transform: translateX(-8px) scale(0.92);
 }
@@ -323,22 +300,23 @@
   transform: translate(0, 0) scale(1) !important;
 }
 
-/* ── TAP REACTION: HAPPY BOUNCE POP + HEARTS ────────────────────────────── */
+/* ── TAP REACTION: HAPPY BOUNCE ─────────────────────────────────────────── */
 .deer-corner-peek.is-popping .dp-body {
-  animation: nodi-pop-bounce 0.52s cubic-bezier(0.34, 1.56, 0.64, 1) !important;
+  animation: nodi-pop-bounce 0.55s cubic-bezier(0.34, 1.56, 0.64, 1) !important;
 }
 
 @keyframes nodi-pop-bounce {
-  0%   { transform: translateY(0) scale(1); }
-  35%  { transform: translateY(-16px) scale(1.15, 0.88); }
-  70%  { transform: translateY(2px) scale(0.96, 1.04); }
-  100% { transform: translateY(0) scale(1); }
+  0%   { transform: translateX(0) scale(1); }
+  25%  { transform: translateX(-12px) scale(1.14, 0.88); }
+  55%  { transform: translateX(4px) scale(0.96, 1.05); }
+  80%  { transform: translateX(-2px) scale(1.02, 0.99); }
+  100% { transform: translateX(0) scale(1); }
 }
 
 .dp-heart {
   position: absolute;
   left: 50%;
-  bottom: 45px;
+  bottom: 50px;
   font-size: 14px;
   pointer-events: none;
   animation: dp-heart-float 1.4s ease-out forwards;
@@ -347,7 +325,7 @@
 @keyframes dp-heart-float {
   0%   { opacity: 0; transform: translate(calc(-50% + var(--hx, 0px)), 0px) scale(0.5); }
   20%  { opacity: 1; }
-  100% { opacity: 0; transform: translate(calc(-50% + var(--hx, 0px)), -54px) scale(1.2); }
+  100% { opacity: 0; transform: translate(calc(-50% + var(--hx, 0px)), -60px) scale(1.3); }
 }
 
 /* ── Sprites: placed on the ground line and moved with translate3d ──────── */
