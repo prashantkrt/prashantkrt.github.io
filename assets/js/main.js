@@ -1459,19 +1459,24 @@
   <path d="M165 125 C200 118 240 132 285 155" stroke="#C8884A" stroke-width="46" stroke-linecap="round" fill="none"/>
   <path d="M168 130 C202 124 240 137 282 158" stroke="#D4A060" stroke-width="26" stroke-linecap="round" fill="none"/>
 
-  <!-- ═══ ANTLERS ═══ -->
+  <!-- ═══ A FRIENDLY PAW WAVE (charming hello gesture, no dangling legs) ═══ -->
+  <g class="dp-wave">
+    <path d="M150 190 C158 176 170 172 180 178" stroke="#B07838" stroke-width="14" stroke-linecap="round" fill="none"/>
+    <ellipse cx="183" cy="179" rx="9.5" ry="7.5" fill="#2A1208"/>
+  </g>
+  <ellipse cx="398" cy="150" rx="13" ry="10" fill="#F0EAD0"/>
+
+  <!-- ═══ ANTLERS — clean two-tine branches ═══ -->
   <g stroke="#6B3D1E" stroke-linecap="round" stroke-linejoin="round" fill="none">
-    <!-- Left antler trunk -->
-    <path d="M110 60 C98 38 76 18 54 4" stroke-width="4.5"/>
-    <path d="M98 44 C82 36 66 38 56 44" stroke-width="3.5"/>
-    <path d="M80 24 C66 18 54 20 46 26" stroke-width="3"/>
-    <path d="M54 4 C44 -4 36 -2 32 4" stroke-width="2.6"/>
-    <path d="M54 4 C58 -6 66 -6 68 0" stroke-width="2.6"/>
-    <!-- Right antler trunk -->
-    <path d="M134 54 C136 32 126 10 116 -2" stroke-width="4"/>
-    <path d="M133 36 C120 28 108 30 106 38" stroke-width="3.2"/>
-    <path d="M116 -2 C108 -10 100 -8 98 -2" stroke-width="2.6"/>
-    <path d="M116 -2 C120 -12 128 -10 130 -4" stroke-width="2.6"/>
+    <!-- Far (left) antler: trunk + two tines -->
+    <path d="M118 55 C110 30 96 10 78 -4" stroke-width="5"/>
+    <path d="M100 32 C86 24 72 24 62 30" stroke-width="3.5"/>
+    <path d="M78 -4 C70 -14 58 -14 52 -6" stroke-width="3"/>
+    <!-- Near (right) antler: trunk + two tines, slightly bigger/forward -->
+    <path d="M140 50 C146 24 138 -2 124 -16" stroke-width="5.5"/>
+    <path d="M136 26 C122 16 106 18 98 26" stroke-width="4"/>
+    <path d="M124 -16 C116 -26 102 -26 96 -16" stroke-width="3.5"/>
+    <path d="M124 -16 C130 -28 144 -26 148 -16" stroke-width="3.5"/>
   </g>
 
   <!-- ═══ FAR EAR (behind head) ═══ -->
@@ -1501,9 +1506,11 @@
   <ellipse cx="22" cy="132" rx="30" ry="22" fill="#EDD090"/>
 
   <!-- ═══ NOSE ═══ -->
-  <ellipse cx="3" cy="118" rx="10" ry="8" fill="#2A1A0E"/>
-  <ellipse cx="0" cy="115" rx="4" ry="2.8" fill="white" opacity="0.9"/>
-  <ellipse cx="12" cy="124" rx="4.5" ry="3" fill="#1A0A05" opacity="0.4"/>
+  <g class="dp-nose">
+    <ellipse cx="3" cy="118" rx="10" ry="8" fill="#2A1A0E"/>
+    <ellipse cx="0" cy="115" rx="4" ry="2.8" fill="white" opacity="0.9"/>
+    <ellipse cx="12" cy="124" rx="4.5" ry="3" fill="#1A0A05" opacity="0.4"/>
+  </g>
 
   <!-- ═══ MOUTH ═══ -->
   <path d="M5 128 C18 140 34 142 46 136" stroke="#2A1A0E" stroke-width="2.4" stroke-linecap="round" fill="none"/>
@@ -1513,33 +1520,21 @@
   <ellipse cx="84" cy="144" rx="13" ry="7.5" fill="#E05050" opacity="0.22"/>
 
   <!-- ═══ EYEBROW ═══ -->
-  <path d="M54 78 C68 70 88 70 102 76" stroke="#6B3D1E" stroke-width="3.5" stroke-linecap="round" fill="none"/>
+  <path d="M58 80 C70 73 86 73 98 79" stroke="#6B3D1E" stroke-width="3.5" stroke-linecap="round" fill="none"/>
 
-  <!-- ═══ BIG EXPRESSIVE EYE ═══ -->
+  <!-- ═══ EXPRESSIVE EYE — proportioned to the head, not oversized ═══ -->
   <g class="dp-eyes">
     <!-- Outer dark ring (pupil) -->
-    <ellipse cx="78" cy="99" rx="22" ry="23" fill="#1A0F08"/>
+    <ellipse cx="80" cy="100" rx="16" ry="17" fill="#1A0F08"/>
     <!-- Iris subtle depth -->
-    <ellipse cx="78" cy="99" rx="18" ry="19" fill="#2C1A0C"/>
+    <ellipse cx="80" cy="100" rx="13" ry="14" fill="#2C1A0C"/>
     <!-- Large primary shine -->
-    <circle cx="66" cy="87" r="8.5" fill="white"/>
+    <circle cx="74" cy="92" r="6" fill="white"/>
     <!-- Secondary highlight -->
-    <circle cx="63" cy="84.5" r="4" fill="white" opacity="0.55"/>
+    <circle cx="71" cy="90" r="2.8" fill="white" opacity="0.55"/>
     <!-- Tertiary bottom shine -->
-    <circle cx="92" cy="112" r="3.8" fill="white" opacity="0.28"/>
-  </g>
-
-  <!-- ═══ TAIL (white/cream fluffy) ═══ -->
-  <ellipse cx="398" cy="140" rx="13" ry="10" fill="#F0EAD0"/>
-
-  <!-- ═══ FRONT LEG ═══ -->
-  <path d="M278 198 C285 216 280 230 273 234" stroke="#B07838" stroke-width="16" stroke-linecap="round" fill="none"/>
-  <ellipse cx="271" cy="234" rx="12" ry="7" fill="#2A1208"/>
-  <path d="M267 237 L276 237" stroke="#1A0A05" stroke-width="2" stroke-linecap="round"/>
-
-  <!-- ═══ BACK LEG ═══ -->
-  <path d="M330 190 C336 208 332 222 326 226" stroke="#A87030" stroke-width="14" stroke-linecap="round" fill="none"/>
-  <ellipse cx="324" cy="226" rx="10" ry="6" fill="#2A1208"/>`;
+    <circle cx="88" cy="108" r="2.6" fill="white" opacity="0.28"/>
+  </g>`;
 
       if (corner === 'top-right') {
         // Deer faces LEFT — head on left side of SVG (visible), body extends right (screen clips it)

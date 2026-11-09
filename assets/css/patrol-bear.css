@@ -194,15 +194,36 @@
 .dp-nose {
   transform-box: fill-box;
   transform-origin: center;
-  animation: dp-nose 3s ease-in-out infinite;
+}
+
+.is-peeking .dp-nose {
+  animation: dp-nose 5s ease-in-out forwards;
 }
 
 @keyframes dp-nose {
-  0%, 65%, 100% { transform: scale(1); }
-  72%           { transform: scale(1.18, 0.84); }
-  80%           { transform: scale(1); }
+  0%, 44%, 100% { transform: scale(1); }
+  48%           { transform: scale(1.18, 0.84); }
+  52%           { transform: scale(1); }
   88%           { transform: scale(1.12, 0.9); }
-  94%           { transform: scale(1); }
+  92%           { transform: scale(1); }
+}
+
+/* Friendly paw wave — rotates from the shoulder, timed to the idle-wiggle window */
+.dp-wave {
+  transform-box: view-box;
+  transform-origin: 150px 190px;
+}
+
+.is-peeking .dp-wave {
+  animation: dp-wave 5s ease-in-out forwards;
+}
+
+@keyframes dp-wave {
+  0%, 46%, 100% { transform: rotate(0deg); }
+  54%           { transform: rotate(-16deg); }
+  62%           { transform: rotate(6deg); }
+  70%           { transform: rotate(-12deg); }
+  78%           { transform: rotate(0deg); }
 }
 
 /* ── NAME TAG & SPEECH BUBBLES ─────────────────────────────────────────── */
