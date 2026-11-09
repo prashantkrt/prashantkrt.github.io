@@ -1310,26 +1310,51 @@
     ];
 
     let bubbleTimer = null;
+    let eatTimer = null;
 
-    function petByte() {
-      wrapper.classList.remove('barking');
+    function petByte(e) {
+      if (e && e.stopPropagation) e.stopPropagation();
+
+      // Clear any pending timers
+      clearTimeout(bubbleTimer);
+      clearTimeout(eatTimer);
+
+      // Force restart all eating animations so EVERY click reliably eats the marshmallow!
+      wrapper.classList.remove('excited', 'barking');
+      const animatedEls = wrapper.querySelectorAll(
+        '.dog-arm-and-stick, .dog-marshmallow-tip, .dog-head-group, .dog-tongue, .dog-eyes, .byte-dog-svg, #dogArmAndStick'
+      );
+      animatedEls.forEach(el => {
+        el.style.animation = 'none';
+      });
       void wrapper.offsetWidth;
-      wrapper.classList.add('barking', 'excited');
+      animatedEls.forEach(el => {
+        el.style.animation = '';
+      });
+
+      // Re-add excited to trigger the eating animation sequence from frame 0
+      wrapper.classList.add('excited', 'barking');
 
       const msg = dogMessages[Math.floor(Math.random() * dogMessages.length)];
       bubble.textContent = msg;
       bubble.classList.add('bubble-visible');
 
+      // Crunch munch sound strictly on click
       SoundFX.kodiMunch();
 
       if (window.showToast) {
         window.showToast(`🐻 Kodi Bear: "${msg}"`);
       }
 
-      clearTimeout(bubbleTimer);
+      // Conclude eating sequence cleanly after 1.65s
+      eatTimer = setTimeout(() => {
+        wrapper.classList.remove('excited');
+      }, 1650);
+
+      // Speech bubble remains visible for 3.5s
       bubbleTimer = setTimeout(() => {
         bubble.classList.remove('bubble-visible');
-        wrapper.classList.remove('excited');
+        wrapper.classList.remove('barking');
       }, 3500);
     }
 
@@ -1340,16 +1365,13 @@
       mascot.addEventListener('keydown', (e) => {
         if (e.key === 'Enter' || e.key === ' ') {
           e.preventDefault();
-          petByte();
+          petByte(e);
         }
       });
     }
 
     if (petBtn) {
-      petBtn.addEventListener('click', (e) => {
-        e.stopPropagation();
-        petByte();
-      });
+      petBtn.addEventListener('click', petByte);
     }
   }
 
