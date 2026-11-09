@@ -1460,11 +1460,15 @@
   <!-- Ears -->
   <g class="dp-ear-l"><ellipse cx="14" cy="32" rx="8" ry="13" transform="rotate(-42 14 32)" fill="#B06E34"/><ellipse cx="14.5" cy="32.5" rx="4.4" ry="8.5" transform="rotate(-42 14.5 32.5)" fill="#F0A58E"/></g>
   <g class="dp-ear-r"><ellipse cx="62" cy="28" rx="6.5" ry="11" transform="rotate(30 62 28)" fill="#A56030"/><ellipse cx="61.5" cy="28.5" rx="3.4" ry="7" transform="rotate(30 61.5 28.5)" fill="#E8977F"/></g>
-  <!-- Neck and shoulder: a wedge from under the chin into the screen edge, so head and arm are one animal -->
-  <g class="dp-body-part">
-    <path d="M38 68 C42 82 52 92 66 97 L86 97 L86 56 L50 58 Z" fill="#B06E34"/>
-    <path d="M46 74 C50 84 58 91 68 94 L86 94 L86 70 C70 78 56 78 46 74 Z" fill="#F2D6AA"/>
-    <path d="M40 72 C44 82 52 90 64 95" stroke="#8A5326" stroke-width="1.1" fill="none" stroke-linecap="round" opacity="0.45"/>
+  <!-- Chibi fawn body: standing foreleg + round torso with cream belly and fawn spots -->
+  <g class="dp-body-part" stroke="#4E2F15" stroke-width="0.9" stroke-linejoin="round" stroke-linecap="round">
+    <path d="M57 104 L57 114" stroke="#4E2F15" stroke-width="9.4" fill="none"/>
+    <path d="M57 104 L57 114" stroke="#B87A3C" stroke-width="7.4" fill="none"/>
+    <path d="M52.6 113 H61.4 C62.6 117 61 120 58.6 120.4 H55.4 C53 120 51.4 117 52.6 113 Z" fill="#3A2616"/>
+    <path d="M57 114.6 V119.6" stroke="#1D120A" stroke-width="0.8"/>
+    <ellipse cx="54" cy="96" rx="27" ry="20" fill="#BE7B3C"/>
+    <ellipse cx="45" cy="102" rx="15" ry="12" fill="#F2D6AA" stroke="none"/>
+    <g fill="#FFF2DE" stroke="none" opacity="0.9"><circle cx="62" cy="86.5" r="1.8"/><circle cx="69" cy="92" r="1.6"/><circle cx="64" cy="97" r="1.5"/></g>
   </g>
   <g class="dp-head">
     <ellipse cx="42" cy="48" rx="31" ry="27" fill="#C98644"/>
@@ -1489,23 +1493,29 @@
     </g>
     <ellipse cx="38" cy="55" rx="4" ry="2.4" fill="#F28B82" opacity="0.5"/>
   </g>
-  <!-- Foreleg coming out of the shoulder; paw rests on the chest -->
-  <g class="dp-paw" stroke="#4E2F15" stroke-width="1" stroke-linejoin="round">
-    <path d="M78 79 C68 78 60 80 55 83 L55 93 C61 95.5 70 96 78 95 Z" fill="#B87A3C"/>
-    <ellipse cx="50" cy="88" rx="8.6" ry="7.8" fill="#C98644"/>
-    <path d="M42.2 85.2 C40.6 86.4 40.6 89.6 42.2 90.8 C43.6 89.8 43.6 86.2 42.2 85.2 Z" fill="#3A2616" stroke="none"/>
-    <path d="M44 88 H48.6" stroke="#7A4A22" stroke-width="1" stroke-linecap="round"/>
-    <ellipse cx="51.5" cy="84.4" rx="3.4" ry="1.3" fill="#E4AC6E" stroke="none"/>
-    <ellipse cx="55.4" cy="88" rx="1.7" ry="5.4" fill="#F2D6AA" stroke="none"/>
+  <!-- Handshake foreleg: starts right at the edge of the body, level with it, reaching toward the screen; shakes on hover -->
+  <g class="dp-arm" stroke-linecap="round" stroke-linejoin="round">
+    <g transform="translate(-12 3)">
+      <circle cx="36" cy="94" r="5.4" fill="#B87A3C" stroke="none"/>
+      <path d="M36 89.2 L24 91 L24 97 L36 98.8 Z" fill="#B87A3C" stroke="#4E2F15" stroke-width="0.9"/>
+      <circle cx="36" cy="94" r="4.2" fill="#B87A3C" stroke="none"/>
+      <path d="M33.6 91.6 L25.4 92.6" stroke="#D79A5C" stroke-width="1.4" fill="none" opacity="0.7"/>
+      <g class="dp-hand">
+        <ellipse cx="23.6" cy="94" rx="2.1" ry="4" fill="#F2D6AA" stroke="#4E2F15" stroke-width="0.8"/>
+        <path d="M23.8 90.4 C19.2 89.8 15.2 91.6 14.8 94 C15.2 96.4 19.2 98.2 23.8 97.6 Z" fill="#3A2616" stroke="#1D120A" stroke-width="0.8"/>
+        <path d="M15.6 94 H20.4" stroke="#1D120A" stroke-width="0.9" fill="none"/>
+        <ellipse cx="19.4" cy="91.9" rx="2.4" ry="0.8" fill="#8B6A4C" stroke="none" opacity="0.8"/>
+      </g>
+    </g>
   </g>
 `;
 
       if (corner === 'top-right') {
         // Deer faces LEFT — head on left side of SVG (visible), body extends right (screen clips it)
-        return `<svg viewBox="0 0 100 104" fill="none" xmlns="http://www.w3.org/2000/svg" style="overflow:visible">${deerSvgContent}</svg>`;
+        return `<svg viewBox="0 0 100 122" fill="none" xmlns="http://www.w3.org/2000/svg" style="overflow:visible">${deerSvgContent}</svg>`;
       }
       // top-left: Mirror the same SVG — head on right side, body on left (screen clips it)
-      return `<svg viewBox="0 0 100 104" fill="none" xmlns="http://www.w3.org/2000/svg" style="overflow:visible"><g transform="scale(-1,1) translate(-100,0)">${deerSvgContent}</g></svg>`;
+      return `<svg viewBox="0 0 100 122" fill="none" xmlns="http://www.w3.org/2000/svg" style="overflow:visible"><g transform="scale(-1,1) translate(-100,0)">${deerSvgContent}</g></svg>`;
     }
 
     const deer = document.createElement('div');

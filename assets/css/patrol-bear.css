@@ -84,7 +84,7 @@
   right: -44px;
   transform: translateY(-50%);
   width: 112px;
-  height: 116px;
+  height: 137px;
 }
 .deer-corner-peek-top-right .dp-body {
   transform: translateX(115%);
@@ -99,7 +99,7 @@
   left: -44px;
   transform: translateY(-50%);
   width: 112px;
-  height: 116px;
+  height: 137px;
 }
 .deer-corner-peek-top-left .dp-body {
   transform: translateX(-115%);
@@ -932,3 +932,21 @@ body.no-nodi #patrolDeer { display: none !important; }
 .ms-panel.ms-anim-off .ms-run { opacity: 0.4; pointer-events: none; }
 .ms-panel.ms-run-off .ms-speed,
 .ms-panel.ms-run-off .ms-jump { opacity: 0.4; pointer-events: none; }
+
+/* Handshake: the forearm swings from the elbow and the hand flaps on top; fast on hover or tap */
+.dp-arm { transform-box: view-box; transform-origin: 24px 97px; }
+.dp-hand { transform-box: view-box; transform-origin: 24px 94px; }
+.is-peeking .dp-arm  { animation: dp-arm-idle 2.6s ease-in-out infinite; }
+.is-peeking .dp-hand { animation: dp-hand-idle 2.6s ease-in-out infinite; }
+.is-peeking .dp-body:hover .dp-arm,
+.deer-corner-peek.is-popping .dp-arm  { animation: dp-arm-shake 0.18s ease-in-out infinite; }
+.is-peeking .dp-body:hover .dp-hand,
+.deer-corner-peek.is-popping .dp-hand { animation: dp-hand-shake 0.18s ease-in-out infinite; }
+
+@keyframes dp-arm-idle   { 0%, 100% { transform: rotate(0deg); }  50% { transform: rotate(-6deg); } }
+@keyframes dp-hand-idle  { 0%, 100% { transform: rotate(0deg); }  50% { transform: rotate(8deg); } }
+@keyframes dp-arm-shake  { 0%, 100% { transform: rotate(10deg); }  50% { transform: rotate(-10deg); } }
+@keyframes dp-hand-shake { 0%, 100% { transform: rotate(-12deg); } 50% { transform: rotate(12deg); } }
+@media (prefers-reduced-motion: reduce) {
+  .dp-arm, .dp-hand { animation: none !important; }
+}
