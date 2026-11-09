@@ -4,6 +4,7 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="theme-color" content="#080d19">
+  <script>try{var t=localStorage.getItem("siteTheme");if(t)document.documentElement.setAttribute("data-theme",t)}catch(e){}</script>
   <meta name="description" content="Prashant Kumar Tiwary — Java Backend Engineer focused on Java, Spring Boot, distributed systems, Kafka, and cloud-native engineering.">
   <meta property="og:title" content="Prashant Tiwary | Backend Engineer">
   <meta property="og:description" content="Backend engineering, distributed systems, technical projects, and continuous learning.">
@@ -12,8 +13,8 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet">
   <link rel="icon" type="image/svg+xml" href="assets/favicon.svg">
-  <link rel="stylesheet" href="assets/css/styles.css?v=5.7">
-  <link rel="stylesheet" href="assets/css/patrol-bear.css?v=9.3">
+  <link rel="stylesheet" href="assets/css/styles.css?v=6.1">
+  <link rel="stylesheet" href="assets/css/patrol-bear.css?v=9.8">
 </head>
 <body>
   <div class="scroll-progress-bar" id="scrollProgressBar"></div>
@@ -488,7 +489,7 @@
   <aside class="corner-bear-container" id="cornerBear" aria-label="Kodi the Corner Peeking Bear">
     <div class="corner-bear-bubble" id="cornerBearBubble">Hey there! Roasting clean code! 🍢 Tap me!</div>
     <button class="corner-bear-btn" id="cornerBearBtn" type="button" aria-label="Kodi the Peeking Moon Bear - tap for fun!">
-      <svg class="corner-bear-svg" viewBox="0 0 100 80" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <svg class="corner-bear-svg" viewBox="0 0 114 80" fill="none" xmlns="http://www.w3.org/2000/svg">
         <!-- Bear Ears -->
         <circle cx="30" cy="24" r="12" fill="#1C2128"/>
         <circle cx="30" cy="24" r="7" fill="#E0A96D"/>
@@ -512,18 +513,21 @@
         <!-- Rosy Cheeks -->
         <ellipse cx="35" cy="47" rx="3.5" ry="2" fill="#E0A96D" opacity="0.6"/>
         <ellipse cx="65" cy="47" rx="3.5" ry="2" fill="#E0A96D" opacity="0.6"/>
-        <!-- Raised arm and paw gripping the marshmallow roasting stick -->
+        <!-- Arm stretched out to the side, paw gripping the marshmallow roasting stick -->
         <g class="kb-stick">
-          <path d="M79 77 C83 69 80 60 74 54" stroke="#1C2128" stroke-width="10" stroke-linecap="round" fill="none"/>
-          <path d="M79 77 C83 69 80 60 74 54" stroke="#2F3742" stroke-width="4.5" stroke-linecap="round" fill="none" opacity="0.7"/>
-          <path d="M66 58 L88 20" stroke="#8D5B2A" stroke-width="2.2" stroke-linecap="round"/>
-          <rect x="83" y="16" width="8" height="6.5" rx="2.5" fill="#FFF8EB" stroke="#D4A373" stroke-width="0.7" transform="rotate(-30 83 16)"/>
-          <ellipse cx="88" cy="20" rx="1.8" ry="1" fill="#B07D48" opacity="0.75"/>
-          <circle cx="73" cy="50" r="6.4" fill="#1C2128"/>
-          <ellipse cx="72" cy="51.6" rx="3.6" ry="2.8" fill="#3D4756"/>
-          <path d="M68.6 46.4 Q73 43.6 77.4 46.4" stroke="#3D4756" stroke-width="1.4" stroke-linecap="round" fill="none"/>
-          <circle cx="68.6" cy="49.6" r="1.1" fill="#3D4756"/>
-          <circle cx="69.4" cy="53.4" r="1.1" fill="#3D4756"/>
+          <path d="M74 77 C84 77 92 70 95 59" stroke="#1C2128" stroke-width="10" stroke-linecap="round" fill="none"/>
+          <path d="M74 77 C84 77 92 70 95 59" stroke="#2F3742" stroke-width="4.5" stroke-linecap="round" fill="none" opacity="0.7"/>
+          <path d="M88 72 L104 28" stroke="#8D5B2A" stroke-width="2.2" stroke-linecap="round"/>
+          <g class="kb-marsh">
+            <circle cx="103.5" cy="24.5" r="10" fill="transparent"/>
+            <rect x="99" y="21" width="8" height="6.5" rx="2.5" fill="#FFF8EB" stroke="#D4A373" stroke-width="0.7" transform="rotate(-20 103 24)"/>
+            <ellipse cx="104" cy="25.6" rx="1.8" ry="1" fill="#B07D48" opacity="0.75"/>
+          </g>
+          <circle cx="95.5" cy="57" r="6.4" fill="#1C2128"/>
+          <ellipse cx="94.4" cy="58.6" rx="3.6" ry="2.8" fill="#3D4756"/>
+          <path d="M90.8 53.4 Q95.4 50.6 100 53.4" stroke="#3D4756" stroke-width="1.4" stroke-linecap="round" fill="none"/>
+          <circle cx="91" cy="56.6" r="1.1" fill="#3D4756"/>
+          <circle cx="91.8" cy="60.4" r="1.1" fill="#3D4756"/>
         </g>
         <!-- Peeking Paws over screen edge -->
         <ellipse cx="26" cy="74" rx="10" ry="7" fill="#1C2128"/>
@@ -533,6 +537,13 @@
       </svg>
       <span class="corner-bear-tag">Kodi · Code 🐻</span>
     </button>
+    <button class="kb-theme-btn" id="kbThemeBtn" type="button" aria-label="Choose site theme" aria-haspopup="dialog" aria-expanded="false" aria-controls="kbThemePanel" title="Change theme">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3a9 9 0 1 0 0 18c1.1 0 1.8-.8 1.8-1.7 0-.5-.2-.9-.5-1.3-.3-.4-.5-.8-.5-1.3 0-1 .8-1.7 1.8-1.7H17a4 4 0 0 0 4-4c0-4.1-4-8-9-8Z"/><circle cx="7.6" cy="11.2" r="1.1" fill="currentColor"/><circle cx="10.4" cy="7.4" r="1.1" fill="currentColor"/><circle cx="15" cy="7.4" r="1.1" fill="currentColor"/></svg>
+    </button>
+    <div class="kb-theme-panel" id="kbThemePanel" role="dialog" aria-label="Site themes" hidden>
+      <div class="kb-theme-head"><span class="ms-label">// THEMES</span><b>Pick a vibe with Kodi</b></div>
+      <div class="kb-theme-grid" id="kbThemeGrid"></div>
+    </div>
   </aside>
 
   <!-- KODI CHASE SCENE — Kodi (campfire bear) chases deer across screen bottom -->
@@ -699,6 +710,6 @@
   <!-- DYNAMIC FLOATING TOAST NOTIFICATION CONTAINER -->
   <div id="toastContainer" class="toast-container" aria-live="polite"></div>
 
-  <script src="assets/js/main.js?v=9.3"></script>
+  <script src="assets/js/main.js?v=9.8"></script>
 </body>
 </html>

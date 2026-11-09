@@ -1,3 +1,18 @@
+window.KodiFoodie = [
+    "Hungry? Prashant says a well-fed dev writes cleaner code! 🍽️",
+    "Do you want to eat something? Prashant is cooking up ideas! 👨‍🍳",
+    "My developer is a total foodie! Ask him for a recipe 😋",
+    "Prashant is a really good cook: tasty code, tastier curry! 🍛",
+    "Marshmallows are dessert, Prashant cooks the main course! 🍢",
+    "Fun fact: Prashant plates his code as neatly as his dinner! 🍽️",
+    "Good code, good chai, good food: Prashant's recipe for joy! ☕",
+    "Prashant stirs a pot like he tunes Kafka: patiently! 🥘",
+    "Hungry? Let's talk food first, Spring Boot second! 🍕",
+    "Debug on an empty stomach? Never! Prashant cooks first! 🍳",
+    "A good cook and a good engineer: Prashant seasons both well! 🧂",
+    "Want to eat? Prashant's kitchen is as organised as his code! 🍲"
+  ];
+window.ThemeColors = { green: '#a1f4c2', blue: '#8eb5ff', purple: '#c0a5ff', greenRgb: '161, 244, 194', blueRgb: '142, 181, 255' };
 /**
  * Prashant Kumar Tiwary - Engineering Portfolio
  * Fully Dynamic Interactive Engine:
@@ -81,7 +96,7 @@
         this.vx = (Math.random() - 0.5) * 0.45;
         this.vy = (Math.random() - 0.5) * 0.45;
         this.radius = Math.random() * 1.8 + 1.2;
-        this.baseColor = Math.random() > 0.4 ? 'rgba(161, 244, 194, ' : 'rgba(142, 181, 255, ';
+        this.useGreen = Math.random() > 0.4;
         this.pulse = Math.random() * Math.PI;
       }
       update() {
@@ -106,8 +121,8 @@
         const glow = 0.5 + Math.sin(this.pulse) * 0.3;
         ctx.beginPath();
         ctx.arc(this.x, this.y, this.radius, 0, Math.PI * 2);
-        ctx.fillStyle = this.baseColor + glow + ')';
-        ctx.shadowColor = '#a1f4c2';
+        ctx.fillStyle = 'rgba(' + (this.useGreen ? ThemeColors.greenRgb : ThemeColors.blueRgb) + ', ' + glow + ')';
+        ctx.shadowColor = ThemeColors.green;
         ctx.shadowBlur = 6;
         ctx.fill();
         ctx.shadowBlur = 0;
@@ -168,7 +183,7 @@
               ctx.beginPath();
               ctx.moveTo(nodes[i].x, nodes[i].y);
               ctx.lineTo(nodes[j].x, nodes[j].y);
-              ctx.strokeStyle = `rgba(161, 244, 194, ${alpha})`;
+              ctx.strokeStyle = `rgba(${ThemeColors.greenRgb}, ${alpha})`;
               ctx.lineWidth = 0.8;
               ctx.stroke();
             }
@@ -183,7 +198,7 @@
             ctx.beginPath();
             ctx.moveTo(nodes[i].x, nodes[i].y);
             ctx.lineTo(mouse.x, mouse.y);
-            ctx.strokeStyle = `rgba(161, 244, 194, ${alpha})`;
+            ctx.strokeStyle = `rgba(${ThemeColors.greenRgb}, ${alpha})`;
             ctx.lineWidth = 1;
             ctx.stroke();
           }
@@ -201,8 +216,8 @@
           const py = p.from.y + (p.to.y - p.from.y) * p.progress;
           ctx.beginPath();
           ctx.arc(px, py, 2.2, 0, Math.PI * 2);
-          ctx.fillStyle = '#a1f4c2';
-          ctx.shadowColor = '#a1f4c2';
+          ctx.fillStyle = ThemeColors.green;
+          ctx.shadowColor = ThemeColors.green;
           ctx.shadowBlur = 8;
           ctx.fill();
           ctx.shadowBlur = 0;
@@ -1307,7 +1322,7 @@
       "Campfire check: 0 vulnerabilities, 100% tests passing! 🔥",
       "Sweet marshmallows & zero memory leaks! ✨",
       "K8s pods 3/3 Running! Kodi writes code, Nodi deploys! 🦌"
-    ];
+    ].concat(window.KodiFoodie);
 
     let bubbleTimer = null;
     let eatTimer = null;
@@ -1342,9 +1357,6 @@
       // Crunch munch sound strictly on click
       SoundFX.kodiMunch();
 
-      if (window.showToast) {
-        window.showToast(`🐻 Kodi Bear: "${msg}"`);
-      }
 
       // Conclude eating sequence cleanly after 1.65s
       eatTimer = setTimeout(() => {
@@ -1397,31 +1409,34 @@
     let bubbleTimer = null;
     let peekTimer = null;
 
-    function popCornerBear() {
+    function popCornerBear(customQuote) {
       bearBtn.classList.remove('popping');
       void bearBtn.offsetWidth;
       bearBtn.classList.add('popping');
       container.classList.add('peek-active');
 
-      const quote = cornerQuotes[Math.floor(Math.random() * cornerQuotes.length)];
+      const quote = typeof customQuote === 'string'
+        ? customQuote
+        : cornerQuotes[Math.floor(Math.random() * cornerQuotes.length)];
       bubble.textContent = quote;
       bubble.classList.add('bubble-visible');
 
       // Play Kodi cartoon jump sound
       SoundFX.kodiJump();
 
-      if (window.showToast) {
-        window.showToast(`🐻 Kodi Bear: "${quote}"`);
-      }
 
       clearTimeout(bubbleTimer);
       bubbleTimer = setTimeout(() => {
         bubble.classList.remove('bubble-visible');
-        container.classList.remove('peek-active');
+        if (!document.body.classList.contains('kodi-busy')) container.classList.remove('peek-active');
       }, 4000);
     }
 
-    bearBtn.addEventListener('click', popCornerBear);
+    bearBtn.addEventListener('click', () => {
+      if (window.kodiCycleTheme) popCornerBear(window.kodiCycleTheme());
+      else popCornerBear();
+    });
+    window.kodiSay = popCornerBear;
 
     // Periodic gentle peek animation every 18 seconds to delight the visitor
     function schedulePeek() {
@@ -1429,7 +1444,7 @@
         if (!container.classList.contains('peek-active')) {
           container.classList.add('peek-active');
           setTimeout(() => {
-            if (!bubble.classList.contains('bubble-visible')) {
+            if (!bubble.classList.contains('bubble-visible') && !document.body.classList.contains('kodi-busy')) {
               container.classList.remove('peek-active');
             }
           }, 2400);
@@ -1956,7 +1971,7 @@
     function startRun() {
       if (!kodi || !deer) return;
       const cl = document.body.classList;
-      if (cl.contains('mascots-off') || cl.contains('no-run') || (cl.contains('no-kodi') && cl.contains('no-nodi'))) {
+      if (cl.contains('mascots-off') || cl.contains('no-run') || cl.contains('kodi-busy') || (cl.contains('no-kodi') && cl.contains('no-nodi'))) {
         restTimer = setTimeout(startRun, 2000);
         return;
       }
@@ -2070,13 +2085,13 @@
   window.initSparkleParticles = function () {
     if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
 
-    const colors = ['#a1f4c2', '#8eb5ff', '#c0a5ff', '#ffd57b', '#ff9cc5'];
 
     function spawnSparkle() {
       const el    = document.createElement('div');
       el.className = 'sparkle-particle';
       const size  = 3 + Math.random() * 5;
-      const color = colors[Math.floor(Math.random() * colors.length)];
+      const palette = [ThemeColors.green, ThemeColors.blue, ThemeColors.purple, '#ffd57b', '#ff9cc5'];
+      const color = palette[Math.floor(Math.random() * palette.length)];
       const x     = 5 + Math.random() * 90;
       const dur   = 2.5 + Math.random() * 3.5;
 
@@ -2209,7 +2224,10 @@
     });
     panel.querySelector('#msClose').addEventListener('click', close);
     panel.addEventListener('click', (e) => e.stopPropagation());
-    document.addEventListener('click', () => { if (panel.classList.contains('open')) close(); });
+    document.addEventListener('click', (e) => {
+      if (box && box.contains(e.target)) return;
+      if (panel.classList.contains('open')) close();
+    });
     document.addEventListener('keydown', (e) => {
       if (e.key === 'Escape' && panel.classList.contains('open')) { close(); btn.focus(); }
     });
@@ -2228,6 +2246,171 @@
     reset.addEventListener('click', () => update(Object.assign({}, DEFAULTS)));
 
     render();
+  }
+
+  document.addEventListener('DOMContentLoaded', init);
+})();
+
+
+// ============================================================
+// KODI EXTRAS — foodie marshmallow chat + site theme picker
+// ============================================================
+(function () {
+  'use strict';
+
+  const THEMES = [{"id": "midnight", "name": "Midnight Mint", "emoji": "\ud83c\udf19", "bg": "#080d19", "bg2": "#0c1424", "green": "#a1f4c2", "blue": "#8eb5ff", "purple": "#c0a5ff"}, {"id": "aurora", "name": "Aurora Violet", "emoji": "\ud83d\udd2e", "bg": "#0c0a1d", "bg2": "#120f28", "green": "#c9a8ff", "blue": "#8fb3ff", "purple": "#ff9fe0"}, {"id": "ocean", "name": "Ocean Depth", "emoji": "\ud83c\udf0a", "bg": "#051520", "bg2": "#09202e", "green": "#6fe3ff", "blue": "#7fb2ff", "purple": "#b2a6ff"}, {"id": "ember", "name": "Sunset Ember", "emoji": "\ud83d\udd25", "bg": "#150c0a", "bg2": "#1e1210", "green": "#ffb86b", "blue": "#ff9a8a", "purple": "#ff8fa3"}, {"id": "forest", "name": "Forest Moss", "emoji": "\ud83c\udf32", "bg": "#07130d", "bg2": "#0c1d14", "green": "#b8f26b", "blue": "#6fe0b4", "purple": "#9be8c8"}, {"id": "rose", "name": "Rose Quartz", "emoji": "\ud83c\udf38", "bg": "#160a13", "bg2": "#200f1b", "green": "#ff9cc5", "blue": "#ffc2a8", "purple": "#d6a8ff"}, {"id": "graphite", "name": "Graphite Mono", "emoji": "\ud83e\udea8", "bg": "#0a0b0e", "bg2": "#111317", "green": "#e3e8f2", "blue": "#9db4dc", "purple": "#b8b4d8"}];
+
+  const FOODIE = window.KodiFoodie;
+
+  const DESC = {
+    midnight: 'calm night-sky coding vibes',
+    aurora: 'a northern-lights purple glow',
+    ocean: 'cool blues for deep-dive debugging',
+    ember: 'warm amber, like a cosy evening kitchen',
+    forest: 'fresh green, calm as a campfire in the woods',
+    rose: 'soft pink, gentle on the eyes',
+    graphite: 'clean minimal greys, pure focus'
+  };
+
+  const root = document.documentElement;
+  let current = 'midnight';
+  try { current = localStorage.getItem('siteTheme') || 'midnight'; } catch (e) { /* ignore */ }
+  if (!THEMES.some((t) => t.id === current)) current = 'midnight';
+
+  function syncColors() {
+    const cs = getComputedStyle(root);
+    const get = (n) => cs.getPropertyValue(n).trim();
+    const tc = window.ThemeColors;
+    tc.green = get('--green') || tc.green;
+    tc.blue = get('--blue') || tc.blue;
+    tc.purple = get('--purple') || tc.purple;
+    tc.greenRgb = get('--green-rgb') || tc.greenRgb;
+    tc.blueRgb = get('--blue-rgb') || tc.blueRgb;
+    const meta = document.querySelector('meta[name="theme-color"]');
+    if (meta) meta.setAttribute('content', get('--bg') || '#080d19');
+  }
+
+  let fadeTimer = null;
+  function setTheme(id, animate) {
+    if (animate) {
+      root.classList.add('theme-fade');
+      clearTimeout(fadeTimer);
+      fadeTimer = setTimeout(() => root.classList.remove('theme-fade'), 750);
+    }
+    current = id;
+    root.setAttribute('data-theme', id);
+    try { localStorage.setItem('siteTheme', id); } catch (e) { /* ignore */ }
+    syncColors();
+    document.dispatchEvent(new Event('theme:change'));
+  }
+
+  function init() {
+    setTheme(current, false);
+
+    // Marshmallow: tap for a random foodie message
+    const marsh = document.querySelector('.kb-marsh');
+    if (marsh) {
+      let last = -1;
+      marsh.addEventListener('click', (e) => {
+        e.stopPropagation();
+        let i;
+        do { i = Math.floor(Math.random() * FOODIE.length); } while (i === last && FOODIE.length > 1);
+        last = i;
+        marsh.classList.remove('jiggle');
+        void marsh.getBoundingClientRect();
+        marsh.classList.add('jiggle');
+        if (window.kodiSay) window.kodiSay(FOODIE[i]);
+      });
+    }
+
+    // Theme picker
+    const btn = document.getElementById('kbThemeBtn');
+    const panel = document.getElementById('kbThemePanel');
+    const grid = document.getElementById('kbThemeGrid');
+    if (!btn || !panel || !grid) return;
+
+    grid.innerHTML = THEMES.map((t) => (
+      '<button class="kb-theme-opt" type="button" data-theme-id="' + t.id + '" aria-pressed="false">' +
+        '<span class="kb-swatch" style="background:linear-gradient(145deg,' + t.bg2 + ',' + t.bg + ')">' +
+          '<i style="background:' + t.green + '"></i><i style="background:' + t.blue + '"></i><i style="background:' + t.purple + '"></i>' +
+        '</span>' +
+        '<span class="kb-theme-name">' + t.name + '<small>' + t.emoji + '</small></span>' +
+      '</button>'
+    )).join('');
+
+    function markActive() {
+      grid.querySelectorAll('.kb-theme-opt').forEach((b) => {
+        b.setAttribute('aria-pressed', String(b.dataset.themeId === current));
+      });
+    }
+    markActive();
+
+    const box = document.getElementById('cornerBear');
+    const cornerBubble = document.getElementById('cornerBearBubble');
+    let leaveTimer = null;
+
+    // While Kodi is hovered, touched or showing themes, the chase waits for him
+    function setBusy(on) { document.body.classList.toggle('kodi-busy', on); }
+    function releaseBusy(delay) {
+      clearTimeout(leaveTimer);
+      leaveTimer = setTimeout(() => {
+        if (!panel.classList.contains('open')) setBusy(false);
+      }, delay);
+    }
+    if (box) {
+      box.addEventListener('mouseenter', () => { clearTimeout(leaveTimer); setBusy(true); });
+      box.addEventListener('mouseleave', () => releaseBusy(700));
+      box.addEventListener('focusin', () => { clearTimeout(leaveTimer); setBusy(true); });
+      box.addEventListener('focusout', () => releaseBusy(700));
+      box.addEventListener('touchstart', () => { clearTimeout(leaveTimer); setBusy(true); releaseBusy(5000); }, { passive: true });
+    }
+
+    function open() {
+      panel.hidden = false;
+      requestAnimationFrame(() => panel.classList.add('open'));
+      btn.setAttribute('aria-expanded', 'true');
+      if (box) box.classList.add('peek-active');
+      if (cornerBubble) cornerBubble.classList.remove('bubble-visible');
+      clearTimeout(leaveTimer);
+      setBusy(true);
+    }
+    function close() {
+      panel.classList.remove('open');
+      btn.setAttribute('aria-expanded', 'false');
+      if (box) box.classList.remove('peek-active');
+      setTimeout(() => { if (!panel.classList.contains('open')) panel.hidden = true; }, 240);
+      releaseBusy(900);
+    }
+    function toggle() { panel.classList.contains('open') ? close() : open(); }
+    window.kodiToggleThemes = toggle;
+
+    // Each click on Kodi steps to the next theme and returns his message; the options panel stays closed
+    window.kodiCycleTheme = function () {
+      const i = (THEMES.findIndex((t) => t.id === current) + 1) % THEMES.length;
+      const t = THEMES[i];
+      setTheme(t.id, true);
+      markActive();
+      return 'Theme ' + (i + 1) + '/' + THEMES.length + ' · ' + t.name + ' ' + t.emoji + ' · ' + DESC[t.id];
+    };
+
+    btn.addEventListener('click', (e) => {
+      e.stopPropagation();
+      toggle();
+    });
+    panel.addEventListener('click', (e) => e.stopPropagation());
+    document.addEventListener('click', () => { if (panel.classList.contains('open')) close(); });
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape' && panel.classList.contains('open')) { close(); btn.focus(); }
+    });
+
+    grid.addEventListener('click', (e) => {
+      const opt = e.target.closest('.kb-theme-opt');
+      if (!opt) return;
+      const id = opt.dataset.themeId;
+      if (id === current) return;
+      setTheme(id, true);
+      markActive();
+    });
   }
 
   document.addEventListener('DOMContentLoaded', init);
