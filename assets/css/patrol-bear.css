@@ -90,7 +90,10 @@
   transform: translateX(115%);
 }
 .deer-corner-peek-top-right.is-peeking .dp-body {
-  animation: nodi-peek-side-right 5s cubic-bezier(0.22, 1.2, 0.36, 1) forwards;
+  animation: nodi-enter-right 1s cubic-bezier(0.22, 0.9, 0.3, 1) both;
+}
+.deer-corner-peek-top-right.is-peeking.is-leaving .dp-body {
+  animation: nodi-exit-right 0.6s cubic-bezier(0.55, 0, 0.8, 0.4) forwards;
 }
 
 /* LEFT edge — Nodi slides in from the left */
@@ -105,42 +108,48 @@
   transform: translateX(-115%);
 }
 .deer-corner-peek-top-left.is-peeking .dp-body {
-  animation: nodi-peek-side-left 5s cubic-bezier(0.22, 1.2, 0.36, 1) forwards;
+  animation: nodi-enter-left 1s cubic-bezier(0.22, 0.9, 0.3, 1) both;
+}
+.deer-corner-peek-top-left.is-peeking.is-leaving .dp-body {
+  animation: nodi-exit-left 0.6s cubic-bezier(0.55, 0, 0.8, 0.4) forwards;
 }
 
 /* ── KEYFRAME ANIMATIONS — smooth slide in with lively bounce ──────────── */
 
-@keyframes nodi-peek-side-right {
-  0%   { transform: translateX(115%); }
-  /* Slide in with strong overshoot — the classic cartoon pull */
-  18%  { transform: translateX(-18px) scaleX(0.92) scaleY(1.05); }
-  26%  { transform: translateX(6px) scaleX(1.04) scaleY(0.97); }
-  34%  { transform: translateX(-4px) scaleX(0.98) scaleY(1.01); }
-  42%  { transform: translateX(0) scaleX(1) scaleY(1); }
-  /* Idle wiggle — alive and curious */
-  52%  { transform: translateX(0) rotate(1.5deg); }
-  60%  { transform: translateX(-3px) rotate(-2deg); }
-  68%  { transform: translateX(0) rotate(1deg); }
-  76%  { transform: translateX(-2px) rotate(0deg); }
-  84%  { transform: translateX(0); }
-  /* Smooth slide back out */
-  92%  { transform: translateX(30px) scaleX(0.9); }
-  100% { transform: translateX(115%); }
+/* Enter: swing in from behind the edge, overshoot, settle. Exit: lean back, then slide away. */
+@keyframes nodi-enter-right {
+  0%   { transform: translateX(115%) rotate(7deg); }
+  50%  { transform: translateX(-16px) rotate(-3deg) scale(0.97, 1.04); }
+  70%  { transform: translateX(6px) rotate(1.5deg) scale(1.03, 0.98); }
+  86%  { transform: translateX(-2px) rotate(-0.5deg); }
+  100% { transform: translateX(0) rotate(0deg); }
+}
+@keyframes nodi-exit-right {
+  0%   { transform: translateX(0) rotate(0deg); }
+  24%  { transform: translateX(-10px) rotate(-2.5deg) scale(1.03, 0.97); }
+  100% { transform: translateX(115%) rotate(6deg); }
+}
+@keyframes nodi-enter-left {
+  0%   { transform: translateX(-115%) rotate(-7deg); }
+  50%  { transform: translateX(16px) rotate(3deg) scale(0.97, 1.04); }
+  70%  { transform: translateX(-6px) rotate(-1.5deg) scale(1.03, 0.98); }
+  86%  { transform: translateX(2px) rotate(0.5deg); }
+  100% { transform: translateX(0) rotate(0deg); }
+}
+@keyframes nodi-exit-left {
+  0%   { transform: translateX(0) rotate(0deg); }
+  24%  { transform: translateX(10px) rotate(2.5deg) scale(1.03, 0.97); }
+  100% { transform: translateX(-115%) rotate(-6deg); }
 }
 
-@keyframes nodi-peek-side-left {
-  0%   { transform: translateX(-115%); }
-  18%  { transform: translateX(18px) scaleX(0.92) scaleY(1.05); }
-  26%  { transform: translateX(-6px) scaleX(1.04) scaleY(0.97); }
-  34%  { transform: translateX(4px) scaleX(0.98) scaleY(1.01); }
-  42%  { transform: translateX(0) scaleX(1) scaleY(1); }
-  52%  { transform: translateX(0) rotate(-1.5deg); }
-  60%  { transform: translateX(3px) rotate(2deg); }
-  68%  { transform: translateX(0) rotate(-1deg); }
-  76%  { transform: translateX(2px) rotate(0deg); }
-  84%  { transform: translateX(0); }
-  92%  { transform: translateX(-30px) scaleX(0.9); }
-  100% { transform: translateX(-115%); }
+/* Once he has settled (and after a tap bounce), he stays put and gently breathes */
+.deer-corner-peek.is-peeking .dp-body { transform: translateX(0); }
+.is-peeking .dp-body svg { animation: nodi-breathe 2.6s ease-in-out 1s infinite; }
+.is-leaving .dp-body svg { animation: none; }
+.deer-corner-peek.is-leaving { pointer-events: none; }
+@keyframes nodi-breathe {
+  0%, 100% { transform: translateY(0); }
+  50%      { transform: translateY(-2px); }
 }
 
 /* Blinks — expressive eye animations */
@@ -795,16 +804,48 @@ body.chase-active .deer-corner-peek * {
 /* ==========================================================================
    MASCOT SETTINGS — visibility switches
    ========================================================================== */
+body.mascots-off .sparkle-particle,
+body.mascots-off .dust-puff { display: none !important; }
+
+/* Hiding is a graceful exit: fade and slide away, then switch visibility off once it has finished */
+.patrol-scene { transition: opacity 0.5s ease; }
+.patrol-sprite { transition: opacity 0.45s ease; }
 body.mascots-off .patrol-scene,
 body.no-run .patrol-scene,
-body.mascots-off .corner-bear-container,
-body.mascots-off .deer-corner-peek,
-body.mascots-off .sparkle-particle,
-body.mascots-off .dust-puff,
-body.no-kodi .corner-bear-container,
 body.no-kodi #patrolKodi,
-body.no-nodi .deer-corner-peek,
-body.no-nodi #patrolDeer { display: none !important; }
+body.no-nodi #patrolDeer {
+  opacity: 0;
+  visibility: hidden;
+  pointer-events: none;
+  transition: opacity 0.45s ease, visibility 0s linear 0.5s;
+}
+
+.corner-bear-container {
+  transition: opacity 0.45s ease, transform 0.6s cubic-bezier(0.34, 1.56, 0.64, 1), visibility 0s;
+  animation: corner-bear-enter 1s cubic-bezier(0.22, 1, 0.36, 1) 0.5s backwards;
+}
+body.chase-active .corner-bear-container { transform: translateY(46px); }
+body.mascots-off .corner-bear-container,
+body.no-kodi .corner-bear-container {
+  opacity: 0;
+  transform: translateY(80px);
+  visibility: hidden;
+  pointer-events: none;
+  transition: opacity 0.4s ease, transform 0.5s cubic-bezier(0.55, 0, 0.8, 0.4), visibility 0s linear 0.5s;
+}
+@keyframes corner-bear-enter {
+  0%   { opacity: 0; transform: translateY(120px) rotate(-5deg); }
+  55%  { opacity: 1; transform: translateY(-10px) rotate(2deg) scale(1.03, 0.98); }
+  78%  { transform: translateY(4px) rotate(-1deg); }
+  100% { opacity: 1; transform: translateY(0) rotate(0deg); }
+}
+
+body.mascots-off .deer-corner-peek,
+body.no-nodi .deer-corner-peek {
+  visibility: hidden;
+  pointer-events: none;
+  transition: opacity 0.3s ease, visibility 0s linear 0.7s;
+}
 
 /* ==========================================================================
    MASCOT SETTINGS — gear button + popup panel
@@ -949,4 +990,18 @@ body.no-nodi #patrolDeer { display: none !important; }
 @keyframes dp-hand-shake { 0%, 100% { transform: rotate(-12deg); } 50% { transform: rotate(12deg); } }
 @media (prefers-reduced-motion: reduce) {
   .dp-arm, .dp-hand { animation: none !important; }
+}
+
+/* Kodi roasts his marshmallow: the arm and stick sway gently from the shoulder */
+.kb-stick {
+  transform-box: view-box;
+  transform-origin: 79px 77px;
+  animation: kb-roast 2.8s ease-in-out infinite;
+}
+@keyframes kb-roast {
+  0%, 100% { transform: rotate(-2.5deg); }
+  50%      { transform: rotate(3.5deg); }
+}
+@media (prefers-reduced-motion: reduce) {
+  .kb-stick { animation: none; }
 }

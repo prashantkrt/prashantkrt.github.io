@@ -1572,21 +1572,47 @@
       holdTimer = setTimeout(hidePeek, 4500);
     }
 
+    let leaveTimer = null;
+
+    // Graceful exit: play the leave animation first, then reset and schedule the next peek
     function hidePeek() {
-      deer.classList.remove('is-peeking');
+      if (!isPeeking || deer.classList.contains('is-leaving')) return;
+      clearTimeout(holdTimer);
       deer.classList.remove('is-popping');
       bubble.classList.remove('visible');
+      deer.classList.add('is-leaving');
+      clearTimeout(leaveTimer);
+      leaveTimer = setTimeout(finishHide, 650);
+    }
+
+    function finishHide() {
+      deer.classList.remove('is-peeking', 'is-leaving');
       isPeeking = false;
       cornerIndex = (cornerIndex + 1) % corners.length;
-      // Schedule next peek in 7-12s so user sees Nodi rotating through the 3 corners
+      // Schedule next peek in 7-12s so Nodi alternates between the two edges
       const nextDelay = 7000 + Math.random() * 5000;
       clearTimeout(peekTimer);
       peekTimer = setTimeout(peek, nextDelay);
     }
 
+    // Settings: leave gracefully when hidden, make an entrance soon after being switched back on
+    let wasHidden = false;
+    document.addEventListener('mascots:change', () => {
+      const cl = document.body.classList;
+      const hidden = cl.contains('no-nodi') || cl.contains('mascots-off');
+      if (hidden === wasHidden) return;
+      wasHidden = hidden;
+      if (hidden) {
+        if (isPeeking) hidePeek();
+      } else if (!isPeeking) {
+        clearTimeout(peekTimer);
+        peekTimer = setTimeout(peek, 700);
+      }
+    });
+
     // Tapping Nodi keeps him in view for a chat, then he carries on his way
     function react() {
-      if (!isPeeking) return;
+      if (!isPeeking || deer.classList.contains('is-leaving')) return;
       clearTimeout(holdTimer);
       const quote = quotes[Math.floor(Math.random() * quotes.length)];
       bubble.textContent = quote;
@@ -2109,6 +2135,7 @@
     cl.toggle('no-kodi', !state.kodi);
     cl.toggle('no-nodi', !state.nodi);
     document.documentElement.style.setProperty('--jump', String(state.jump));
+    document.dispatchEvent(new Event('mascots:change'));
   }
 
   function speedLabel(v) {
