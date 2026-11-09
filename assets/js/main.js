@@ -2158,6 +2158,7 @@ window.ThemeColors = { green: '#a1f4c2', blue: '#8eb5ff', purple: '#c0a5ff', gre
   }
 
   function init() {
+    applyBodyClasses();
     const btn = document.getElementById('mascotSettingsBtn');
     const panel = document.getElementById('mascotSettingsPanel');
     if (!btn || !panel) return;
@@ -2307,6 +2308,16 @@ window.ThemeColors = { green: '#a1f4c2', blue: '#8eb5ff', purple: '#c0a5ff', gre
   function init() {
     setTheme(current, false);
 
+    // Each click on Kodi steps to the next theme and returns his message; works on every page
+    let onThemeChange = null;
+    window.kodiCycleTheme = function () {
+      const i = (THEMES.findIndex((t) => t.id === current) + 1) % THEMES.length;
+      const t = THEMES[i];
+      setTheme(t.id, true);
+      if (onThemeChange) onThemeChange();
+      return 'Theme ' + (i + 1) + '/' + THEMES.length + ' · ' + t.name + ' ' + t.emoji + ' · ' + DESC[t.id];
+    };
+
     // Marshmallow: tap for a random foodie message
     const marsh = document.querySelector('.kb-marsh');
     if (marsh) {
@@ -2384,14 +2395,7 @@ window.ThemeColors = { green: '#a1f4c2', blue: '#8eb5ff', purple: '#c0a5ff', gre
     function toggle() { panel.classList.contains('open') ? close() : open(); }
     window.kodiToggleThemes = toggle;
 
-    // Each click on Kodi steps to the next theme and returns his message; the options panel stays closed
-    window.kodiCycleTheme = function () {
-      const i = (THEMES.findIndex((t) => t.id === current) + 1) % THEMES.length;
-      const t = THEMES[i];
-      setTheme(t.id, true);
-      markActive();
-      return 'Theme ' + (i + 1) + '/' + THEMES.length + ' · ' + t.name + ' ' + t.emoji + ' · ' + DESC[t.id];
-    };
+    onThemeChange = markActive;
 
     btn.addEventListener('click', (e) => {
       e.stopPropagation();
