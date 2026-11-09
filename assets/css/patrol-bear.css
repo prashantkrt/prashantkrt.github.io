@@ -68,12 +68,12 @@
 
 .dp-ear-l {
   transform-box: view-box;
-  transform-origin: 32px 38px;
+  transform-origin: 18px 38px;
 }
 
 .dp-ear-r {
   transform-box: view-box;
-  transform-origin: 68px 38px;
+  transform-origin: 60px 36px;
 }
 
 /* ── 2 SIDE CORNER ANCHORS ──────────────────────────────────────────────── */
@@ -81,10 +81,10 @@
 /* RIGHT edge — Nodi slides in from the right */
 .deer-corner-peek-top-right {
   top: 50%;
-  right: 0;
+  right: -44px;
   transform: translateY(-50%);
-  width: 160px;
-  height: 180px;
+  width: 112px;
+  height: 107px;
 }
 .deer-corner-peek-top-right .dp-body {
   transform: translateX(115%);
@@ -96,10 +96,10 @@
 /* LEFT edge — Nodi slides in from the left */
 .deer-corner-peek-top-left {
   top: 50%;
-  left: 0;
+  left: -44px;
   transform: translateY(-50%);
-  width: 160px;
-  height: 180px;
+  width: 112px;
+  height: 107px;
 }
 .deer-corner-peek-top-left .dp-body {
   transform: translateX(-115%);
@@ -208,22 +208,19 @@
   92%           { transform: scale(1); }
 }
 
-/* Friendly paw wave — rotates from the shoulder, timed to the idle-wiggle window */
-.dp-wave {
+/* Head sways gently while Nodi is peeking */
+.dp-head {
   transform-box: view-box;
-  transform-origin: 150px 190px;
 }
+.dp-head { transform-origin: 42px 75px; }
+.is-peeking .dp-head { animation: dp-head 5s ease-in-out forwards; }
 
-.is-peeking .dp-wave {
-  animation: dp-wave 5s ease-in-out forwards;
-}
-
-@keyframes dp-wave {
-  0%, 46%, 100% { transform: rotate(0deg); }
-  54%           { transform: rotate(-16deg); }
-  62%           { transform: rotate(6deg); }
-  70%           { transform: rotate(-12deg); }
-  78%           { transform: rotate(0deg); }
+@keyframes dp-head {
+  0%, 40%  { transform: rotate(0deg); }
+  50%      { transform: rotate(-4deg); }
+  62%      { transform: rotate(3deg); }
+  74%      { transform: rotate(-3deg); }
+  86%, 100% { transform: rotate(0deg); }
 }
 
 /* ── NAME TAG & SPEECH BUBBLES ─────────────────────────────────────────── */
@@ -255,12 +252,12 @@
 
 /* Tag positioning for side views */
 .deer-corner-peek-top-right .dp-tag {
-  bottom: 12px;
+  bottom: 6px;
   right: calc(100% + 10px);
   white-space: nowrap;
 }
 .deer-corner-peek-top-left .dp-tag {
-  bottom: 12px;
+  bottom: 6px;
   left: calc(100% + 10px);
   white-space: nowrap;
 }
@@ -793,3 +790,139 @@ body.chase-active .deer-corner-peek * {
   transform: translateY(-2px);
 }
 
+
+
+/* ==========================================================================
+   MASCOT SETTINGS — visibility switches
+   ========================================================================== */
+body.mascots-off .patrol-scene,
+body.mascots-off .corner-bear-container,
+body.mascots-off .deer-corner-peek,
+body.mascots-off .sparkle-particle,
+body.mascots-off .dust-puff,
+body.no-kodi .corner-bear-container,
+body.no-kodi #patrolKodi,
+body.no-nodi .deer-corner-peek,
+body.no-nodi #patrolDeer { display: none !important; }
+
+/* ==========================================================================
+   MASCOT SETTINGS — gear button + popup panel
+   ========================================================================== */
+.ms-gear {
+  position: fixed;
+  right: 26px;
+  bottom: 86px;
+  width: 44px;
+  height: 44px;
+  display: grid;
+  place-items: center;
+  border-radius: 50%;
+  border: 1px solid rgba(175, 195, 233, 0.3);
+  background: rgba(17, 27, 46, 0.85);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  color: var(--green);
+  cursor: pointer;
+  z-index: 1010;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.45);
+  transition: transform 0.35s cubic-bezier(0.34, 1.56, 0.64, 1), border-color 0.2s, color 0.2s;
+}
+.ms-gear svg { width: 20px; height: 20px; transition: transform 0.6s cubic-bezier(0.34, 1.56, 0.64, 1); }
+.ms-gear:hover, .ms-gear:focus-visible { border-color: rgba(161, 244, 194, 0.55); outline: none; }
+.ms-gear:hover svg, .ms-gear[aria-expanded="true"] svg { transform: rotate(90deg); }
+.ms-gear:active { transform: scale(0.92); }
+
+.ms-panel {
+  position: fixed;
+  right: 26px;
+  bottom: 140px;
+  width: min(320px, calc(100vw - 32px));
+  padding: 18px;
+  border-radius: 14px;
+  border: 1px solid rgba(175, 195, 233, 0.22);
+  background: linear-gradient(145deg, rgba(19, 29, 50, 0.97), rgba(9, 15, 28, 0.97));
+  box-shadow: 0 28px 80px rgba(0, 0, 0, 0.6);
+  color: var(--text);
+  z-index: 1011;
+  opacity: 0;
+  transform: translateY(10px) scale(0.97);
+  transform-origin: bottom right;
+  transition: opacity 0.2s ease, transform 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+}
+.ms-panel[hidden] { display: none; }
+.ms-panel.open { opacity: 1; transform: none; }
+
+.ms-head { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 14px; }
+.ms-label { font: 9px var(--mono); letter-spacing: 0.11em; color: var(--green); }
+.ms-head h3 { margin: 2px 0 0; font-size: 18px; letter-spacing: -0.04em; }
+.ms-close {
+  width: 28px; height: 28px; border-radius: 8px; border: 1px solid var(--line);
+  background: transparent; color: #aab6cc; font-size: 18px; line-height: 1; cursor: pointer;
+  transition: color 0.2s, border-color 0.2s;
+}
+.ms-close:hover { color: #fff; border-color: rgba(161, 244, 194, 0.4); }
+
+.ms-section { padding: 12px 0; border-top: 1px solid var(--line); }
+.ms-row { display: flex; align-items: center; justify-content: space-between; gap: 12px; }
+.ms-row + .ms-row { margin-top: 12px; }
+.ms-text b { display: block; font-size: 12px; font-weight: 700; }
+.ms-text small { display: block; font: 9px var(--mono); color: #8998b4; margin-top: 2px; }
+
+.ms-switch {
+  position: relative; flex: none; width: 38px; height: 22px; padding: 0; border-radius: 999px;
+  border: 1px solid rgba(175, 195, 233, 0.28); background: rgba(255, 255, 255, 0.06); cursor: pointer;
+  transition: background 0.2s, border-color 0.2s;
+}
+.ms-switch i {
+  position: absolute; top: 2px; left: 2px; width: 16px; height: 16px; border-radius: 50%;
+  background: #9ba9c1; transition: transform 0.25s cubic-bezier(0.34, 1.56, 0.64, 1), background 0.2s;
+}
+.ms-switch[aria-checked="true"] { background: rgba(161, 244, 194, 0.2); border-color: rgba(161, 244, 194, 0.55); }
+.ms-switch[aria-checked="true"] i { transform: translateX(16px); background: var(--green); }
+.ms-switch:focus-visible, .ms-btn:focus-visible, .ms-chips button:focus-visible, .ms-close:focus-visible {
+  outline: 2px solid var(--green); outline-offset: 2px;
+}
+
+.ms-readout { font: 700 11px var(--mono); color: var(--green); }
+.ms-range {
+  --fill: 50%;
+  -webkit-appearance: none; appearance: none; width: 100%; height: 4px; margin: 14px 0 12px;
+  border-radius: 999px; outline: none; cursor: pointer;
+  background: linear-gradient(90deg, var(--green) var(--fill), rgba(255, 255, 255, 0.12) var(--fill));
+}
+.ms-range::-webkit-slider-thumb {
+  -webkit-appearance: none; width: 16px; height: 16px; border-radius: 50%;
+  background: #fff; border: 3px solid var(--green); box-shadow: 0 2px 8px rgba(0, 0, 0, 0.5);
+}
+.ms-range::-moz-range-thumb {
+  width: 12px; height: 12px; border-radius: 50%; background: #fff; border: 3px solid var(--green);
+}
+.ms-range:focus-visible { outline: 2px solid var(--green); outline-offset: 6px; }
+
+.ms-chips { display: flex; gap: 6px; }
+.ms-chips button {
+  flex: 1; padding: 6px 0; border-radius: 6px; border: 1px solid var(--line); background: transparent;
+  color: #b7c4dc; font: 9px var(--mono); cursor: pointer; transition: all 0.2s;
+}
+.ms-chips button:hover { border-color: rgba(161, 244, 194, 0.4); color: #fff; }
+.ms-chips button.active { background: rgba(161, 244, 194, 0.14); border-color: rgba(161, 244, 194, 0.55); color: var(--green); }
+
+.ms-panel.ms-anim-off .ms-speed { opacity: 0.4; pointer-events: none; }
+
+.ms-foot { display: flex; gap: 8px; padding-top: 14px; border-top: 1px solid var(--line); }
+.ms-btn {
+  flex: 1; min-height: 34px; border-radius: 6px; border: 1px solid var(--line); background: transparent;
+  color: #e8eefb; font: 700 10px var(--font); cursor: pointer; transition: all 0.2s;
+}
+.ms-btn:hover { border-color: rgba(161, 244, 194, 0.45); }
+.ms-danger { color: #ff9cab; border-color: rgba(255, 136, 151, 0.3); }
+.ms-danger:hover { background: rgba(255, 136, 151, 0.1); border-color: rgba(255, 136, 151, 0.6); }
+.ms-danger.is-restore { color: #07140d; background: var(--green); border-color: var(--green); }
+
+@media (max-width: 480px) {
+  .ms-gear { right: 16px; bottom: 70px; width: 40px; height: 40px; }
+  .ms-panel { right: 16px; bottom: 118px; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .ms-gear svg, .ms-panel, .ms-switch i { transition: none; }
+}

@@ -1452,96 +1452,53 @@
       // For RIGHT peek: head in left portion (x=0-220), body/neck extends right (clipped by screen edge).
       // For LEFT peek: same SVG mirrored — head on right (x=180-400), body on left (off-screen left edge).
       const deerSvgContent = `
-  <!-- ═══ BODY & NECK ═══ -->
-  <ellipse cx="310" cy="168" rx="90" ry="60" fill="#C8884A"/>
-  <ellipse cx="295" cy="178" rx="58" ry="40" fill="#EDD090"/>
-  <!-- Neck thick stroke -->
-  <path d="M165 125 C200 118 240 132 285 155" stroke="#C8884A" stroke-width="46" stroke-linecap="round" fill="none"/>
-  <path d="M168 130 C202 124 240 137 282 158" stroke="#D4A060" stroke-width="26" stroke-linecap="round" fill="none"/>
-
-  <!-- ═══ A FRIENDLY PAW WAVE (charming hello gesture, no dangling legs) ═══ -->
-  <g class="dp-wave">
-    <path d="M150 190 C158 176 170 172 180 178" stroke="#B07838" stroke-width="14" stroke-linecap="round" fill="none"/>
-    <ellipse cx="183" cy="179" rx="9.5" ry="7.5" fill="#2A1208"/>
+  <!-- Antler nubs -->
+  <g stroke="#D9B27C" stroke-linecap="round" fill="none">
+    <path d="M30 22 C27 14 23 10 19 8 M28 16 C24 15 22 13 21 11" stroke-width="2.6"/>
+    <path d="M52 22 C54 14 58 10 62 8 M54 16 C58 15 60 13 61 11" stroke-width="2.4"/>
   </g>
-  <ellipse cx="398" cy="150" rx="13" ry="10" fill="#F0EAD0"/>
-
-  <!-- ═══ ANTLERS — clean two-tine branches ═══ -->
-  <g stroke="#6B3D1E" stroke-linecap="round" stroke-linejoin="round" fill="none">
-    <!-- Far (left) antler: trunk + two tines -->
-    <path d="M118 55 C110 30 96 10 78 -4" stroke-width="5"/>
-    <path d="M100 32 C86 24 72 24 62 30" stroke-width="3.5"/>
-    <path d="M78 -4 C70 -14 58 -14 52 -6" stroke-width="3"/>
-    <!-- Near (right) antler: trunk + two tines, slightly bigger/forward -->
-    <path d="M140 50 C146 24 138 -2 124 -16" stroke-width="5.5"/>
-    <path d="M136 26 C122 16 106 18 98 26" stroke-width="4"/>
-    <path d="M124 -16 C116 -26 102 -26 96 -16" stroke-width="3.5"/>
-    <path d="M124 -16 C130 -28 144 -26 148 -16" stroke-width="3.5"/>
+  <!-- Ears -->
+  <g class="dp-ear-l"><ellipse cx="14" cy="32" rx="8" ry="13" transform="rotate(-42 14 32)" fill="#B06E34"/><ellipse cx="14.5" cy="32.5" rx="4.4" ry="8.5" transform="rotate(-42 14.5 32.5)" fill="#F0A58E"/></g>
+  <g class="dp-ear-r"><ellipse cx="62" cy="28" rx="6.5" ry="11" transform="rotate(30 62 28)" fill="#A56030"/><ellipse cx="61.5" cy="28.5" rx="3.4" ry="7" transform="rotate(30 61.5 28.5)" fill="#E8977F"/></g>
+  <g class="dp-head">
+    <ellipse cx="42" cy="48" rx="31" ry="27" fill="#C98644"/>
+    <ellipse cx="40" cy="38" rx="22" ry="14" fill="#D9A062" opacity="0.55"/>
+    <circle cx="32" cy="26" r="1.8" fill="#FFF2DE" opacity="0.9"/>
+    <circle cx="41" cy="22.5" r="2" fill="#FFF2DE" opacity="0.9"/>
+    <circle cx="50" cy="26" r="1.7" fill="#FFF2DE" opacity="0.9"/>
+    <!-- Muzzle pushed to the front (left) for a side look -->
+    <ellipse cx="25" cy="58" rx="14" ry="10.5" fill="#F2D6AA"/>
+    <g class="dp-nose">
+      <ellipse cx="14.5" cy="54.5" rx="4.6" ry="3.6" fill="#2A1A10"/>
+      <ellipse cx="13.2" cy="53.3" rx="1.5" ry="0.9" fill="#fff" opacity="0.8"/>
+    </g>
+    <path d="M17 62 Q25 66 33 61" stroke="#2A1A10" stroke-width="1.4" stroke-linecap="round" fill="none"/>
+    <ellipse cx="26" cy="65" rx="2.4" ry="1.3" fill="#FF6B81"/>
+    <!-- Eyes glancing toward the page -->
+    <g class="dp-eyes">
+      <ellipse cx="29" cy="43" rx="4.8" ry="5.6" fill="#1B1410"/>
+      <circle cx="27.4" cy="41" r="1.9" fill="#fff"/><circle cx="30.4" cy="45.2" r="0.8" fill="#fff"/>
+      <ellipse cx="50" cy="43" rx="3.8" ry="5.2" fill="#1B1410"/>
+      <circle cx="48.8" cy="41" r="1.5" fill="#fff"/>
+    </g>
+    <ellipse cx="38" cy="55" rx="4" ry="2.4" fill="#F28B82" opacity="0.5"/>
   </g>
-
-  <!-- ═══ FAR EAR (behind head) ═══ -->
-  <g class="dp-ear-l" opacity="0.72">
-    <path d="M110 70 C100 44 98 20 104 8 C114 20 116 50 112 70 Z" fill="#A86430"/>
-    <path d="M109 66 C100 46 100 26 105 14 C112 24 112 50 108 66 Z" fill="#C87858"/>
+  <!-- Hoof gripping the screen edge below the chin: palm is off-screen, three toes curl over -->
+  <rect x="58" y="76" width="30" height="16" rx="5" fill="#9A5F2E"/>
+  <g fill="#C98644" stroke="#7A4A22" stroke-width="0.8">
+    <rect x="47" y="77" width="16" height="4.6" rx="2.3"/>
+    <rect x="46" y="82.6" width="17" height="4.6" rx="2.3"/>
+    <rect x="47.5" y="88.2" width="15.5" height="4.2" rx="2.1"/>
   </g>
-
-  <!-- ═══ NEAR EAR ═══ -->
-  <g class="dp-ear-r">
-    <path d="M148 78 C162 48 174 24 180 10 C188 22 184 54 166 76 Z" fill="#C8884A"/>
-    <path d="M152 74 C163 50 173 30 177 16 C183 28 180 54 164 72 Z" fill="#E8907A"/>
-    <path d="M178 13 C181 7 179 4 176 7" stroke="#D07858" stroke-width="1.6" stroke-linecap="round" fill="none"/>
-  </g>
-
-  <!-- ═══ HEAD ═══ -->
-  <!-- Shadow for depth -->
-  <ellipse cx="98" cy="121" rx="74" ry="68" fill="#A86430" opacity="0.22" transform="translate(3,4)"/>
-  <!-- Main head oval — wide from front to back (deer profile) -->
-  <ellipse cx="96" cy="118" rx="74" ry="68" fill="#C8884A"/>
-
-  <!-- ═══ FOREHEAD BLAZE ═══ -->
-  <ellipse cx="90" cy="85" rx="12" ry="24" fill="#F0E8D0" opacity="0.9" transform="rotate(5 90 85)"/>
-
-  <!-- ═══ MUZZLE — protruding snout, defines it as a DEER not a bear ═══ -->
-  <ellipse cx="28" cy="134" rx="40" ry="30" fill="#D4A060"/>
-  <ellipse cx="22" cy="132" rx="30" ry="22" fill="#EDD090"/>
-
-  <!-- ═══ NOSE ═══ -->
-  <g class="dp-nose">
-    <ellipse cx="3" cy="118" rx="10" ry="8" fill="#2A1A0E"/>
-    <ellipse cx="0" cy="115" rx="4" ry="2.8" fill="white" opacity="0.9"/>
-    <ellipse cx="12" cy="124" rx="4.5" ry="3" fill="#1A0A05" opacity="0.4"/>
-  </g>
-
-  <!-- ═══ MOUTH ═══ -->
-  <path d="M5 128 C18 140 34 142 46 136" stroke="#2A1A0E" stroke-width="2.4" stroke-linecap="round" fill="none"/>
-
-  <!-- ═══ CHEEK BLUSH ═══ -->
-  <ellipse cx="34" cy="142" rx="15" ry="9" fill="#E05050" opacity="0.28"/>
-  <ellipse cx="84" cy="144" rx="13" ry="7.5" fill="#E05050" opacity="0.22"/>
-
-  <!-- ═══ EYEBROW ═══ -->
-  <path d="M58 80 C70 73 86 73 98 79" stroke="#6B3D1E" stroke-width="3.5" stroke-linecap="round" fill="none"/>
-
-  <!-- ═══ EXPRESSIVE EYE — proportioned to the head, not oversized ═══ -->
-  <g class="dp-eyes">
-    <!-- Outer dark ring (pupil) -->
-    <ellipse cx="80" cy="100" rx="16" ry="17" fill="#1A0F08"/>
-    <!-- Iris subtle depth -->
-    <ellipse cx="80" cy="100" rx="13" ry="14" fill="#2C1A0C"/>
-    <!-- Large primary shine -->
-    <circle cx="74" cy="92" r="6" fill="white"/>
-    <!-- Secondary highlight -->
-    <circle cx="71" cy="90" r="2.8" fill="white" opacity="0.55"/>
-    <!-- Tertiary bottom shine -->
-    <circle cx="88" cy="108" r="2.6" fill="white" opacity="0.28"/>
-  </g>`;
+  <g fill="#3A2616"><rect x="46.6" y="77.6" width="4.4" height="3.4" rx="1.6"/><rect x="45.6" y="83.2" width="4.4" height="3.4" rx="1.6"/><rect x="47.1" y="88.7" width="4.2" height="3.2" rx="1.5"/></g>
+`;
 
       if (corner === 'top-right') {
         // Deer faces LEFT — head on left side of SVG (visible), body extends right (screen clips it)
-        return `<svg viewBox="0 0 400 240" fill="none" xmlns="http://www.w3.org/2000/svg" style="overflow:visible">${deerSvgContent}</svg>`;
+        return `<svg viewBox="0 0 100 96" fill="none" xmlns="http://www.w3.org/2000/svg" style="overflow:visible">${deerSvgContent}</svg>`;
       }
       // top-left: Mirror the same SVG — head on right side, body on left (screen clips it)
-      return `<svg viewBox="0 0 400 240" fill="none" xmlns="http://www.w3.org/2000/svg" style="overflow:visible"><g transform="scale(-1,1) translate(-400,0)">${deerSvgContent}</g></svg>`;
+      return `<svg viewBox="0 0 100 96" fill="none" xmlns="http://www.w3.org/2000/svg" style="overflow:visible"><g transform="scale(-1,1) translate(-100,0)">${deerSvgContent}</g></svg>`;
     }
 
     const deer = document.createElement('div');
@@ -1577,7 +1534,8 @@
 
     function peek() {
       // Keep corner mascot tucked away while chase is running across screen
-      if (document.visibilityState !== 'visible' || document.body.classList.contains('chase-active')) {
+      if (document.visibilityState !== 'visible' || document.body.classList.contains('chase-active') ||
+          document.body.classList.contains('mascots-off') || document.body.classList.contains('no-nodi')) {
         peekTimer = setTimeout(peek, 2500);
         return;
       }
@@ -1952,6 +1910,11 @@
     // Both sprites start and end fully off-screen, so the scene has no visible cut-in.
     function startRun() {
       if (!kodi || !deer) return;
+      const cl = document.body.classList;
+      if (cl.contains('mascots-off') || (cl.contains('no-kodi') && cl.contains('no-nodi'))) {
+        restTimer = setTimeout(startRun, 2000);
+        return;
+      }
       spriteW  = kodi.offsetWidth || 142;
       deerW    = deer.offsetWidth || 124;
       kodiX    = dir === 1 ? -spriteW - GAP_START : vw() + spriteW + GAP_START;
@@ -1969,9 +1932,11 @@
 
     function frame(t) {
       if (!running) return;
+      if (document.body.classList.contains('mascots-off')) { endRun(); return; }
       if (lastT === null) lastT = t;
       // Clamp so a background tab doesn't cause a teleport when it resumes
-      const dt = Math.min(0.05, (t - lastT) / 1000);
+      const speedMul = window.MascotSettings ? window.MascotSettings.speed : 1;
+      const dt = Math.min(0.05, (t - lastT) / 1000) * speedMul;
       lastT = t;
 
       // A relaxed pace so you can actually watch them: Nodi jogs ahead, Kodi follows
@@ -2088,4 +2053,120 @@
     for (let i = 0; i < 5; i++) setTimeout(spawnSparkle, i * 350);
   };
 
+})();
+
+
+// ============================================================
+// MASCOT SETTINGS — speed, animation on/off, show/hide Kodi & Nodi
+// ============================================================
+(function () {
+  'use strict';
+
+  const KEY = 'mascotSettings.v1';
+  const DEFAULTS = { speed: 1, animations: true, kodi: true, nodi: true };
+
+  let state = Object.assign({}, DEFAULTS);
+  try {
+    const saved = JSON.parse(localStorage.getItem(KEY) || 'null');
+    if (saved && typeof saved === 'object') {
+      if (typeof saved.speed === 'number') state.speed = Math.min(2, Math.max(0.4, saved.speed));
+      ['animations', 'kodi', 'nodi'].forEach((k) => { if (typeof saved[k] === 'boolean') state[k] = saved[k]; });
+    }
+  } catch (e) { /* storage unavailable: keep defaults */ }
+
+  window.MascotSettings = {
+    get speed() { return state.speed; },
+  };
+
+  function save() {
+    try { localStorage.setItem(KEY, JSON.stringify(state)); } catch (e) { /* ignore */ }
+  }
+
+  function applyBodyClasses() {
+    const cl = document.body.classList;
+    cl.toggle('mascots-off', !state.animations);
+    cl.toggle('no-kodi', !state.kodi);
+    cl.toggle('no-nodi', !state.nodi);
+  }
+
+  function speedLabel(v) {
+    return (Math.round(v * 10) / 10).toFixed(1) + '×';
+  }
+
+  function init() {
+    const btn = document.getElementById('mascotSettingsBtn');
+    const panel = document.getElementById('mascotSettingsPanel');
+    if (!btn || !panel) return;
+
+    const range = panel.querySelector('#msSpeed');
+    const readout = panel.querySelector('#msSpeedValue');
+    const presets = panel.querySelectorAll('[data-speed]');
+    const toggles = {
+      animations: panel.querySelector('[data-toggle="animations"]'),
+      kodi: panel.querySelector('[data-toggle="kodi"]'),
+      nodi: panel.querySelector('[data-toggle="nodi"]'),
+    };
+    const removeBoth = panel.querySelector('#msRemoveBoth');
+    const reset = panel.querySelector('#msReset');
+
+    function render() {
+      applyBodyClasses();
+      range.value = state.speed;
+      readout.textContent = speedLabel(state.speed);
+      range.style.setProperty('--fill', ((state.speed - 0.4) / 1.6 * 100) + '%');
+      presets.forEach((b) => {
+        b.classList.toggle('active', Math.abs(parseFloat(b.dataset.speed) - state.speed) < 0.05);
+      });
+      Object.keys(toggles).forEach((k) => {
+        toggles[k].setAttribute('aria-checked', String(state[k]));
+      });
+      panel.classList.toggle('ms-anim-off', !state.animations);
+      const bothGone = !state.kodi && !state.nodi;
+      removeBoth.textContent = bothGone ? 'Bring back both' : 'Remove both';
+      removeBoth.classList.toggle('is-restore', bothGone);
+    }
+
+    function update(patch) {
+      Object.assign(state, patch);
+      save();
+      render();
+    }
+
+    function open() {
+      panel.hidden = false;
+      requestAnimationFrame(() => panel.classList.add('open'));
+      btn.setAttribute('aria-expanded', 'true');
+    }
+    function close() {
+      panel.classList.remove('open');
+      btn.setAttribute('aria-expanded', 'false');
+      setTimeout(() => { if (!panel.classList.contains('open')) panel.hidden = true; }, 220);
+    }
+
+    btn.addEventListener('click', (e) => {
+      e.stopPropagation();
+      panel.classList.contains('open') ? close() : open();
+    });
+    panel.querySelector('#msClose').addEventListener('click', close);
+    panel.addEventListener('click', (e) => e.stopPropagation());
+    document.addEventListener('click', () => { if (panel.classList.contains('open')) close(); });
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape' && panel.classList.contains('open')) { close(); btn.focus(); }
+    });
+
+    range.addEventListener('input', () => update({ speed: parseFloat(range.value) }));
+    presets.forEach((b) => b.addEventListener('click', () => update({ speed: parseFloat(b.dataset.speed) })));
+    Object.keys(toggles).forEach((k) => {
+      toggles[k].addEventListener('click', () => update({ [k]: !state[k] }));
+    });
+    removeBoth.addEventListener('click', () => {
+      const bothGone = !state.kodi && !state.nodi;
+      update({ kodi: bothGone, nodi: bothGone });
+    });
+    reset.addEventListener('click', () => update(Object.assign({}, DEFAULTS)));
+
+    render();
+  }
+
+  document.addEventListener('DOMContentLoaded', init);
 })();

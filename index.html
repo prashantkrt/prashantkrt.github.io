@@ -13,7 +13,7 @@
   <link href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet">
   <link rel="icon" type="image/svg+xml" href="assets/favicon.svg">
   <link rel="stylesheet" href="assets/css/styles.css?v=5.7">
-  <link rel="stylesheet" href="assets/css/patrol-bear.css?v=6.0">
+  <link rel="stylesheet" href="assets/css/patrol-bear.css?v=6.5">
 </head>
 <body>
   <div class="scroll-progress-bar" id="scrollProgressBar"></div>
@@ -404,6 +404,57 @@
     </div>
   </footer>
 
+
+  <!-- MASCOT SETTINGS: gear button + popup -->
+  <button class="ms-gear" id="mascotSettingsBtn" type="button" aria-label="Mascot settings" aria-haspopup="dialog" aria-expanded="false" aria-controls="mascotSettingsPanel">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="3.2"/><path d="M19.4 15a1.7 1.7 0 0 0 .34 1.87l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.7 1.7 0 0 0-1.87-.34 1.7 1.7 0 0 0-1.03 1.55V21a2 2 0 1 1-4 0v-.09a1.7 1.7 0 0 0-1.11-1.55 1.7 1.7 0 0 0-1.87.34l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06A1.7 1.7 0 0 0 4.6 15a1.7 1.7 0 0 0-1.55-1.03H3a2 2 0 1 1 0-4h.09A1.7 1.7 0 0 0 4.6 8.9a1.7 1.7 0 0 0-.34-1.87l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06a1.7 1.7 0 0 0 1.87.34H9a1.7 1.7 0 0 0 1.03-1.55V3a2 2 0 1 1 4 0v.09a1.7 1.7 0 0 0 1.03 1.55 1.7 1.7 0 0 0 1.87-.34l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06a1.7 1.7 0 0 0-.34 1.87V9c.26.6.85 1 1.55 1.03H21a2 2 0 1 1 0 4h-.09c-.7.03-1.29.43-1.51 1.03Z"/></svg>
+  </button>
+  <div class="ms-panel" id="mascotSettingsPanel" role="dialog" aria-label="Mascot settings" hidden>
+    <div class="ms-head">
+      <div>
+        <span class="ms-label">// SETTINGS</span>
+        <h3>Mascots</h3>
+      </div>
+      <button class="ms-close" id="msClose" type="button" aria-label="Close settings">&times;</button>
+    </div>
+
+    <div class="ms-section">
+      <div class="ms-row">
+        <div class="ms-text"><b>Animations</b><small>Kodi, Nodi and sparkles</small></div>
+        <button class="ms-switch" type="button" role="switch" aria-checked="true" aria-label="Animations" data-toggle="animations"><i></i></button>
+      </div>
+    </div>
+
+    <div class="ms-section ms-speed">
+      <div class="ms-row">
+        <div class="ms-text"><b>Running speed</b><small>How fast Kodi chases Nodi</small></div>
+        <span class="ms-readout" id="msSpeedValue">1.0×</span>
+      </div>
+      <input class="ms-range" id="msSpeed" type="range" min="0.4" max="2" step="0.1" value="1" aria-label="Running speed">
+      <div class="ms-chips">
+        <button type="button" data-speed="0.5">Slow</button>
+        <button type="button" data-speed="1">Normal</button>
+        <button type="button" data-speed="1.6">Fast</button>
+      </div>
+    </div>
+
+    <div class="ms-section">
+      <div class="ms-row">
+        <div class="ms-text"><b>Show Kodi</b><small>The code bear</small></div>
+        <button class="ms-switch" type="button" role="switch" aria-checked="true" aria-label="Show Kodi" data-toggle="kodi"><i></i></button>
+      </div>
+      <div class="ms-row">
+        <div class="ms-text"><b>Show Nodi</b><small>The deploy deer</small></div>
+        <button class="ms-switch" type="button" role="switch" aria-checked="true" aria-label="Show Nodi" data-toggle="nodi"><i></i></button>
+      </div>
+    </div>
+
+    <div class="ms-foot">
+      <button class="ms-btn ms-danger" id="msRemoveBoth" type="button">Remove both</button>
+      <button class="ms-btn" id="msReset" type="button">Reset</button>
+    </div>
+  </div>
+
   <!-- FLOATING BACK TO TOP BUTTON WITH SVG RADIAL PROGRESS -->
   <button class="back-to-top" id="backToTop" type="button" aria-label="Back to top">
     <svg class="progress-ring" viewBox="0 0 50 50">
@@ -618,6 +669,6 @@
   <!-- DYNAMIC FLOATING TOAST NOTIFICATION CONTAINER -->
   <div id="toastContainer" class="toast-container" aria-live="polite"></div>
 
-  <script src="assets/js/main.js?v=6.0"></script>
+  <script src="assets/js/main.js?v=6.5"></script>
 </body>
 </html>
