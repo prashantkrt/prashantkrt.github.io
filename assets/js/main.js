@@ -1426,8 +1426,8 @@
     deer.setAttribute('aria-hidden', 'true');
     deer.innerHTML = `
       <div class="dp-body">
-        <svg class="dp-svg" viewBox="0 0 100 85" fill="none" xmlns="http://www.w3.org/2000/svg">
-          <!-- Antlers (curved branching golden-brown) -->
+        <svg class="dp-svg" viewBox="0 0 100 88" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <!-- Antlers (branching golden fawn with rounded tips) -->
           <g stroke="#7A4E27" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round" fill="none">
             <path d="M38 34 C34 22 28 14 22 4 M32 20 L22 17 M28 12 L18 8 M22 4 L17 1 M22 4 L26 1"/>
             <path d="M62 34 C66 22 72 14 78 4 M68 20 L78 17 M72 12 L82 8 M78 4 L83 1 M78 4 L74 1"/>
@@ -1449,6 +1449,9 @@
 
           <!-- Deer Head -->
           <ellipse cx="50" cy="46" rx="28" ry="25" fill="#BB7A3E"/>
+          <!-- Soft cream chest bib behind hooves -->
+          <path d="M36 66 C43 74 57 74 64 66 C68 76 32 76 36 66 Z" fill="#FFF0D6"/>
+
           <!-- Forehead blaze & fawn spots -->
           <path d="M50 30 L53 38 L50 42 L47 38 Z" fill="#FFF2DE" opacity="0.85"/>
           <circle cx="37" cy="35" r="1.8" fill="#FFF2DE" opacity="0.75"/>
@@ -1481,14 +1484,14 @@
             </g>
           </g>
 
-          <!-- Deployment Flag held in hoof -->
+          <!-- Deployment Flag held in right hoof -->
           <g transform="rotate(12 78 55)">
             <line x1="74" y1="78" x2="88" y2="22" stroke="#8D5B2A" stroke-width="2.2" stroke-linecap="round"/>
             <path d="M88 22 L76 29 L88 36 Z" fill="#A1F4C2" stroke="#48B374" stroke-width="0.8"/>
             <circle cx="88" cy="21" r="2.2" fill="#FFD700"/>
           </g>
 
-          <!-- Cute Cloven Peeking Hooves over the screen border -->
+          <!-- Cute Rounded Cloven Peeking Hooves resting on screen border -->
           <g class="dp-hoof-l">
             <ellipse cx="26" cy="78" rx="10" ry="6.5" fill="#BB7A3E"/>
             <ellipse cx="26" cy="79" rx="8" ry="5" fill="#2E1C12"/>
@@ -1507,7 +1510,8 @@
     const tag = deer.querySelector('.dp-tag');
     const bubble = deer.querySelector('.dp-bubble');
 
-    const corners = ['bottom-right', 'bottom-mid-right', 'bottom-left'];
+    // Nodi peeks only in the 3 corners where Kodi is NOT located (Kodi is in bottom-left)
+    const corners = ['bottom-right', 'top-right', 'top-left'];
     const quotes = [
       "Hi! I'm Nodi, I keep the pods running! 🦌",
       "Kodi writes the code, I deploy it! 🚀",
@@ -1527,9 +1531,9 @@
     document.body.appendChild(deer);
 
     function peek() {
-      // The corner mascots stay out of the way while Kodi and Nodi are running
+      // Keep corner mascot tucked away while chase is running across screen
       if (document.visibilityState !== 'visible' || document.body.classList.contains('chase-active')) {
-        peekTimer = setTimeout(peek, 3000);
+        peekTimer = setTimeout(peek, 2500);
         return;
       }
       isPeeking = true;
@@ -1549,8 +1553,8 @@
       bubble.classList.remove('visible');
       isPeeking = false;
       cornerIndex = (cornerIndex + 1) % corners.length;
-      // Schedule next peek in 14-22s
-      const nextDelay = 14000 + Math.random() * 8000;
+      // Schedule next peek in 7-12s so user sees Nodi rotating through the 3 corners
+      const nextDelay = 7000 + Math.random() * 5000;
       clearTimeout(peekTimer);
       peekTimer = setTimeout(peek, nextDelay);
     }
@@ -1577,6 +1581,7 @@
         setTimeout(() => heart.remove(), 1800);
       }
 
+      // Audio strictly on user click/tap!
       SoundFX.nodiJump();
       if (window.showToast) window.showToast(`🦌 Nodi: "${quote}"`);
 
@@ -1584,10 +1589,12 @@
       holdTimer = setTimeout(hidePeek, 3500);
     }
 
+    // Strictly click/tap events — zero hover audio
     body.addEventListener('click', react);
     tag.addEventListener('click', react);
 
-    setTimeout(peek, 3500);
+    // Initial peek 1.8s after page load
+    setTimeout(peek, 1800);
   }
 
   // --- INITIALIZE ALL DYNAMIC SYSTEMS ---

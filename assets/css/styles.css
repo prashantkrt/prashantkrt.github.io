@@ -1395,9 +1395,9 @@ body.modal-open{overflow:hidden}
   100% { transform: rotate(2deg); }
 }
 
-/* On HOVER: Kodi FASTENS the hand shaking — rapid, energetic excited marshmallow roasting shake! */
-.byte-dog-wrapper:hover .dog-arm-and-stick {
-  animation: dog-fast-hand-shake 0.15s ease-in-out infinite alternate !important;
+/* On HOVER (when not eating): Kodi FASTENS the hand shaking — rapid, energetic excited marshmallow roasting shake! */
+.byte-dog-wrapper:not(.excited):hover .dog-arm-and-stick {
+  animation: dog-fast-hand-shake 0.14s ease-in-out infinite alternate !important;
 }
 
 @keyframes dog-fast-hand-shake {
@@ -1417,8 +1417,8 @@ body.modal-open{overflow:hidden}
   100% { transform: rotate(4deg); }
 }
 
-.byte-dog-wrapper:hover .dog-stick-group {
-  animation: stick-fast-vibe 0.15s ease-in-out infinite alternate !important;
+.byte-dog-wrapper:not(.excited):hover .dog-stick-group {
+  animation: stick-fast-vibe 0.14s ease-in-out infinite alternate !important;
 }
 
 @keyframes stick-fast-vibe {
@@ -1433,8 +1433,8 @@ body.modal-open{overflow:hidden}
   transition: transform 0.2s ease;
 }
 
-.byte-dog-wrapper:hover .dog-left-arm {
-  animation: left-arm-cheer 0.24s ease-in-out infinite alternate;
+.byte-dog-wrapper:not(.excited):hover .dog-left-arm {
+  animation: left-arm-cheer 0.2s ease-in-out infinite alternate;
 }
 
 @keyframes left-arm-cheer {
@@ -1443,8 +1443,14 @@ body.modal-open{overflow:hidden}
 }
 
 /* CLICK TO EAT MARSHMALLOW: Kodi brings stick right into his mouth and munches! */
-.byte-dog-wrapper.excited .dog-arm-and-stick {
-  animation: kodi-eat-marshmallow 1.5s cubic-bezier(0.25, 1, 0.35, 1) forwards !important;
+.byte-dog-wrapper.excited .dog-arm-and-stick,
+.byte-dog-wrapper.excited:hover .dog-arm-and-stick {
+  animation: kodi-eat-marshmallow 1.6s cubic-bezier(0.25, 1, 0.35, 1) forwards !important;
+}
+
+.byte-dog-wrapper.excited .dog-stick-group,
+.byte-dog-wrapper.excited:hover .dog-stick-group {
+  animation: none !important;
 }
 
 @keyframes kodi-eat-marshmallow {
