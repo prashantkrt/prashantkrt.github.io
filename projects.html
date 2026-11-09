@@ -3,14 +3,14 @@
 <head>
   <meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="theme-color" content="#080d19">
-  <script>try{var t=localStorage.getItem("siteTheme");if(t)document.documentElement.setAttribute("data-theme",t)}catch(e){}</script>
+  <script>try{var t=localStorage.getItem("siteTheme");if(t)document.documentElement.setAttribute("data-theme",t);if(localStorage.getItem("siteMode")==="light")document.documentElement.setAttribute("data-mode","light")}catch(e){}</script>
   <meta name="description" content="Explore Prashant Tiwary's Java backend projects and focused learning repositories for Spring Boot, Kafka, Kubernetes, DSA, and DevOps.">
   <title>Projects & Learning Repositories | Prashant Tiwary</title>
   <link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet">
   <link rel="icon" type="image/svg+xml" href="assets/favicon.svg">
-  <link rel="stylesheet" href="assets/css/styles.css?v=6.2">
- <link rel="stylesheet" href="assets/css/patrol-bear.css?v=10.0">
+  <link rel="stylesheet" href="assets/css/styles.css?v=6.3">
+ <link rel="stylesheet" href="assets/css/patrol-bear.css?v=10.9">
 </head>
 <body>
   <div class="scroll-progress-bar" id="scrollProgressBar"></div>
@@ -106,6 +106,13 @@
     <span class="arrow-up">↑</span>
   </button>
 
+
+  <!-- PULL ROPE: hangs from the top beside Contact, down to Nodi. Tap = sway, Nodi pulls = dark/light -->
+  <div class="pull-rope" id="pullRope" role="button" tabindex="0" aria-label="Pull cord: switch between dark and light mode (Nodi pulls it when you tap him)">
+    <span class="rope-thread"></span>
+    <span class="rope-knob"><i></i></span>
+  </div>
+
   <!-- CORNER POPPING MOON BEAR MASCOT (PERSISTENT COMPANION) -->
   <aside class="corner-bear-container" id="cornerBear" aria-label="Kodi the Corner Peeking Bear">
     <div class="corner-bear-bubble" id="cornerBearBubble">Hey there! Roasting clean code! 🍢 Tap me!</div>
@@ -170,6 +177,6 @@
   <!-- DYNAMIC FLOATING TOAST NOTIFICATION CONTAINER -->
   <div id="toastContainer" class="toast-container" aria-live="polite"></div>
 
-  <script src="assets/js/main.js?v=10.3"></script><script src="assets/js/projects.js?v=5.6"></script>
+  <script src="assets/js/main.js?v=11.3"></script><script src="assets/js/projects.js?v=5.6"></script>
 </body>
 </html>

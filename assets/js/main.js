@@ -1547,7 +1547,7 @@ window.ThemeColors = { green: '#a1f4c2', blue: '#8eb5ff', purple: '#c0a5ff', gre
     const bubble = deer.querySelector('.dp-bubble');
 
     // Nodi peeks only from SIDE views (left and right edges)
-    const corners = ['top-right', 'top-left'];
+    const corners = ['top-right'];
     const quotes = [
       "Hi! I'm Nodi, I keep the pods running! 🦌",
       "Kodi writes the code, I deploy it! 🚀",
@@ -1568,7 +1568,7 @@ window.ThemeColors = { green: '#a1f4c2', blue: '#8eb5ff', purple: '#c0a5ff', gre
 
     function peek() {
       // Keep corner mascot tucked away while chase is running across screen
-      if (document.visibilityState !== 'visible' || document.body.classList.contains('chase-active') ||
+      if (document.visibilityState !== 'visible' || document.body.classList.contains('chase-active') || document.body.classList.contains('nodi-climbing') ||
           document.body.classList.contains('mascots-off') || document.body.classList.contains('no-nodi')) {
         peekTimer = setTimeout(peek, 2500);
         return;
@@ -1601,7 +1601,7 @@ window.ThemeColors = { green: '#a1f4c2', blue: '#8eb5ff', purple: '#c0a5ff', gre
     }
 
     function finishHide() {
-      deer.classList.remove('is-peeking', 'is-leaving');
+      deer.classList.remove('is-peeking', 'is-leaving', 'is-jumping', 'is-gone');
       isPeeking = false;
       cornerIndex = (cornerIndex + 1) % corners.length;
       // Schedule next peek in 7-12s so Nodi alternates between the two edges
@@ -1625,33 +1625,37 @@ window.ThemeColors = { green: '#a1f4c2', blue: '#8eb5ff', purple: '#c0a5ff', gre
       }
     });
 
-    // Tapping Nodi keeps him in view for a chat, then he carries on his way
-    function react() {
-      if (!isPeeking || deer.classList.contains('is-leaving')) return;
+    // Tapping Nodi: he leaps onto the hanging cord (flipping dark/light) and climbs away up it
+    function startClimb() {
+      document.body.classList.add('nodi-climbing');
       clearTimeout(holdTimer);
-      const quote = quotes[Math.floor(Math.random() * quotes.length)];
-      bubble.textContent = quote;
-      bubble.classList.add('visible');
+      clearTimeout(peekTimer);
+      bubble.classList.remove('visible');
+      deer.classList.remove('is-popping');
+      const rect = body.getBoundingClientRect();
+      deer.classList.add('is-jumping');
+      SoundFX.nodiJump();
+      setTimeout(() => deer.classList.add('is-gone'), 200);
+      window.nodiClimbRope({
+        delay: 200,
+        from: rect,
+        onDone: () => {
+          document.body.classList.remove('nodi-climbing');
+          finishHide();
+        }
+      });
+    }
 
+    function react() {
+      if (!isPeeking || deer.classList.contains('is-leaving') || document.body.classList.contains('nodi-climbing')) return;
+      if (window.nodiClimbRope) { startClimb(); return; }
+      clearTimeout(holdTimer);
+      bubble.textContent = quotes[Math.floor(Math.random() * quotes.length)];
+      bubble.classList.add('visible');
       deer.classList.remove('is-popping');
       void deer.offsetWidth;
       deer.classList.add('is-popping');
-
-      for (let i = 0; i < 3; i++) {
-        const heart = document.createElement('span');
-        heart.className = 'dp-heart';
-        heart.textContent = '💚';
-        heart.style.setProperty('--hx', (i - 1) * 16 + 'px');
-        heart.style.animationDelay = i * 0.12 + 's';
-        deer.appendChild(heart);
-        setTimeout(() => heart.remove(), 1800);
-      }
-
-      // Audio strictly on user click/tap!
       SoundFX.nodiJump();
-      if (window.showToast) window.showToast(`🦌 Nodi: "${quote}"`);
-
-      // Keep visible for 3.5s after tap, then submerge
       holdTimer = setTimeout(hidePeek, 3500);
     }
 
@@ -2291,7 +2295,31 @@ window.ThemeColors = { green: '#a1f4c2', blue: '#8eb5ff', purple: '#c0a5ff', gre
     if (meta) meta.setAttribute('content', get('--bg') || '#080d19');
   }
 
+  let mode = 'dark';
+  try { mode = localStorage.getItem('siteMode') === 'light' ? 'light' : 'dark'; } catch (e) { /* ignore */ }
+
   let fadeTimer = null;
+  function fadeSwitch() {
+    root.classList.add('theme-fade');
+    clearTimeout(fadeTimer);
+    fadeTimer = setTimeout(() => root.classList.remove('theme-fade'), 750);
+  }
+
+  function setMode(next, animate) {
+    if (animate) fadeSwitch();
+    mode = next;
+    root.setAttribute('data-mode', mode);
+    try { localStorage.setItem('siteMode', mode); } catch (e) { /* ignore */ }
+    syncColors();
+    document.dispatchEvent(new Event('theme:change'));
+    return mode;
+  }
+
+  window.SiteMode = {
+    get mode() { return mode; },
+    toggle() { return setMode(mode === 'light' ? 'dark' : 'light', true); }
+  };
+
   function setTheme(id, animate) {
     if (animate) {
       root.classList.add('theme-fade');
@@ -2307,6 +2335,7 @@ window.ThemeColors = { green: '#a1f4c2', blue: '#8eb5ff', purple: '#c0a5ff', gre
 
   function init() {
     setTheme(current, false);
+    setMode(mode, false);
 
     // Each click on Kodi steps to the next theme and returns his message; works on every page
     let onThemeChange = null;
@@ -2415,6 +2444,393 @@ window.ThemeColors = { green: '#a1f4c2', blue: '#8eb5ff', purple: '#c0a5ff', gre
       setTheme(id, true);
       markActive();
     });
+  }
+
+  document.addEventListener('DOMContentLoaded', init);
+})();
+
+
+// ============================================================
+// HANGING CORD — fixed at the top only, loose under gravity, bead at the end.
+// Tap = it swings. Tap Nodi = he jumps on, dark/light flips, he climbs up and away.
+// ============================================================
+(function () {
+  'use strict';
+
+  const N = 20;              // points along the cord
+  let W = 150;               // canvas width in px (grows on wide screens)
+
+  const CLIMBER_SVG = `
+<svg viewBox="0 0 44 70" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+  <g class="cl-legs" stroke-linecap="round" stroke-linejoin="round">
+    <g class="cl-legL"><path d="M17 54 C13 59 14 62 18 64" stroke="#6B4122" stroke-width="6"/><path d="M17 54 C13 59 14 62 18 64" stroke="#B87A3C" stroke-width="4.4"/><ellipse cx="18.4" cy="65" rx="3" ry="2.3" fill="#3A2616"/></g>
+    <g class="cl-legR"><path d="M27 54 C31 59 30 62 26 64" stroke="#6B4122" stroke-width="6"/><path d="M27 54 C31 59 30 62 26 64" stroke="#B87A3C" stroke-width="4.4"/><ellipse cx="25.6" cy="65" rx="3" ry="2.3" fill="#3A2616"/></g>
+  </g>
+  <ellipse cx="22" cy="44" rx="10.5" ry="12.5" fill="#BE7B3C"/>
+  <g fill="#FFF2DE" opacity="0.9"><circle cx="17" cy="38" r="1.1"/><circle cx="26.5" cy="36.5" r="1"/><circle cx="21.5" cy="43" r="1.1"/><circle cx="27" cy="47" r="1"/><circle cx="16.5" cy="48" r="1"/></g>
+  <ellipse class="cl-tail" cx="22" cy="53.5" rx="3.6" ry="4.4" fill="#FFF8EC" stroke="#E2CFA6" stroke-width="0.7"/>
+  <g class="cl-arms" stroke-linecap="round" stroke-linejoin="round">
+    <g class="cl-armL"><path d="M14 36 C9 30 12 18 19.4 10" stroke="#6B4122" stroke-width="5.8"/><path d="M14 36 C9 30 12 18 19.4 10" stroke="#B87A3C" stroke-width="4.2"/><ellipse cx="20" cy="9" rx="2.9" ry="2.5" fill="#3A2616"/></g>
+    <g class="cl-armR"><path d="M30 36 C35 30 32 16 24.6 6" stroke="#6B4122" stroke-width="5.8"/><path d="M30 36 C35 30 32 16 24.6 6" stroke="#B87A3C" stroke-width="4.2"/><ellipse cx="24" cy="5" rx="2.9" ry="2.5" fill="#3A2616"/></g>
+  </g>
+  <g stroke="#D9B27C" stroke-width="1.8" stroke-linecap="round" fill="none"><path d="M18 17 C17 13 14.5 11.5 12.5 11"/><path d="M26 17 C27 13 29.5 11.5 31.5 11"/></g>
+  <ellipse cx="11.5" cy="23" rx="4.4" ry="7" transform="rotate(-24 11.5 23)" fill="#B06E34"/>
+  <ellipse cx="32.5" cy="23" rx="4.4" ry="7" transform="rotate(24 32.5 23)" fill="#B06E34"/>
+  <ellipse cx="22" cy="25" rx="11.5" ry="10.6" fill="#C98644"/>
+  <ellipse cx="22" cy="21" rx="7.6" ry="4.4" fill="#D9A062" opacity="0.6"/>
+  <g fill="#FFF2DE" opacity="0.9"><circle cx="17.5" cy="22" r="1"/><circle cx="26.5" cy="22" r="1"/><circle cx="22" cy="19.5" r="1.1"/></g>
+</svg>`;
+
+  function init() {
+    const rope = document.getElementById('pullRope');
+    if (!rope) return;
+
+    const reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    const canvas = document.createElement('canvas');
+    canvas.className = 'rope-canvas';
+    canvas.setAttribute('aria-hidden', 'true');
+    document.body.appendChild(canvas);
+    const ctx = canvas.getContext('2d');
+
+    let pts = [];
+    let segLen = 10;
+    let ax = 0, ay = -6;
+    let canvasLeft = 0;
+    let time = 0, last = 0, raf = null;
+    let climber = null;
+
+    function layout() {
+      const vw = window.innerWidth;
+      const vh = window.innerHeight;
+      const topCentre = Math.min(84, Math.max(22, (vw - 1280) / 2 - 12));
+      const hoofY = vh * 0.5 + 50;
+      const dpr = window.devicePixelRatio || 1;
+      const h = Math.round(hoofY + 90);
+      W = Math.max(150, Math.ceil(topCentre + 60));
+
+      canvas.style.width = W + 'px';
+      canvas.style.height = h + 'px';
+      canvas.width = Math.round(W * dpr);
+      canvas.height = Math.round(h * dpr);
+      ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+      canvasLeft = vw - W;
+
+      ax = W - topCentre;
+      const length = hoofY - ay;
+      segLen = length / (N - 1);
+
+      // Tap target: a vertical strip along the cord, wide enough to cover its swing
+      rope.style.setProperty('--rope-right', (topCentre - 20) + 'px');
+      rope.style.setProperty('--rl', length.toFixed(1) + 'px');
+      rope.style.setProperty('--tilt', '0deg');
+
+      pts = [];
+      for (let i = 0; i < N; i++) {
+        const t = i / (N - 1);
+        const x = ax + Math.sin(t * Math.PI * 2) * 2.5 * t;
+        pts.push({ x, y: ay + length * t, px: x, py: ay + length * t });
+      }
+      draw();
+    }
+
+    function colors() {
+      const light = document.documentElement.getAttribute('data-mode') === 'light';
+      return light
+        ? { rope: '#1b2437', twist: 'rgba(255,255,255,0.38)', shadow: 'rgba(20,30,60,0.28)', halo: 'rgba(255,255,255,0.0)' }
+        : { rope: '#f4f7ff', twist: 'rgba(90,105,135,0.6)', shadow: 'rgba(0,0,0,0.5)', halo: 'rgba(255,255,255,0.18)' };
+    }
+
+    function step(dt) {
+      time += dt;
+      const gravity = 1250;
+      for (let i = 1; i < N; i++) {
+        const p = pts[i];
+        const f = i / (N - 1);
+        const vx = (p.x - p.px) * 0.992;
+        const vy = (p.y - p.py) * 0.992;
+        // a light breeze: stronger lower down, so the loose end drifts like a real cord
+        const wind = (Math.sin(time * 1.05 + i * 0.45) * 30 + Math.sin(time * 0.37) * 24) * f;
+        // the bead at the bottom has some weight
+        const g = i >= N - 3 ? gravity * 1.7 : gravity;
+        p.px = p.x;
+        p.py = p.y;
+        p.x += vx + wind * dt * dt;
+        p.y += vy + g * dt * dt;
+      }
+      pts[0].x = ax; pts[0].y = ay;
+
+      for (let it = 0; it < 16; it++) {
+        for (let i = 0; i < N - 1; i++) {
+          const a = pts[i], b = pts[i + 1];
+          const dx = b.x - a.x, dy = b.y - a.y;
+          const d = Math.hypot(dx, dy) || 0.0001;
+          const diff = (d - segLen) / d;
+          if (i === 0) {
+            b.x -= dx * diff;
+            b.y -= dy * diff;
+          } else {
+            a.x += dx * diff * 0.5;
+            a.y += dy * diff * 0.5;
+            b.x -= dx * diff * 0.5;
+            b.y -= dy * diff * 0.5;
+          }
+        }
+        pts[0].x = ax; pts[0].y = ay;
+      }
+    }
+
+    function tracePath(offsetX) {
+      ctx.beginPath();
+      ctx.moveTo(pts[0].x + offsetX, pts[0].y);
+      for (let i = 1; i < N - 1; i++) {
+        const mx = (pts[i].x + pts[i + 1].x) / 2 + offsetX;
+        const my = (pts[i].y + pts[i + 1].y) / 2;
+        ctx.quadraticCurveTo(pts[i].x + offsetX, pts[i].y, mx, my);
+      }
+      ctx.lineTo(pts[N - 1].x + offsetX, pts[N - 1].y);
+    }
+
+    function draw() {
+      const col = colors();
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+      ctx.lineCap = 'round';
+      ctx.lineJoin = 'round';
+
+      tracePath(0);
+      ctx.strokeStyle = col.halo;
+      ctx.lineWidth = 7;
+      ctx.setLineDash([]);
+      ctx.stroke();
+
+      tracePath(2);
+      ctx.strokeStyle = col.shadow;
+      ctx.lineWidth = 2.8;
+      ctx.stroke();
+
+      tracePath(0);
+      ctx.strokeStyle = col.rope;
+      ctx.lineWidth = 3.4;
+      ctx.stroke();
+      ctx.setLineDash([1.4, 2.4]);
+      ctx.strokeStyle = col.twist;
+      ctx.stroke();
+      ctx.setLineDash([]);
+
+      // Bead and tassel hang from the end of the last segment
+      const e = pts[N - 1], p = pts[N - 2];
+      const ang = Math.atan2(e.y - p.y, e.x - p.x);
+      ctx.save();
+      ctx.translate(e.x, e.y);
+      ctx.rotate(ang - Math.PI / 2);
+      ctx.strokeStyle = col.rope;
+      ctx.lineWidth = 1.1;
+      for (let s = -1; s <= 1; s++) {
+        ctx.beginPath();
+        ctx.moveTo(s * 1.2, 7);
+        ctx.lineTo(s * 3.2, 15);
+        ctx.stroke();
+      }
+      const g = ctx.createRadialGradient(-2, 1, 1, 0, 3, 8);
+      g.addColorStop(0, '#ffffff');
+      g.addColorStop(0.35, col.rope);
+      g.addColorStop(1, col.shadow);
+      ctx.fillStyle = g;
+      ctx.beginPath();
+      ctx.ellipse(0, 3, 4.8, 6.6, 0, 0, Math.PI * 2);
+      ctx.fill();
+      ctx.restore();
+    }
+
+    // ---- Nodi on the cord ----
+    function pointAt(dist) {
+      // dist measured up the cord from its bottom end; past the top it keeps going straight up
+      let idx = (N - 1) - dist / segLen;
+      if (idx <= 0) {
+        return { x: pts[0].x, y: pts[0].y + idx * segLen, ang: 0 };
+      }
+      const i0 = Math.floor(idx), i1 = Math.min(N - 1, i0 + 1), f = idx - i0;
+      const a = pts[i0], b = pts[i1];
+      return {
+        x: a.x + (b.x - a.x) * f,
+        y: a.y + (b.y - a.y) * f,
+        ang: Math.atan2(b.x - a.x, b.y - a.y) * -1
+      };
+    }
+
+    const FLIGHT = 0.58;       // seconds in the air
+    const GRAVITY = 1900;      // px/s^2 for the leap
+    const GRAB_DIST = 62;      // where on the cord he grabs, measured up from its end
+
+    function kickCord(dir, gripIndex) {
+      // A sudden force: the whole cord is shoved in the direction of the jump,
+      // plus a ripple that runs along it from the point he grabbed
+      for (let i = 1; i < N; i++) {
+        const f = i / (N - 1);
+        const ripple = Math.sin((i - gripIndex) * 0.85) * Math.exp(-Math.abs(i - gripIndex) / 4.5);
+        pts[i].x += dir * (1.35 * f + 0.7 * ripple);
+        pts[i].y += 0.45 * Math.abs(ripple);
+      }
+    }
+
+    function place(x, y, rotDeg, sx, sy) {
+      climber.el.style.transform =
+        'translate3d(' + (canvasLeft + x - 48) + 'px,' + (y - 73) + 'px,0) rotate(' + rotDeg.toFixed(2) + 'deg) scale(' + sx.toFixed(3) + ',' + sy.toFixed(3) + ')';
+    }
+
+    function updateClimber(dt) {
+      if (!climber) return;
+      climber.t += dt;
+      if (climber.t < 0) return;
+
+      // ---- flight: a real projectile arc, with anticipation, tuck and reach ----
+      if (climber.phase === 'flight') {
+        if (!climber.started) {
+          climber.started = true;
+          climber.el.classList.add('show', 'flying');
+        }
+        const T = FLIGHT;
+        const tt = Math.min(T, climber.t);
+        const u = tt / T;
+        const target = pointAt(GRAB_DIST);
+        const dx = target.x - climber.from.x;
+        const dy = target.y - climber.from.y;
+        // launch speed so gravity brings him exactly onto the cord at time T
+        const vy = (dy - 0.5 * GRAVITY * T * T) / T;
+        const x = climber.from.x + dx * (tt / T);
+        const y = climber.from.y + vy * tt + 0.5 * GRAVITY * tt * tt;
+        const velY = vy + GRAVITY * tt;                 // negative while rising
+        const dir = Math.sign(dx) || -1;
+        // body follows the flight path: nose up while rising, levelling out as he falls
+        const rot = dir * Math.max(-20, Math.min(20, velY * -0.03)) + dir * (1 - u) * 6;
+        // stretch at take-off and fall speed, tuck at the top, reach for the cord on the way down
+        const speedStretch = 1 + Math.min(0.16, Math.abs(velY) / 4200);
+        const launchSquash = tt < 0.07 ? 1 - (0.07 - tt) * 2.2 : 1;
+        place(x, y, rot, (1 / speedStretch) * launchSquash, speedStretch / launchSquash);
+        const tuck = Math.sin(Math.PI * Math.min(1, u * 1.15));      // 0 → 1 → 0
+        climber.el.style.setProperty('--ay', (-2 - 6 * u).toFixed(2));
+        climber.el.style.setProperty('--ly', (3 - 8 * tuck).toFixed(2));
+        if (climber.t >= T) {
+          climber.phase = 'climb';
+          climber.t = 0;
+          climber.dist = GRAB_DIST;
+          climber.el.classList.remove('flying');
+          climber.el.classList.add('land');
+          kickCord(dir, Math.max(1, Math.floor((N - 1) - GRAB_DIST / segLen)));
+          if (climber.onLand) climber.onLand();
+        }
+        return;
+      }
+
+      // ---- climbing: hand over hand, pushing up in pulses ----
+      const ease = Math.min(1, climber.t / 0.7);
+      const pulse = 0.3 + 0.7 * Math.abs(Math.sin(Math.PI * climber.t / 0.42));
+      const speed = 150 * ease * pulse * (climber.t < 0.45 ? 0.35 : 1);
+      climber.dist += speed * dt;
+      const p = pointAt(climber.dist);
+      const bob = Math.sin(climber.t * 14.9) * 1.4;
+      place(p.x, p.y + bob, p.ang * 0.8 * 57.2958, 1, 1);
+      if (Math.floor(climber.t * 2.4) !== climber.step) {
+        climber.step = Math.floor(climber.t * 2.4);
+        const k = Math.max(1, Math.floor((N - 1) - climber.dist / segLen));
+        if (k < N) pts[k].x += (climber.step % 2 ? 0.5 : -0.5);
+      }
+      if (p.y < -90) {
+        climber.el.remove();
+        const done = climber.onDone;
+        climber = null;
+        if (done) done();
+      }
+    }
+
+    function frame(now) {
+      const dt = Math.min(0.033, (now - last) / 1000 || 0.016);
+      last = now;
+      step(dt);
+      updateClimber(dt);
+      draw();
+      raf = requestAnimationFrame(frame);
+    }
+    function start() {
+      if (reduced || raf) return;
+      last = performance.now();
+      raf = requestAnimationFrame(frame);
+    }
+    function stop() { cancelAnimationFrame(raf); raf = null; }
+    document.addEventListener('visibilitychange', () => (document.hidden ? stop() : start()));
+
+    // Pluck the cord where it was touched: a sideways shove plus a ripple that runs along it
+    function pluck(gripIndex, dir, strength) {
+      gripIndex = Math.max(1, Math.min(N - 1, gripIndex));
+      for (let i = 1; i < N; i++) {
+        const f = i / (N - 1);
+        const ripple = Math.sin((i - gripIndex) * 0.8) * Math.exp(-Math.abs(i - gripIndex) / 5);
+        pts[i].x += dir * strength * (0.8 * f + 0.9 * ripple);
+        pts[i].y += 0.3 * strength * Math.abs(ripple);
+      }
+    }
+    function pluckAt(e, strength) {
+      const r = rope.getBoundingClientRect();
+      const idx = Math.round(((e && e.clientY != null ? e.clientY : r.top + r.height * 0.5) - r.top) / r.height * (N - 1));
+      const cx = r.left + r.width / 2;
+      const dir = e && e.clientX != null && Math.abs(e.clientX - cx) > 2 ? (e.clientX < cx ? 1 : -1) : (Math.random() < 0.5 ? -1 : 1);
+      pluck(idx, dir, strength);
+    }
+
+    function flip() {
+      const next = window.SiteMode ? window.SiteMode.toggle() : 'dark';
+      return next === 'light'
+        ? 'Lights on! ☀️ Light mode'
+        : 'Lights out! 🌙 Dark mode';
+    }
+
+    // Called by Nodi: he lands on the cord, the page flips mode, he climbs to the top and vanishes
+    window.nodiClimbRope = function (opts) {
+      const o = opts || {};
+      if (reduced || climber) { flip(); if (o.onDone) o.onDone(); return; }
+      const el = document.createElement('div');
+      el.className = 'nodi-climber';
+      el.innerHTML = CLIMBER_SVG + '<span class="cl-bubble"></span>';
+      document.body.appendChild(el);
+      const r = o.from;
+      const from = r
+        ? { x: r.left + r.width * 0.42 - canvasLeft, y: r.top + r.height * 0.62 }
+        : { x: ax + 50, y: pts[N - 1].y };
+      climber = {
+        el, from, phase: 'flight', t: -(o.delay || 0) / 1000, dist: GRAB_DIST, started: false, step: -1,
+        onDone: o.onDone,
+        onLand() {
+          const msg = flip();
+          const b = el.querySelector('.cl-bubble');
+          b.textContent = msg;
+          b.classList.add('on');
+        }
+      };
+      start();
+    };
+
+    function nodiAvailable() {
+      const cl = document.body.classList;
+      return !cl.contains('no-nodi') && !cl.contains('mascots-off');
+    }
+
+    // A tap on the cord only makes it swing; with Nodi away it flips the mode itself
+    rope.addEventListener('click', (e) => {
+      if (nodiAvailable()) { if (!reduced) pluckAt(e, 1.6); return; }
+      if (!reduced) pluckAt(e, 2);
+      flip();
+    });
+    rope.addEventListener('keydown', (e) => {
+      if (e.key === 'Enter' || e.key === ' ') {
+        e.preventDefault();
+        if (!reduced) pluckAt(null, 2);
+        flip();
+      }
+    });
+    document.addEventListener('theme:change', () => { if (reduced) draw(); });
+
+    layout();
+    window.addEventListener('resize', layout);
+    start();
   }
 
   document.addEventListener('DOMContentLoaded', init);
