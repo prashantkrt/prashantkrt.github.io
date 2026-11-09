@@ -1483,22 +1483,19 @@
     </g>
     <ellipse cx="38" cy="55" rx="4" ry="2.4" fill="#F28B82" opacity="0.5"/>
   </g>
-  <!-- Hoof gripping the screen edge below the chin: palm is off-screen, three toes curl over -->
-  <rect x="58" y="76" width="30" height="16" rx="5" fill="#9A5F2E"/>
-  <g fill="#C98644" stroke="#7A4A22" stroke-width="0.8">
-    <rect x="47" y="77" width="16" height="4.6" rx="2.3"/>
-    <rect x="46" y="82.6" width="17" height="4.6" rx="2.3"/>
-    <rect x="47.5" y="88.2" width="15.5" height="4.2" rx="2.1"/>
-  </g>
-  <g fill="#3A2616"><rect x="46.6" y="77.6" width="4.4" height="3.4" rx="1.6"/><rect x="45.6" y="83.2" width="4.4" height="3.4" rx="1.6"/><rect x="47.1" y="88.7" width="4.2" height="3.2" rx="1.5"/></g>
+  <!-- Small paw resting on the screen edge -->
+  <rect x="56" y="77" width="16" height="9" rx="4.5" fill="#9A5F2E"/>
+  <ellipse cx="55" cy="81.5" rx="5.6" ry="4.6" fill="#C98644"/>
+  <circle cx="51.6" cy="79.6" r="1.7" fill="#9A5F2E"/>
+  <circle cx="50.6" cy="83.4" r="1.7" fill="#9A5F2E"/>
 `;
 
       if (corner === 'top-right') {
         // Deer faces LEFT — head on left side of SVG (visible), body extends right (screen clips it)
-        return `<svg viewBox="0 0 100 96" fill="none" xmlns="http://www.w3.org/2000/svg" style="overflow:visible">${deerSvgContent}</svg>`;
+        return `<svg viewBox="0 0 100 90" fill="none" xmlns="http://www.w3.org/2000/svg" style="overflow:visible">${deerSvgContent}</svg>`;
       }
       // top-left: Mirror the same SVG — head on right side, body on left (screen clips it)
-      return `<svg viewBox="0 0 100 96" fill="none" xmlns="http://www.w3.org/2000/svg" style="overflow:visible"><g transform="scale(-1,1) translate(-100,0)">${deerSvgContent}</g></svg>`;
+      return `<svg viewBox="0 0 100 90" fill="none" xmlns="http://www.w3.org/2000/svg" style="overflow:visible"><g transform="scale(-1,1) translate(-100,0)">${deerSvgContent}</g></svg>`;
     }
 
     const deer = document.createElement('div');

@@ -84,7 +84,7 @@
   right: -44px;
   transform: translateY(-50%);
   width: 112px;
-  height: 107px;
+  height: 100px;
 }
 .deer-corner-peek-top-right .dp-body {
   transform: translateX(115%);
@@ -99,7 +99,7 @@
   left: -44px;
   transform: translateY(-50%);
   width: 112px;
-  height: 107px;
+  height: 100px;
 }
 .deer-corner-peek-top-left .dp-body {
   transform: translateX(-115%);
