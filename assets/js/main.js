@@ -1460,6 +1460,12 @@
   <!-- Ears -->
   <g class="dp-ear-l"><ellipse cx="14" cy="32" rx="8" ry="13" transform="rotate(-42 14 32)" fill="#B06E34"/><ellipse cx="14.5" cy="32.5" rx="4.4" ry="8.5" transform="rotate(-42 14.5 32.5)" fill="#F0A58E"/></g>
   <g class="dp-ear-r"><ellipse cx="62" cy="28" rx="6.5" ry="11" transform="rotate(30 62 28)" fill="#A56030"/><ellipse cx="61.5" cy="28.5" rx="3.4" ry="7" transform="rotate(30 61.5 28.5)" fill="#E8977F"/></g>
+  <!-- Neck, chest and shoulder behind the head, running back to the screen edge -->
+  <g class="dp-body-part">
+    <path d="M40 66 C52 72 64 70 78 66 L82 94 L64 96 C48 96 36 90 32 80 C31 74 35 69 40 66 Z" fill="#B06E34"/>
+    <path d="M45 74 C54 80 64 78 74 74 L76 93 C62 94 50 91 45 84 C43 80 43 77 45 74 Z" fill="#F2D6AA"/>
+    <path d="M36 70 C42 76 48 79 56 80" stroke="#8A5326" stroke-width="1.2" fill="none" stroke-linecap="round" opacity="0.5"/>
+  </g>
   <g class="dp-head">
     <ellipse cx="42" cy="48" rx="31" ry="27" fill="#C98644"/>
     <ellipse cx="40" cy="38" rx="22" ry="14" fill="#D9A062" opacity="0.55"/>
@@ -1483,11 +1489,14 @@
     </g>
     <ellipse cx="38" cy="55" rx="4" ry="2.4" fill="#F28B82" opacity="0.5"/>
   </g>
-  <!-- Small paw resting on the screen edge -->
-  <rect x="56" y="77" width="16" height="9" rx="4.5" fill="#9A5F2E"/>
-  <ellipse cx="55" cy="81.5" rx="5.6" ry="4.6" fill="#C98644"/>
-  <circle cx="51.6" cy="79.6" r="1.7" fill="#9A5F2E"/>
-  <circle cx="50.6" cy="83.4" r="1.7" fill="#9A5F2E"/>
+  <!-- Foreleg growing out of the shoulder, paw resting on the chest -->
+  <g class="dp-paw" stroke="#4E2F15" stroke-width="1" stroke-linejoin="round">
+    <path d="M70 76 C62 76 57 78 54 80.5 L54 88.5 C58 90 64 91 72 90 Z" fill="#B06E34"/>
+    <ellipse cx="50.5" cy="84.5" rx="7.6" ry="6.8" fill="#C98644"/>
+    <path d="M44 82.2 C42.6 83.2 42.6 85.8 44 86.8 C45.2 86 45.2 83 44 82.2 Z" fill="#3A2616" stroke="none"/>
+    <path d="M45.4 84.5 H49" stroke="#7A4A22" stroke-width="1" stroke-linecap="round"/>
+    <ellipse cx="52" cy="81.6" rx="3" ry="1.2" fill="#E4AC6E" stroke="none"/>
+  </g>
 `;
 
       if (corner === 'top-right') {
@@ -1908,7 +1917,7 @@
     function startRun() {
       if (!kodi || !deer) return;
       const cl = document.body.classList;
-      if (cl.contains('mascots-off') || (cl.contains('no-kodi') && cl.contains('no-nodi'))) {
+      if (cl.contains('mascots-off') || cl.contains('no-run') || (cl.contains('no-kodi') && cl.contains('no-nodi'))) {
         restTimer = setTimeout(startRun, 2000);
         return;
       }
@@ -1929,7 +1938,7 @@
 
     function frame(t) {
       if (!running) return;
-      if (document.body.classList.contains('mascots-off')) { endRun(); return; }
+      if (document.body.classList.contains('mascots-off') || document.body.classList.contains('no-run')) { endRun(); return; }
       if (lastT === null) lastT = t;
       // Clamp so a background tab doesn't cause a teleport when it resumes
       const speedMul = window.MascotSettings ? window.MascotSettings.speed : 1;
@@ -2060,14 +2069,15 @@
   'use strict';
 
   const KEY = 'mascotSettings.v1';
-  const DEFAULTS = { speed: 1, animations: true, kodi: true, nodi: true };
+  const DEFAULTS = { speed: 1, jump: 1, animations: true, run: true, kodi: true, nodi: true };
 
   let state = Object.assign({}, DEFAULTS);
   try {
     const saved = JSON.parse(localStorage.getItem(KEY) || 'null');
     if (saved && typeof saved === 'object') {
       if (typeof saved.speed === 'number') state.speed = Math.min(2, Math.max(0.4, saved.speed));
-      ['animations', 'kodi', 'nodi'].forEach((k) => { if (typeof saved[k] === 'boolean') state[k] = saved[k]; });
+      if (typeof saved.jump === 'number') state.jump = Math.min(2.5, Math.max(0.5, saved.jump));
+      ['animations', 'run', 'kodi', 'nodi'].forEach((k) => { if (typeof saved[k] === 'boolean') state[k] = saved[k]; });
     }
   } catch (e) { /* storage unavailable: keep defaults */ }
 
@@ -2082,8 +2092,10 @@
   function applyBodyClasses() {
     const cl = document.body.classList;
     cl.toggle('mascots-off', !state.animations);
+    cl.toggle('no-run', !state.run);
     cl.toggle('no-kodi', !state.kodi);
     cl.toggle('no-nodi', !state.nodi);
+    document.documentElement.style.setProperty('--jump', String(state.jump));
   }
 
   function speedLabel(v) {
@@ -2098,8 +2110,12 @@
     const range = panel.querySelector('#msSpeed');
     const readout = panel.querySelector('#msSpeedValue');
     const presets = panel.querySelectorAll('[data-speed]');
+    const jumpRange = panel.querySelector('#msJump');
+    const jumpReadout = panel.querySelector('#msJumpValue');
+    const jumpPresets = panel.querySelectorAll('[data-jump]');
     const toggles = {
       animations: panel.querySelector('[data-toggle="animations"]'),
+      run: panel.querySelector('[data-toggle="run"]'),
       kodi: panel.querySelector('[data-toggle="kodi"]'),
       nodi: panel.querySelector('[data-toggle="nodi"]'),
     };
@@ -2117,7 +2133,14 @@
       Object.keys(toggles).forEach((k) => {
         toggles[k].setAttribute('aria-checked', String(state[k]));
       });
+      jumpRange.value = state.jump;
+      jumpReadout.textContent = speedLabel(state.jump);
+      jumpRange.style.setProperty('--fill', ((state.jump - 0.5) / 2 * 100) + '%');
+      jumpPresets.forEach((b) => {
+        b.classList.toggle('active', Math.abs(parseFloat(b.dataset.jump) - state.jump) < 0.05);
+      });
       panel.classList.toggle('ms-anim-off', !state.animations);
+      panel.classList.toggle('ms-run-off', !state.run);
       const bothGone = !state.kodi && !state.nodi;
       removeBoth.textContent = bothGone ? 'Bring back both' : 'Remove both';
       removeBoth.classList.toggle('is-restore', bothGone);
@@ -2153,6 +2176,8 @@
 
     range.addEventListener('input', () => update({ speed: parseFloat(range.value) }));
     presets.forEach((b) => b.addEventListener('click', () => update({ speed: parseFloat(b.dataset.speed) })));
+    jumpRange.addEventListener('input', () => update({ jump: parseFloat(jumpRange.value) }));
+    jumpPresets.forEach((b) => b.addEventListener('click', () => update({ jump: parseFloat(b.dataset.jump) })));
     Object.keys(toggles).forEach((k) => {
       toggles[k].addEventListener('click', () => update({ [k]: !state[k] }));
     });

@@ -13,7 +13,7 @@
   <link href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet">
   <link rel="icon" type="image/svg+xml" href="assets/favicon.svg">
   <link rel="stylesheet" href="assets/css/styles.css?v=5.7">
-  <link rel="stylesheet" href="assets/css/patrol-bear.css?v=6.6">
+  <link rel="stylesheet" href="assets/css/patrol-bear.css?v=7.2">
 </head>
 <body>
   <div class="scroll-progress-bar" id="scrollProgressBar"></div>
@@ -425,6 +425,13 @@
       </div>
     </div>
 
+    <div class="ms-section ms-run">
+      <div class="ms-row">
+        <div class="ms-text"><b>Running chase</b><small>Kodi and Nodi running across the screen</small></div>
+        <button class="ms-switch" type="button" role="switch" aria-checked="true" aria-label="Running chase" data-toggle="run"><i></i></button>
+      </div>
+    </div>
+
     <div class="ms-section ms-speed">
       <div class="ms-row">
         <div class="ms-text"><b>Running speed</b><small>How fast Kodi chases Nodi</small></div>
@@ -435,6 +442,20 @@
         <button type="button" data-speed="0.5">Slow</button>
         <button type="button" data-speed="1">Normal</button>
         <button type="button" data-speed="1.6">Fast</button>
+      </div>
+    </div>
+
+    <div class="ms-section ms-jump">
+      <div class="ms-row">
+        <div class="ms-text"><b>Jump height</b><small>When you click Kodi or Nodi</small></div>
+        <span class="ms-readout" id="msJumpValue">1.0×</span>
+      </div>
+      <input class="ms-range" id="msJump" type="range" min="0.5" max="2.5" step="0.1" value="1" aria-label="Jump height">
+      <div class="ms-chips">
+        <button type="button" data-jump="0.6">Low</button>
+        <button type="button" data-jump="1">Normal</button>
+        <button type="button" data-jump="1.6">High</button>
+        <button type="button" data-jump="2.3">Super</button>
       </div>
     </div>
 
@@ -669,6 +690,6 @@
   <!-- DYNAMIC FLOATING TOAST NOTIFICATION CONTAINER -->
   <div id="toastContainer" class="toast-container" aria-live="polite"></div>
 
-  <script src="assets/js/main.js?v=6.6"></script>
+  <script src="assets/js/main.js?v=7.2"></script>
 </body>
 </html>

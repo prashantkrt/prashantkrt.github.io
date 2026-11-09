@@ -443,15 +443,15 @@
 
 @keyframes kodi-jump-roll {
   0%   { transform: translateY(0) rotate(0deg) scale(1, 1); }
-  10%  { transform: translateY(6px) rotate(10deg) scale(1.22, 0.78); }  /* Deep crouch preparation */
-  22%  { transform: translateY(-48px) rotate(38deg) scale(0.86, 1.2); } /* PONG TAKEOFF into the air */
-  36%  { transform: translateY(-75px) rotate(90deg) scale(0.96, 1.04); } /* Peak apex tumble float */
-  48%  { transform: translateY(-30px) rotate(155deg) scale(1.08, 0.92); } /* Fast descent towards ground */
-  58%  { transform: translateY(5px) rotate(215deg) scale(1.26, 0.74); } /* Ground slam impact squash! */
-  68%  { transform: translateY(-4px) rotate(290deg) scale(0.92, 1.08); } /* Rolling 360 somersault across floor */
-  78%  { transform: translateY(4px) rotate(360deg) scale(1.25, 0.78); } /* Landing on paws completing 360 roll */
-  88%  { transform: translateY(-13px) rotate(360deg) scale(0.94, 1.06); } /* Spring rebound pop */
-  95%  { transform: translateY(2px) rotate(360deg) scale(1.05, 0.95); } /* Settle into sprint */
+  10%  { transform: translateY(calc(6px * var(--jump, 1))) rotate(10deg) scale(1.22, 0.78); }  /* Deep crouch preparation */
+  22%  { transform: translateY(calc(-48px * var(--jump, 1))) rotate(38deg) scale(0.86, 1.2); } /* PONG TAKEOFF into the air */
+  36%  { transform: translateY(calc(-75px * var(--jump, 1))) rotate(90deg) scale(0.96, 1.04); } /* Peak apex tumble float */
+  48%  { transform: translateY(calc(-30px * var(--jump, 1))) rotate(155deg) scale(1.08, 0.92); } /* Fast descent towards ground */
+  58%  { transform: translateY(calc(5px * var(--jump, 1))) rotate(215deg) scale(1.26, 0.74); } /* Ground slam impact squash! */
+  68%  { transform: translateY(calc(-4px * var(--jump, 1))) rotate(290deg) scale(0.92, 1.08); } /* Rolling 360 somersault across floor */
+  78%  { transform: translateY(calc(4px * var(--jump, 1))) rotate(360deg) scale(1.25, 0.78); } /* Landing on paws completing 360 roll */
+  88%  { transform: translateY(calc(-13px * var(--jump, 1))) rotate(360deg) scale(0.94, 1.06); } /* Spring rebound pop */
+  95%  { transform: translateY(calc(2px * var(--jump, 1))) rotate(360deg) scale(1.05, 0.95); } /* Settle into sprint */
   100% { transform: translateY(0) rotate(360deg) scale(1, 1); }
 }
 
@@ -467,13 +467,13 @@
 
 @keyframes deer-super-leap {
   0%   { transform: translateY(0) rotate(0deg) scale(1, 1); }
-  10%  { transform: translateY(5px) rotate(-4deg) scale(1.18, 0.82); }  /* Nimble crouch */
-  30%  { transform: translateY(-65px) rotate(6deg) scale(0.86, 1.22); } /* PONG LEAP takeoff */
-  48%  { transform: translateY(-88px) rotate(-2deg) scale(0.96, 1.04); } /* Graceful apex hover */
-  62%  { transform: translateY(-45px) rotate(4deg) scale(1.04, 0.96); } /* Elegant descent */
-  76%  { transform: translateY(4px) rotate(-2deg) scale(1.2, 0.82); }  /* Land squash with poise */
-  88%  { transform: translateY(-14px) rotate(1deg) scale(0.96, 1.04); } /* Soft bounce recovery */
-  95%  { transform: translateY(2px) rotate(0deg) scale(1.04, 0.96); }  /* Settle */
+  10%  { transform: translateY(calc(5px * var(--jump, 1))) rotate(-4deg) scale(1.18, 0.82); }  /* Nimble crouch */
+  30%  { transform: translateY(calc(-65px * var(--jump, 1))) rotate(6deg) scale(0.86, 1.22); } /* PONG LEAP takeoff */
+  48%  { transform: translateY(calc(-88px * var(--jump, 1))) rotate(-2deg) scale(0.96, 1.04); } /* Graceful apex hover */
+  62%  { transform: translateY(calc(-45px * var(--jump, 1))) rotate(4deg) scale(1.04, 0.96); } /* Elegant descent */
+  76%  { transform: translateY(calc(4px * var(--jump, 1))) rotate(-2deg) scale(1.2, 0.82); }  /* Land squash with poise */
+  88%  { transform: translateY(calc(-14px * var(--jump, 1))) rotate(1deg) scale(0.96, 1.04); } /* Soft bounce recovery */
+  95%  { transform: translateY(calc(2px * var(--jump, 1))) rotate(0deg) scale(1.04, 0.96); }  /* Settle */
   100% { transform: translateY(0) rotate(0deg) scale(1, 1); }
 }
 
@@ -796,6 +796,7 @@ body.chase-active .deer-corner-peek * {
    MASCOT SETTINGS — visibility switches
    ========================================================================== */
 body.mascots-off .patrol-scene,
+body.no-run .patrol-scene,
 body.mascots-off .corner-bear-container,
 body.mascots-off .deer-corner-peek,
 body.mascots-off .sparkle-particle,
@@ -926,3 +927,8 @@ body.no-nodi #patrolDeer { display: none !important; }
 @media (prefers-reduced-motion: reduce) {
   .ms-gear svg, .ms-panel, .ms-switch i { transition: none; }
 }
+
+.ms-panel.ms-anim-off .ms-jump,
+.ms-panel.ms-anim-off .ms-run { opacity: 0.4; pointer-events: none; }
+.ms-panel.ms-run-off .ms-speed,
+.ms-panel.ms-run-off .ms-jump { opacity: 0.4; pointer-events: none; }
