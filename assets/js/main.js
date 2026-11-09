@@ -1452,6 +1452,7 @@
       // For RIGHT peek: head in left portion (x=0-220), body/neck extends right (clipped by screen edge).
       // For LEFT peek: same SVG mirrored — head on right (x=180-400), body on left (off-screen left edge).
       const deerSvgContent = `
+  <g transform="rotate(-9 62 112)">
   <!-- Antler nubs -->
   <g stroke="#D9B27C" stroke-linecap="round" fill="none">
     <path d="M30 22 C27 14 23 10 19 8 M28 16 C24 15 22 13 21 11" stroke-width="2.6"/>
@@ -1460,12 +1461,12 @@
   <!-- Ears -->
   <g class="dp-ear-l"><ellipse cx="14" cy="32" rx="8" ry="13" transform="rotate(-42 14 32)" fill="#B06E34"/><ellipse cx="14.5" cy="32.5" rx="4.4" ry="8.5" transform="rotate(-42 14.5 32.5)" fill="#F0A58E"/></g>
   <g class="dp-ear-r"><ellipse cx="62" cy="28" rx="6.5" ry="11" transform="rotate(30 62 28)" fill="#A56030"/><ellipse cx="61.5" cy="28.5" rx="3.4" ry="7" transform="rotate(30 61.5 28.5)" fill="#E8977F"/></g>
-  <!-- Chibi fawn body: standing foreleg + round torso with cream belly and fawn spots -->
-  <g class="dp-body-part" stroke="#4E2F15" stroke-width="0.9" stroke-linejoin="round" stroke-linecap="round">
-    <path d="M57 104 L57 114" stroke="#4E2F15" stroke-width="9.4" fill="none"/>
-    <path d="M57 104 L57 114" stroke="#B87A3C" stroke-width="7.4" fill="none"/>
-    <path d="M52.6 113 H61.4 C62.6 117 61 120 58.6 120.4 H55.4 C53 120 51.4 117 52.6 113 Z" fill="#3A2616"/>
-    <path d="M57 114.6 V119.6" stroke="#1D120A" stroke-width="0.8"/>
+  <!-- Half body only: torso fades out toward the bottom so just face, upper body and hand show -->
+  <defs>
+    <linearGradient id="nFade" gradientUnits="userSpaceOnUse" x1="0" y1="101" x2="0" y2="113"><stop offset="0" stop-color="#fff"/><stop offset="1" stop-color="#000"/></linearGradient>
+    <mask id="nBodyMask" maskUnits="userSpaceOnUse" x="-20" y="-10" width="160" height="140"><rect x="-20" y="-10" width="160" height="123" fill="url(#nFade)"/><rect x="-20" y="-10" width="160" height="111" fill="#fff"/></mask>
+  </defs>
+  <g class="dp-body-part" mask="url(#nBodyMask)" stroke="#4E2F15" stroke-width="0.9" stroke-linejoin="round" stroke-linecap="round">
     <ellipse cx="54" cy="96" rx="27" ry="20" fill="#BE7B3C"/>
     <ellipse cx="45" cy="102" rx="15" ry="12" fill="#F2D6AA" stroke="none"/>
     <g fill="#FFF2DE" stroke="none" opacity="0.9"><circle cx="62" cy="86.5" r="1.8"/><circle cx="69" cy="92" r="1.6"/><circle cx="64" cy="97" r="1.5"/></g>
@@ -1508,14 +1509,15 @@
       </g>
     </g>
   </g>
+  </g>
 `;
 
       if (corner === 'top-right') {
         // Deer faces LEFT — head on left side of SVG (visible), body extends right (screen clips it)
-        return `<svg viewBox="0 0 100 122" fill="none" xmlns="http://www.w3.org/2000/svg" style="overflow:visible">${deerSvgContent}</svg>`;
+        return `<svg viewBox="-20 0 120 122" fill="none" xmlns="http://www.w3.org/2000/svg" style="overflow:visible">${deerSvgContent}</svg>`;
       }
       // top-left: Mirror the same SVG — head on right side, body on left (screen clips it)
-      return `<svg viewBox="0 0 100 122" fill="none" xmlns="http://www.w3.org/2000/svg" style="overflow:visible"><g transform="scale(-1,1) translate(-100,0)">${deerSvgContent}</g></svg>`;
+      return `<svg viewBox="0 0 120 122" fill="none" xmlns="http://www.w3.org/2000/svg" style="overflow:visible"><g transform="scale(-1,1) translate(-100,0)">${deerSvgContent}</g></svg>`;
     }
 
     const deer = document.createElement('div');
