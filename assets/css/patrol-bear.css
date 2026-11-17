@@ -1370,9 +1370,10 @@ body.mascots-off .byte-dog-wrapper .dog-eyes {
 .rope-canvas {
   position: fixed;
   top: 0;
-  right: 0;
+  left: 0;
   z-index: 1000;
   pointer-events: none;
+  /* JS sets width/height to full viewport – never constrain here */
 }
 @media print { .rope-canvas, .pull-rope { display: none; } }
 

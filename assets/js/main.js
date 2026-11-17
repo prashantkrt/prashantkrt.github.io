@@ -2704,19 +2704,22 @@ window.ThemeColors = { green: '#a1f4c2', blue: '#8eb5ff', purple: '#c0a5ff', gre
       const vw = window.innerWidth;
       const vh = window.innerHeight;
       const topCentre = Math.min(84, Math.max(22, (vw - 1280) / 2 - 12));
-      const hoofY = vh * 0.5 + 50;
+      // give plenty of room below so a pulled rope is never clipped
+      const hoofY = vh * 0.75 + 50;
       const dpr = window.devicePixelRatio || 1;
-      const h = Math.round(hoofY + 90);
-      W = Math.max(150, Math.ceil(topCentre + 60));
+      // Full-viewport canvas so the rope is never clipped on any edge
+      const H = Math.round(Math.max(vh, hoofY + 200));
+      W = vw;
 
-      canvas.style.width = W + 'px';
-      canvas.style.height = h + 'px';
-      canvas.width = Math.round(W * dpr);
-      canvas.height = Math.round(h * dpr);
+      canvas.style.width  = vw + 'px';
+      canvas.style.height = H  + 'px';
+      canvas.width  = Math.round(vw * dpr);
+      canvas.height = Math.round(H  * dpr);
       ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
-      canvasLeft = vw - W;
+      canvasLeft = 0;   // canvas origin IS the viewport origin — no offset needed
 
-      ax = W - topCentre;
+      // anchor hangs from the top-right corner of the viewport
+      ax = vw - topCentre;
       targetLength = hoofY - ay;
       targetSegLen = targetLength / (N - 1);
 
@@ -2899,7 +2902,7 @@ window.ThemeColors = { green: '#a1f4c2', blue: '#8eb5ff', purple: '#c0a5ff', gre
 
     function place(x, y, rotDeg, sx, sy) {
       climber.el.style.transform =
-        'translate3d(' + (canvasLeft + x - 48) + 'px,' + (y - 73) + 'px,0) rotate(' + rotDeg.toFixed(2) + 'deg) scale(' + sx.toFixed(3) + ',' + sy.toFixed(3) + ')';
+        'translate3d(' + (x - 48) + 'px,' + (y - 73) + 'px,0) rotate(' + rotDeg.toFixed(2) + 'deg) scale(' + sx.toFixed(3) + ',' + sy.toFixed(3) + ')';
     }
 
     function updateClimber(dt) {
@@ -3023,7 +3026,7 @@ window.ThemeColors = { green: '#a1f4c2', blue: '#8eb5ff', purple: '#c0a5ff', gre
       document.body.appendChild(el);
       const r = o.from;
       const from = r
-        ? { x: r.left + r.width * 0.42 - canvasLeft, y: r.top + r.height * 0.62 }
+        ? { x: r.left + r.width * 0.42, y: r.top + r.height * 0.62 }
         : { x: ax + 50, y: pts[N - 1].y };
       climber = {
         el, from, phase: 'flight', t: -(o.delay || 0) / 1000, dist: GRAB_DIST, started: false, step: -1,
