@@ -2220,6 +2220,85 @@ window.ThemeColors = { green: '#a1f4c2', blue: '#8eb5ff', purple: '#c0a5ff', gre
       });
     }
 
+    // --- SECRET EASTER EGG UNLOCK ---
+    function unlockEasterEgg(sourceMsg) {
+      if (!state.animations) {
+        update({ animations: true });
+        if (window.showToast) {
+          window.showToast(sourceMsg || '🎉 Secret found! Kodi, Nodi & mascot settings unlocked! 🍢', '🐻');
+        }
+        if (window.SoundFX && window.SoundFX.kodiJump) {
+          window.SoundFX.kodiJump();
+        }
+      } else {
+        if (window.showToast) {
+          window.showToast('Kodi & Nodi are roasting marshmallows! 🍢', '🐻');
+        }
+      }
+    }
+    window.unlockMascotEasterEgg = unlockEasterEgg;
+
+    // Secret 1: Click the brand avatar in the header
+    const avatars = document.querySelectorAll('.brand-icon, #secretMascotAvatar');
+    avatars.forEach((av) => {
+      av.classList.add('secret-trigger');
+      av.setAttribute('title', 'Secret: tap to discover Kodi! 🐾');
+      av.addEventListener('click', (e) => {
+        if (!state.animations) {
+          e.preventDefault();
+          e.stopPropagation();
+          unlockEasterEgg('🎉 You found Kodi! Mascot animations & settings unlocked! 🍢');
+        }
+      });
+    });
+
+    // Secret 2: Subtle paw in footer
+    const footerTriggers = document.querySelectorAll('#secretFooterPaw, .secret-paw-trigger');
+    footerTriggers.forEach((b) => {
+      b.addEventListener('click', (e) => {
+        e.preventDefault();
+        e.stopPropagation();
+        unlockEasterEgg('🎉 Campfire secret found! Kodi & Nodi are active! 🍢');
+      });
+    });
+
+    // Secret 3: Green window dot in code showcase
+    const greenDots = document.querySelectorAll('.window-dots i:last-child, #secretWindowDot');
+    greenDots.forEach((dot) => {
+      dot.classList.add('secret-dot');
+      dot.setAttribute('title', 'Campfire dot');
+      dot.addEventListener('click', (e) => {
+        e.stopPropagation();
+        unlockEasterEgg('💻 Terminal secret! Kodi Bear unlocked! 🍢');
+      });
+    });
+
+    // Secret 4: Keyboard secret - typing "kodi" or "bear"
+    let keyBuffer = '';
+    window.addEventListener('keydown', (e) => {
+      if (e.target && (e.target.tagName === 'INPUT' || e.target.tagName === 'TEXTAREA')) return;
+      if (typeof e.key === 'string' && e.key.length === 1) {
+        keyBuffer = (keyBuffer + e.key.toLowerCase()).slice(-8);
+        if (keyBuffer.includes('kodi') || keyBuffer.includes('bear')) {
+          keyBuffer = '';
+          unlockEasterEgg('🎉 Keyword secret unlocked! Kodi & Nodi are here! 🍢');
+        }
+      }
+    });
+
+    // Nav Dark/Light mode toggle
+    const navModeBtns = document.querySelectorAll('.nav-mode-btn, #navModeBtn');
+    navModeBtns.forEach((b) => {
+      b.addEventListener('click', () => {
+        if (window.SiteMode) {
+          const next = window.SiteMode.toggle();
+          if (window.showToast) {
+            window.showToast(next === 'light' ? '☀️ Light mode' : '🌙 Dark mode', next === 'light' ? '☀️' : '🌙');
+          }
+        }
+      });
+    });
+
     if (!btn || !panel) {
       syncPill();
       return;

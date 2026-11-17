@@ -23,7 +23,7 @@
   <div class="ambient ambient-a"></div><div class="ambient ambient-b"></div>
   <header class="header">
     <a class="brand" href="index.html" aria-label="Prashant Tiwary home">
-      <img class="brand-icon" src="assets/github-avatar.png" onerror="this.src='assets/logo.svg'" alt="Prashant Tiwary Logo" width="38" height="38">
+      <img class="brand-icon secret-trigger" id="secretMascotAvatar" src="assets/github-avatar.png" onerror="this.src='assets/logo.svg'" alt="Prashant Tiwary Logo" width="38" height="38" title="Secret: tap to discover Kodi! 🐾">
       <div class="brand-info">
         <span class="brand-name">Prashant Tiwary</span>
         <span class="brand-title">Backend Engineer</span>
@@ -31,7 +31,7 @@
     </a>
     <button class="menu-toggle" aria-label="Toggle navigation" aria-expanded="false"><span></span><span></span></button>
     <nav class="nav" aria-label="Main navigation">
-      <a class="active" href="index.html">Home</a><a href="#about">About</a><a href="#skills">Skills</a><a href="#journey">Experience</a><a href="#certifications">Certifications</a><a href="projects.html">Repositories <span class="nav-count">↗</span></a><button class="nav-cta contact-open" type="button"><span class="cta-pulse"></span> Contact</button>
+      <a class="active" href="index.html">Home</a><a href="#about">About</a><a href="#skills">Skills</a><a href="#journey">Experience</a><a href="#certifications">Certifications</a><a href="projects.html">Repositories <span class="nav-count">↗</span></a><button class="nav-mode-btn" id="navModeBtn" type="button" aria-label="Toggle dark and light mode" title="Toggle dark/light mode"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="5"/><path d="M12 1v2M12 21v2M4.22 4.22l1.42 1.42M18.36 18.36l1.42 1.42M1 12h2M21 12h2M4.22 19.78l1.42-1.42M18.36 5.64l1.42-1.42"/></svg></button><button class="nav-cta contact-open" type="button"><span class="cta-pulse"></span> Contact</button>
     </nav>
   </header>
 
@@ -401,7 +401,7 @@
         </div>
       </a>
       <p>Designed around the work. Built with Java, Spring Boot, Kafka, and continuous learning.</p>
-      <span class="footer-domain">MYLEARNINGDESK.IN · © <span id="year"></span></span>
+      <span class="footer-domain">MYLEARNINGDESK.IN · © <span id="year"></span> <button class="secret-paw-trigger" id="secretFooterPaw" type="button" aria-label="A tiny campfire secret" title="A tiny campfire secret...">🐾</button></span>
     </div>
   </footer>
 
