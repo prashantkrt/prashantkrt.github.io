@@ -1291,6 +1291,41 @@ window.ThemeColors = { green: '#a1f4c2', blue: '#8eb5ff', purple: '#c0a5ff', gre
         bell.start(t + 0.3);
         bell.stop(t + 0.62);
       } catch (e) {}
+    },
+
+    // 6. Mechanical pull-cord snap / click switch sound
+    ropeSnap() {
+      try {
+        const ac = this.getCtx();
+        if (!ac) return;
+        const t = ac.currentTime;
+
+        // Mechanical switch click
+        const osc = ac.createOscillator();
+        const gain = ac.createGain();
+        osc.type = 'triangle';
+        osc.frequency.setValueAtTime(1400, t);
+        osc.frequency.exponentialRampToValueAtTime(320, t + 0.05);
+        gain.gain.setValueAtTime(0.35, t);
+        gain.gain.exponentialRampToValueAtTime(0.001, t + 0.06);
+        osc.connect(gain);
+        gain.connect(ac.destination);
+        osc.start(t);
+        osc.stop(t + 0.07);
+
+        // Cord spring recoil twang
+        const osc2 = ac.createOscillator();
+        const gain2 = ac.createGain();
+        osc2.type = 'sine';
+        osc2.frequency.setValueAtTime(620, t + 0.01);
+        osc2.frequency.exponentialRampToValueAtTime(240, t + 0.2);
+        gain2.gain.setValueAtTime(0.2, t + 0.01);
+        gain2.gain.exponentialRampToValueAtTime(0.001, t + 0.22);
+        osc2.connect(gain2);
+        gain2.connect(ac.destination);
+        osc2.start(t + 0.01);
+        osc2.stop(t + 0.24);
+      } catch (e) {}
     }
   };
   window.SoundFX = SoundFX;
@@ -2643,6 +2678,11 @@ window.ThemeColors = { green: '#a1f4c2', blue: '#8eb5ff', purple: '#c0a5ff', gre
     let rolling = false;
     let rollT = 0;
     const ROLL_DURATION = 1.15;
+    let isDragging = false;
+    let dragPointIdx = N - 1;
+    let dragX = 0, dragY = 0;
+    let dragStartX = 0, dragStartY = 0;
+    let hasMovedFar = false;
     let ax = 0, ay = -6;
     let canvasLeft = 0;
     let time = 0, last = 0, raf = null;
@@ -2757,6 +2797,10 @@ window.ThemeColors = { green: '#a1f4c2', blue: '#8eb5ff', purple: '#c0a5ff', gre
           }
         }
         pts[0].x = ax; pts[0].y = ay;
+        if (isDragging && dragPointIdx > 0 && dragPointIdx < N && pts[dragPointIdx]) {
+          pts[dragPointIdx].x = dragX;
+          pts[dragPointIdx].y = dragY;
+        }
       }
     }
 
@@ -2999,19 +3043,91 @@ window.ThemeColors = { green: '#a1f4c2', blue: '#8eb5ff', purple: '#c0a5ff', gre
       return !cl.contains('no-nodi') && !cl.contains('mascots-off');
     }
 
-    // A tap on the cord only makes it swing; with Nodi away it flips the mode itself
-    rope.addEventListener('click', (e) => {
-      if (document.body.classList.contains('mascots-off')) return;
-      if (nodiAvailable()) { if (!reduced) pluckAt(e, 1.6); return; }
-      if (!reduced) pluckAt(e, 2);
-      flip();
-    });
+    function toggleThemeWithRope() {
+      if (window.SoundFX && window.SoundFX.ropeSnap) {
+        window.SoundFX.ropeSnap();
+      }
+      const msg = flip();
+      if (window.showToast) {
+        window.showToast(msg, msg.includes('Light') ? '☀️' : '🌙');
+      }
+    }
+
+    function onPointerDown(e) {
+      if (document.body.classList.contains('mascots-off') || reduced) return;
+      isDragging = true;
+      hasMovedFar = false;
+      dragStartX = e.clientX;
+      dragStartY = e.clientY;
+      const r = rope.getBoundingClientRect();
+      const relY = Math.max(0, Math.min(r.height, e.clientY - r.top));
+      dragPointIdx = Math.max(2, Math.min(N - 1, Math.round((relY / r.height) * (N - 1))));
+      dragX = e.clientX - canvasLeft;
+      dragY = Math.max(ay + 15, e.clientY);
+      rope.classList.add('is-pulling');
+      try { rope.setPointerCapture(e.pointerId); } catch (_) {}
+      start();
+    }
+
+    function onPointerMove(e) {
+      if (!isDragging) return;
+      const dx = e.clientX - dragStartX;
+      const dy = e.clientY - dragStartY;
+      if (Math.hypot(dx, dy) > 6) hasMovedFar = true;
+      dragX = e.clientX - canvasLeft;
+      dragY = Math.max(ay + 25, e.clientY);
+
+      // Elastic stretch: stretch segments if pulled down past target length
+      const pullDist = dragY - ay;
+      if (pullDist > targetLength) {
+        segLen = Math.min(targetSegLen * 1.5, pullDist / (N - 1));
+        rope.style.setProperty('--rl', pullDist.toFixed(1) + 'px');
+      }
+    }
+
+    function onPointerUp(e) {
+      if (!isDragging) return;
+      isDragging = false;
+      rope.classList.remove('is-pulling');
+      try { rope.releasePointerCapture(e.pointerId); } catch (_) {}
+
+      const deltaY = e.clientY - dragStartY;
+      const deltaX = e.clientX - dragStartX;
+      const totalPull = Math.hypot(deltaX, deltaY);
+
+      // Spring snap back
+      segLen = targetSegLen;
+      rope.style.setProperty('--rl', targetLength.toFixed(1) + 'px');
+
+      if (dragPointIdx > 0 && pts[dragPointIdx]) {
+        pts[dragPointIdx].py -= Math.min(45, Math.max(14, deltaY * 0.45));
+        pts[dragPointIdx].px -= Math.min(30, Math.max(-30, deltaX * 0.4));
+      }
+      pluck(dragPointIdx, deltaX < 0 ? 1 : -1, Math.min(3.6, 1.8 + totalPull * 0.025));
+
+      toggleThemeWithRope();
+    }
+
+    function onPointerCancel(e) {
+      if (!isDragging) return;
+      isDragging = false;
+      rope.classList.remove('is-pulling');
+      segLen = targetSegLen;
+      rope.style.setProperty('--rl', targetLength.toFixed(1) + 'px');
+      pluck(dragPointIdx, 1, 1.5);
+    }
+
+    rope.addEventListener('pointerdown', onPointerDown);
+    rope.addEventListener('pointermove', onPointerMove);
+    rope.addEventListener('pointerup', onPointerUp);
+    rope.addEventListener('pointercancel', onPointerCancel);
+
     rope.addEventListener('keydown', (e) => {
       if (document.body.classList.contains('mascots-off')) return;
       if (e.key === 'Enter' || e.key === ' ') {
         e.preventDefault();
-        if (!reduced) pluckAt(null, 2);
-        flip();
+        pluck(N - 1, (Math.random() < 0.5 ? -1 : 1), 2.5);
+        toggleThemeWithRope();
       }
     });
     document.addEventListener('theme:change', () => { if (reduced) draw(); });

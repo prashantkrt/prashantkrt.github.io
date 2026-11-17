@@ -1362,7 +1362,8 @@ body.mascots-off .byte-dog-wrapper .dog-eyes {
 }
 
 /* The visible cord is drawn on a canvas; .pull-rope is just the slim, tilted tap target along it */
-.pull-rope { width: 40px; animation: none !important; background: transparent; }
+.pull-rope { width: 44px; animation: none !important; background: transparent; cursor: grab; touch-action: none; user-select: none; }
+.pull-rope:active, .pull-rope.is-pulling { cursor: grabbing; }
 .pull-rope.nudge, .pull-rope.pulled { animation: none !important; }
 .rope-thread, .rope-knob { display: none; }
 .pull-rope:focus-visible { outline: 2px solid rgba(var(--green-rgb), 0.7); outline-offset: 2px; border-radius: 6px; }
