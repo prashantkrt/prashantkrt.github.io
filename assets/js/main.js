@@ -2638,10 +2638,27 @@ window.ThemeColors = { green: '#a1f4c2', blue: '#8eb5ff', purple: '#c0a5ff', gre
 
     let pts = [];
     let segLen = 10;
+    let targetLength = 0;
+    let targetSegLen = 10;
+    let rolling = false;
+    let rollT = 0;
+    const ROLL_DURATION = 1.15;
     let ax = 0, ay = -6;
     let canvasLeft = 0;
     let time = 0, last = 0, raf = null;
     let climber = null;
+
+    function triggerRollDown() {
+      rolling = true;
+      rollT = 0;
+      pts = [];
+      for (let i = 0; i < N; i++) {
+        const t = i / (N - 1);
+        pts.push({ x: ax, y: ay + t * 3, px: ax, py: ay + t * 3 });
+      }
+      segLen = 3 / (N - 1);
+      rope.style.setProperty('--rl', '4px');
+    }
 
     function layout() {
       const vw = window.innerWidth;
@@ -2660,19 +2677,24 @@ window.ThemeColors = { green: '#a1f4c2', blue: '#8eb5ff', purple: '#c0a5ff', gre
       canvasLeft = vw - W;
 
       ax = W - topCentre;
-      const length = hoofY - ay;
-      segLen = length / (N - 1);
+      targetLength = hoofY - ay;
+      targetSegLen = targetLength / (N - 1);
 
       // Tap target: a vertical strip along the cord, wide enough to cover its swing
       rope.style.setProperty('--rope-right', (topCentre - 20) + 'px');
-      rope.style.setProperty('--rl', length.toFixed(1) + 'px');
       rope.style.setProperty('--tilt', '0deg');
 
-      pts = [];
-      for (let i = 0; i < N; i++) {
-        const t = i / (N - 1);
-        const x = ax + Math.sin(t * Math.PI * 2) * 2.5 * t;
-        pts.push({ x, y: ay + length * t, px: x, py: ay + length * t });
+      if (!rolling) {
+        segLen = targetSegLen;
+        rope.style.setProperty('--rl', targetLength.toFixed(1) + 'px');
+        if (pts.length === 0) {
+          pts = [];
+          for (let i = 0; i < N; i++) {
+            const t = i / (N - 1);
+            const x = ax + Math.sin(t * Math.PI * 2) * 2.5 * t;
+            pts.push({ x, y: ay + targetLength * t, px: x, py: ay + targetLength * t });
+          }
+        }
       }
       draw();
     }
@@ -2686,6 +2708,21 @@ window.ThemeColors = { green: '#a1f4c2', blue: '#8eb5ff', purple: '#c0a5ff', gre
 
     function step(dt) {
       time += dt;
+      if (rolling) {
+        rollT += dt;
+        const u = Math.min(1, rollT / ROLL_DURATION);
+        // Smooth cubic roll down: 1 - (1 - u)^3
+        const ease = 1 - Math.pow(1 - u, 3);
+        const curLen = Math.max(6, targetLength * ease);
+        segLen = curLen / (N - 1);
+        rope.style.setProperty('--rl', curLen.toFixed(1) + 'px');
+        if (u >= 1) {
+          rolling = false;
+          segLen = targetSegLen;
+          rope.style.setProperty('--rl', targetLength.toFixed(1) + 'px');
+          pluck(N - 1, (Math.random() < 0.5 ? -1 : 1), 1.4);
+        }
+      }
       const gravity = 1250;
       for (let i = 1; i < N; i++) {
         const p = pts[i];
@@ -2979,9 +3016,11 @@ window.ThemeColors = { green: '#a1f4c2', blue: '#8eb5ff', purple: '#c0a5ff', gre
     });
     document.addEventListener('theme:change', () => { if (reduced) draw(); });
 
+    let wasOff = true;
     function syncRope() {
       const off = document.body.classList.contains('mascots-off');
       if (off) {
+        wasOff = true;
         stop();
         if (canvas) canvas.style.display = 'none';
         if (rope) rope.style.display = 'none';
@@ -2989,6 +3028,10 @@ window.ThemeColors = { green: '#a1f4c2', blue: '#8eb5ff', purple: '#c0a5ff', gre
         if (canvas) canvas.style.display = '';
         if (rope) rope.style.display = '';
         layout();
+        if (wasOff) {
+          triggerRollDown();
+        }
+        wasOff = false;
         start();
       }
     }
