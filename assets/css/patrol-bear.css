@@ -847,37 +847,145 @@ body.no-nodi .deer-corner-peek {
   transition: opacity 0.3s ease, visibility 0s linear 0.7s;
 }
 
+/* ROPE & CORD: completely hidden & disabled when mascots/animations are off */
+body.mascots-off .pull-rope,
+body.mascots-off .rope-canvas,
+html.mascots-off-init .pull-rope,
+html.mascots-off-init .rope-canvas,
+html.mascots-off-init .patrol-scene,
+html.mascots-off-init .corner-bear-container,
+html.mascots-off-init .deer-corner-peek {
+  opacity: 0 !important;
+  visibility: hidden !important;
+  pointer-events: none !important;
+  display: none !important;
+}
+
+/* JUMP ANIMATIONS: disabled when mascots/animations are off */
+body.mascots-off .patrol-sprite.hop,
+body.mascots-off .patrol-sprite.is-jumping,
+body.mascots-off .nodi-climber {
+  animation: none !important;
+  display: none !important;
+}
+
+/* HERO KODI MARSHMALLOW ANIMATIONS: paused when animations are off */
+body.mascots-off .byte-dog-wrapper .dog-arm-and-stick,
+body.mascots-off .byte-dog-wrapper .dog-stick-group,
+body.mascots-off .byte-dog-wrapper .dog-left-arm,
+body.mascots-off .byte-dog-wrapper .dog-head-group,
+body.mascots-off .byte-dog-wrapper .dog-tongue,
+body.mascots-off .byte-dog-wrapper .dog-eyes {
+  animation: none !important;
+}
+
 /* ==========================================================================
-   MASCOT SETTINGS — gear button + popup panel
+   MASCOT CONTROLS — floating direct toggle pill + mode + gear button + popup panel
    ========================================================================== */
-.ms-gear {
+.mascot-controls {
   position: fixed;
   right: 26px;
-  bottom: 86px;
-  width: 44px;
-  height: 44px;
+  bottom: 84px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  z-index: 1010;
+  transition: transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+.ms-toggle-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 14px;
+  height: 42px;
+  border-radius: 999px;
+  border: 1px solid rgba(175, 195, 233, 0.3);
+  background: rgba(var(--panel-rgb), 0.88);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  color: var(--text);
+  font: 600 12px var(--mono);
+  cursor: pointer;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.45);
+  transition: transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1), border-color 0.2s, background 0.2s, color 0.2s, box-shadow 0.2s;
+  user-select: none;
+}
+.ms-toggle-pill:hover, .ms-toggle-pill:focus-visible {
+  transform: translateY(-2px);
+  border-color: rgba(var(--green-rgb), 0.6);
+  outline: none;
+  box-shadow: 0 12px 32px rgba(0, 0, 0, 0.55);
+}
+.ms-toggle-pill:active { transform: scale(0.95); }
+.ms-pill-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: #7a889e;
+  transition: background 0.25s, box-shadow 0.25s;
+}
+.ms-toggle-pill.active .ms-pill-dot {
+  background: var(--green);
+  box-shadow: 0 0 10px var(--green);
+}
+.ms-pill-icon { font-size: 14px; line-height: 1; }
+.ms-pill-text { letter-spacing: -0.01em; white-space: nowrap; }
+.ms-pill-text b {
+  color: #8998b4;
+  text-transform: uppercase;
+  font-size: 11px;
+  margin-left: 2px;
+}
+.ms-toggle-pill.active .ms-pill-text b { color: var(--green); }
+
+.ms-mode-btn {
+  width: 42px;
+  height: 42px;
   display: grid;
   place-items: center;
   border-radius: 50%;
   border: 1px solid rgba(175, 195, 233, 0.3);
-  background: rgba(var(--panel-rgb),0.85);
+  background: rgba(var(--panel-rgb), 0.88);
   backdrop-filter: blur(12px);
   -webkit-backdrop-filter: blur(12px);
   color: var(--green);
   cursor: pointer;
-  z-index: 1010;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.45);
+  transition: transform 0.35s cubic-bezier(0.34, 1.56, 0.64, 1), border-color 0.2s, color 0.2s;
+}
+.ms-mode-btn svg { width: 18px; height: 18px; }
+.ms-mode-btn:hover, .ms-mode-btn:focus-visible {
+  border-color: rgba(var(--green-rgb), 0.6);
+  transform: translateY(-2px) rotate(15deg);
+  outline: none;
+}
+.ms-mode-btn:active { transform: scale(0.92); }
+
+.ms-gear {
+  width: 42px;
+  height: 42px;
+  display: grid;
+  place-items: center;
+  border-radius: 50%;
+  border: 1px solid rgba(175, 195, 233, 0.3);
+  background: rgba(var(--panel-rgb),0.88);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  color: var(--green);
+  cursor: pointer;
   box-shadow: 0 10px 30px rgba(0, 0, 0, 0.45);
   transition: transform 0.35s cubic-bezier(0.34, 1.56, 0.64, 1), border-color 0.2s, color 0.2s;
 }
 .ms-gear svg { width: 20px; height: 20px; transition: transform 0.6s cubic-bezier(0.34, 1.56, 0.64, 1); }
-.ms-gear:hover, .ms-gear:focus-visible { border-color: rgba(var(--green-rgb),0.55); outline: none; }
+.ms-gear:hover, .ms-gear:focus-visible { border-color: rgba(var(--green-rgb),0.55); outline: none; transform: translateY(-2px); }
 .ms-gear:hover svg, .ms-gear[aria-expanded="true"] svg { transform: rotate(90deg); }
 .ms-gear:active { transform: scale(0.92); }
 
 .ms-panel {
   position: fixed;
   right: 26px;
-  bottom: 140px;
+  bottom: 136px;
   width: min(320px, calc(100vw - 32px));
   padding: 18px;
   border-radius: 14px;
@@ -961,12 +1069,17 @@ body.no-nodi .deer-corner-peek {
 .ms-danger:hover { background: rgba(255, 136, 151, 0.1); border-color: rgba(255, 136, 151, 0.6); }
 .ms-danger.is-restore { color: #07140d; background: var(--green); border-color: var(--green); }
 
-@media (max-width: 480px) {
-  .ms-gear { right: 16px; bottom: 70px; width: 40px; height: 40px; }
-  .ms-panel { right: 16px; bottom: 118px; }
+@media (max-width: 680px) {
+  .mascot-controls { right: 14px; bottom: 74px; gap: 6px; }
+  .ms-toggle-pill { padding: 6px 11px; height: 38px; font-size: 11px; }
+  .ms-gear, .ms-mode-btn { width: 38px; height: 38px; }
+  .ms-panel { right: 14px; bottom: 122px; }
+}
+@media (max-width: 400px) {
+  .ms-pill-text span.ms-pill-word { display: none; }
 }
 @media (prefers-reduced-motion: reduce) {
-  .ms-gear svg, .ms-panel, .ms-switch i { transition: none; }
+  .ms-gear svg, .ms-panel, .ms-switch i, .ms-toggle-pill, .ms-mode-btn { transition: none; }
 }
 
 .ms-panel.ms-anim-off .ms-jump,

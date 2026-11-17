@@ -1410,6 +1410,7 @@ window.ThemeColors = { green: '#a1f4c2', blue: '#8eb5ff', purple: '#c0a5ff', gre
     let peekTimer = null;
 
     function popCornerBear(customQuote) {
+      if (document.body.classList.contains('mascots-off')) return;
       bearBtn.classList.remove('popping');
       void bearBtn.offsetWidth;
       bearBtn.classList.add('popping');
@@ -1627,6 +1628,7 @@ window.ThemeColors = { green: '#a1f4c2', blue: '#8eb5ff', purple: '#c0a5ff', gre
 
     // Tapping Nodi: he leaps onto the hanging cord (flipping dark/light) and climbs away up it
     function startClimb() {
+      if (document.body.classList.contains('mascots-off')) return;
       document.body.classList.add('nodi-climbing');
       clearTimeout(holdTimer);
       clearTimeout(peekTimer);
@@ -2050,6 +2052,7 @@ window.ThemeColors = { green: '#a1f4c2', blue: '#8eb5ff', purple: '#c0a5ff', gre
     [['kodi', kodi], ['deer', deer]].forEach(([who, el]) => {
       if (!el) return;
       el.addEventListener('click', () => {
+        if (document.body.classList.contains('mascots-off')) return;
         if (who === 'kodi') {
           SoundFX.kodiJumpRoll();
           spawnDust(kodiX);
@@ -2077,6 +2080,14 @@ window.ThemeColors = { green: '#a1f4c2', blue: '#8eb5ff', purple: '#c0a5ff', gre
         el.classList.remove('hop');
         spawnDust(who === 'kodi' ? kodiX : deerX);
       });
+    });
+
+    document.addEventListener('mascots:change', () => {
+      const cl = document.body.classList;
+      if (!cl.contains('mascots-off') && !cl.contains('no-run') && !running) {
+        clearTimeout(restTimer);
+        restTimer = setTimeout(startRun, 400);
+      }
     });
 
     const initialDelay = 2500 + Math.random() * 3500;
@@ -2126,8 +2137,8 @@ window.ThemeColors = { green: '#a1f4c2', blue: '#8eb5ff', purple: '#c0a5ff', gre
 (function () {
   'use strict';
 
-  const KEY = 'mascotSettings.v1';
-  const DEFAULTS = { speed: 1, jump: 1, animations: true, run: true, kodi: true, nodi: true };
+  const KEY = 'mascotSettings.v2';
+  const DEFAULTS = { speed: 1, jump: 1, animations: false, run: true, kodi: true, nodi: true };
 
   let state = Object.assign({}, DEFAULTS);
   try {
@@ -2141,6 +2152,14 @@ window.ThemeColors = { green: '#a1f4c2', blue: '#8eb5ff', purple: '#c0a5ff', gre
 
   window.MascotSettings = {
     get speed() { return state.speed; },
+    get animations() { return state.animations; },
+    toggleAnimations() {
+      const next = !state.animations;
+      state.animations = next;
+      save();
+      applyBodyClasses();
+      return next;
+    }
   };
 
   function save() {
@@ -2148,6 +2167,7 @@ window.ThemeColors = { green: '#a1f4c2', blue: '#8eb5ff', purple: '#c0a5ff', gre
   }
 
   function applyBodyClasses() {
+    document.documentElement.classList.remove('mascots-off-init');
     const cl = document.body.classList;
     cl.toggle('mascots-off', !state.animations);
     cl.toggle('no-run', !state.run);
@@ -2165,7 +2185,45 @@ window.ThemeColors = { green: '#a1f4c2', blue: '#8eb5ff', purple: '#c0a5ff', gre
     applyBodyClasses();
     const btn = document.getElementById('mascotSettingsBtn');
     const panel = document.getElementById('mascotSettingsPanel');
-    if (!btn || !panel) return;
+    const togglePill = document.getElementById('msTogglePill');
+    const pillStatus = document.getElementById('msPillStatus');
+    const modeBtn = document.getElementById('msModeBtn');
+
+    function syncPill() {
+      if (!togglePill || !pillStatus) return;
+      togglePill.classList.toggle('active', state.animations);
+      togglePill.setAttribute('aria-pressed', String(state.animations));
+      pillStatus.textContent = state.animations ? 'On' : 'Off';
+      togglePill.title = state.animations ? 'Click to disable mascot animations' : 'Click to enable mascot animations';
+    }
+
+    if (togglePill) {
+      togglePill.addEventListener('click', (e) => {
+        e.stopPropagation();
+        const next = !state.animations;
+        update({ animations: next });
+        if (window.showToast) {
+          window.showToast(next ? '✨ Mascot animations enabled! Say hi to Kodi & Nodi 🍢' : '💤 Mascot animations disabled.', next ? '🐻' : '💤');
+        }
+      });
+    }
+
+    if (modeBtn) {
+      modeBtn.addEventListener('click', (e) => {
+        e.stopPropagation();
+        if (window.SiteMode) {
+          const next = window.SiteMode.toggle();
+          if (window.showToast) {
+            window.showToast(next === 'light' ? '☀️ Light mode' : '🌙 Dark mode', next === 'light' ? '☀️' : '🌙');
+          }
+        }
+      });
+    }
+
+    if (!btn || !panel) {
+      syncPill();
+      return;
+    }
 
     const range = panel.querySelector('#msSpeed');
     const readout = panel.querySelector('#msSpeedValue');
@@ -2184,26 +2242,33 @@ window.ThemeColors = { green: '#a1f4c2', blue: '#8eb5ff', purple: '#c0a5ff', gre
 
     function render() {
       applyBodyClasses();
-      range.value = state.speed;
-      readout.textContent = speedLabel(state.speed);
-      range.style.setProperty('--fill', ((state.speed - 0.4) / 1.6 * 100) + '%');
+      syncPill();
+      if (range) {
+        range.value = state.speed;
+        readout.textContent = speedLabel(state.speed);
+        range.style.setProperty('--fill', ((state.speed - 0.4) / 1.6 * 100) + '%');
+      }
       presets.forEach((b) => {
         b.classList.toggle('active', Math.abs(parseFloat(b.dataset.speed) - state.speed) < 0.05);
       });
       Object.keys(toggles).forEach((k) => {
-        toggles[k].setAttribute('aria-checked', String(state[k]));
+        if (toggles[k]) toggles[k].setAttribute('aria-checked', String(state[k]));
       });
-      jumpRange.value = state.jump;
-      jumpReadout.textContent = speedLabel(state.jump);
-      jumpRange.style.setProperty('--fill', ((state.jump - 0.5) / 2 * 100) + '%');
+      if (jumpRange) {
+        jumpRange.value = state.jump;
+        jumpReadout.textContent = speedLabel(state.jump);
+        jumpRange.style.setProperty('--fill', ((state.jump - 0.5) / 2 * 100) + '%');
+      }
       jumpPresets.forEach((b) => {
         b.classList.toggle('active', Math.abs(parseFloat(b.dataset.jump) - state.jump) < 0.05);
       });
       panel.classList.toggle('ms-anim-off', !state.animations);
       panel.classList.toggle('ms-run-off', !state.run);
       const bothGone = !state.kodi && !state.nodi;
-      removeBoth.textContent = bothGone ? 'Bring back both' : 'Remove both';
-      removeBoth.classList.toggle('is-restore', bothGone);
+      if (removeBoth) {
+        removeBoth.textContent = bothGone ? 'Bring back both' : 'Remove both';
+        removeBoth.classList.toggle('is-restore', bothGone);
+      }
     }
 
     function update(patch) {
@@ -2751,7 +2816,7 @@ window.ThemeColors = { green: '#a1f4c2', blue: '#8eb5ff', purple: '#c0a5ff', gre
       raf = requestAnimationFrame(frame);
     }
     function start() {
-      if (reduced || raf) return;
+      if (reduced || raf || document.body.classList.contains('mascots-off')) return;
       last = performance.now();
       raf = requestAnimationFrame(frame);
     }
@@ -2786,6 +2851,11 @@ window.ThemeColors = { green: '#a1f4c2', blue: '#8eb5ff', purple: '#c0a5ff', gre
     // Called by Nodi: he lands on the cord, the page flips mode, he climbs to the top and vanishes
     window.nodiClimbRope = function (opts) {
       const o = opts || {};
+      if (document.body.classList.contains('mascots-off')) {
+        flip();
+        if (o.onDone) o.onDone();
+        return;
+      }
       if (reduced || climber) { flip(); if (o.onDone) o.onDone(); return; }
       const el = document.createElement('div');
       el.className = 'nodi-climber';
@@ -2815,11 +2885,13 @@ window.ThemeColors = { green: '#a1f4c2', blue: '#8eb5ff', purple: '#c0a5ff', gre
 
     // A tap on the cord only makes it swing; with Nodi away it flips the mode itself
     rope.addEventListener('click', (e) => {
+      if (document.body.classList.contains('mascots-off')) return;
       if (nodiAvailable()) { if (!reduced) pluckAt(e, 1.6); return; }
       if (!reduced) pluckAt(e, 2);
       flip();
     });
     rope.addEventListener('keydown', (e) => {
+      if (document.body.classList.contains('mascots-off')) return;
       if (e.key === 'Enter' || e.key === ' ') {
         e.preventDefault();
         if (!reduced) pluckAt(null, 2);
@@ -2828,9 +2900,24 @@ window.ThemeColors = { green: '#a1f4c2', blue: '#8eb5ff', purple: '#c0a5ff', gre
     });
     document.addEventListener('theme:change', () => { if (reduced) draw(); });
 
+    function syncRope() {
+      const off = document.body.classList.contains('mascots-off');
+      if (off) {
+        stop();
+        if (canvas) canvas.style.display = 'none';
+        if (rope) rope.style.display = 'none';
+      } else {
+        if (canvas) canvas.style.display = '';
+        if (rope) rope.style.display = '';
+        layout();
+        start();
+      }
+    }
+    document.addEventListener('mascots:change', syncRope);
+
     layout();
     window.addEventListener('resize', layout);
-    start();
+    syncRope();
   }
 
   document.addEventListener('DOMContentLoaded', init);
