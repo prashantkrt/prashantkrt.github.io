@@ -2250,10 +2250,7 @@ window.ThemeColors = { green: '#a1f4c2', blue: '#8eb5ff', purple: '#c0a5ff', gre
       modeBtn.addEventListener('click', (e) => {
         e.stopPropagation();
         if (window.SiteMode) {
-          const next = window.SiteMode.toggle();
-          if (window.showToast) {
-            window.showToast(next === 'light' ? '☀️ Light mode' : '🌙 Dark mode', next === 'light' ? '☀️' : '🌙');
-          }
+          window.SiteMode.toggle();
         }
       });
     }
@@ -2329,10 +2326,7 @@ window.ThemeColors = { green: '#a1f4c2', blue: '#8eb5ff', purple: '#c0a5ff', gre
     navModeBtns.forEach((b) => {
       b.addEventListener('click', () => {
         if (window.SiteMode) {
-          const next = window.SiteMode.toggle();
-          if (window.showToast) {
-            window.showToast(next === 'light' ? '☀️ Light mode' : '🌙 Dark mode', next === 'light' ? '☀️' : '🌙');
-          }
+          window.SiteMode.toggle();
         }
       });
     });
