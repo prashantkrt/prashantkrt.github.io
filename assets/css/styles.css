@@ -120,24 +120,7 @@ body.modal-open{overflow:hidden}
 }
 
 .nav-mode-btn {
-  display: grid;
-  place-items: center;
-  width: 32px;
-  height: 32px;
-  padding: 0;
-  border-radius: 50%;
-  border: 1px solid var(--line);
-  background: transparent;
-  color: var(--t2);
-  cursor: pointer;
-  transition: all 0.2s ease;
-}
-.nav-mode-btn svg { width: 15px; height: 15px; }
-.nav-mode-btn:hover, .nav-mode-btn:focus-visible {
-  color: var(--green);
-  border-color: rgba(var(--green-rgb), 0.5);
-  transform: rotate(15deg);
-  outline: none;
+  display: none !important;
 }
 
 /* ==========================================================================

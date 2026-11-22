@@ -804,13 +804,37 @@ body.chase-active .deer-corner-peek * {
 /* ==========================================================================
    MASCOT SETTINGS — visibility switches
    ========================================================================== */
+/* ---- All animations FULLY OFF when mascots disabled ---- */
 body.mascots-off .sparkle-particle,
-body.mascots-off .dust-puff { display: none !important; }
+body.mascots-off .dust-puff,
+body.mascots-off .patrol-scene,
+body.mascots-off #byteDogWrapper,
+body.mascots-off .corner-bear-container,
+body.mascots-off .deer-corner-peek,
+body.mascots-off .pull-rope,
+body.mascots-off .rope-canvas,
+body.mascots-off .nodi-climber,
+body.mascots-off .patrol-sprite.hop,
+body.mascots-off .patrol-sprite.is-jumping,
+body.mascots-off .mascot-controls,
+/* same for pre-JS class on <html> (zero flash on load) */
+html.mascots-off-init .patrol-scene,
+html.mascots-off-init .corner-bear-container,
+html.mascots-off-init .deer-corner-peek,
+html.mascots-off-init #byteDogWrapper,
+html.mascots-off-init .pull-rope,
+html.mascots-off-init .rope-canvas,
+html.mascots-off-init .mascot-controls {
+  display: none !important;
+  visibility: hidden !important;
+  opacity: 0 !important;
+  pointer-events: none !important;
+  animation: none !important;
+}
 
-/* Hiding is a graceful exit: fade and slide away, then switch visibility off once it has finished */
+/* When animations ON: gentle fade-in for patrol & corner bear */
 .patrol-scene { transition: opacity 0.5s ease; }
 .patrol-sprite { transition: opacity 0.45s ease; }
-body.mascots-off .patrol-scene,
 body.no-run .patrol-scene,
 body.no-kodi #patrolKodi,
 body.no-nodi #patrolDeer {
@@ -825,7 +849,6 @@ body.no-nodi #patrolDeer {
   animation: corner-bear-enter 1s cubic-bezier(0.22, 1, 0.36, 1) 0.5s backwards;
 }
 body.chase-active .corner-bear-container { transform: translateY(46px); }
-body.mascots-off .corner-bear-container,
 body.no-kodi .corner-bear-container {
   opacity: 0;
   transform: translateY(80px);
@@ -840,29 +863,10 @@ body.no-kodi .corner-bear-container {
   100% { opacity: 1; transform: translateY(0) rotate(0deg); }
 }
 
-body.mascots-off .deer-corner-peek,
 body.no-nodi .deer-corner-peek {
   visibility: hidden;
   pointer-events: none;
   transition: opacity 0.3s ease, visibility 0s linear 0.7s;
-}
-
-/* ROPE & CORD: completely hidden & disabled when mascots/animations are off */
-body.mascots-off .pull-rope,
-body.mascots-off .rope-canvas,
-html.mascots-off-init .pull-rope,
-html.mascots-off-init .rope-canvas,
-html.mascots-off-init .patrol-scene,
-html.mascots-off-init .corner-bear-container,
-html.mascots-off-init .deer-corner-peek,
-body.mascots-off #byteDogWrapper,
-html.mascots-off-init #byteDogWrapper,
-body.mascots-off .mascot-controls,
-html.mascots-off-init .mascot-controls {
-  opacity: 0 !important;
-  visibility: hidden !important;
-  pointer-events: none !important;
-  display: none !important;
 }
 
 /* JUMP ANIMATIONS: disabled when mascots/animations are off */
@@ -920,6 +924,79 @@ body.mascots-off .byte-dog-wrapper .dog-eyes {
   transform: scale(1.3);
   box-shadow: 0 0 6px var(--green);
 }
+
+/* ==========================================================================
+   THEME LAMP & BULB — ceiling fixture at the top of the pull cord
+   ========================================================================== */
+.theme-bulb {
+  position: fixed;
+  top: 0;
+  right: calc(var(--rope-right, 37px) - 2px);
+  width: 48px;
+  height: 56px;
+  padding: 0;
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  z-index: 1002;
+  -webkit-tap-highlight-color: transparent;
+  outline: none;
+  transform-origin: 50% 0;
+  transition: transform 0.2s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+.theme-bulb:hover  { transform: scale(1.08); }
+.theme-bulb:active { transform: scale(0.95); }
+.theme-bulb:focus-visible { outline: 2px solid rgba(var(--green-rgb), 0.7); border-radius: 6px; }
+
+/* SVG parts — dark mode defaults (bulb OFF) */
+.bulb-svg { width: 100%; height: 100%; overflow: visible; display: block; }
+.bulb-glass   { fill: rgba(255, 255, 255, 0.05); stroke: rgba(180, 195, 220, 0.4); stroke-width: 1.4; transition: fill 0.35s, stroke 0.35s, filter 0.35s; }
+.bulb-filament{ stroke: rgba(180, 195, 220, 0.3); transition: stroke 0.35s; }
+.bulb-cap     { fill: #3a4454; transition: fill 0.35s; }
+.bulb-thread  { stroke: rgba(255, 255, 255, 0.2); }
+.bulb-mount   { fill: #525d73; }
+.bulb-glow1, .bulb-glow2, .bulb-glow3 { opacity: 0; transition: opacity 0.35s; }
+
+/* Light mode — bulb ON: warm glowing yellow lamp */
+html[data-mode="light"] .theme-bulb .bulb-glass {
+  fill: #ffe97a;
+  stroke: #f5c842;
+  filter: drop-shadow(0 0 10px #ffe066) drop-shadow(0 0 24px rgba(255, 215, 0, 0.7));
+}
+html[data-mode="light"] .theme-bulb .bulb-filament { stroke: #c8860a; }
+html[data-mode="light"] .theme-bulb .bulb-cap      { fill: #8a7040; }
+html[data-mode="light"] .theme-bulb .bulb-glow1    { opacity: 0.25; fill: #ffe97a; }
+html[data-mode="light"] .theme-bulb .bulb-glow2    { opacity: 0.15; fill: #ffe97a; }
+html[data-mode="light"] .theme-bulb .bulb-glow3    { opacity: 0.08; fill: #ffe97a; }
+
+/* Pulse aura when bulb is ON */
+@keyframes bulb-pulse {
+  0%, 100% { filter: drop-shadow(0 0 8px #ffe066) drop-shadow(0 0 20px rgba(255, 215, 0, 0.55)); }
+  50%       { filter: drop-shadow(0 0 14px #ffe97a) drop-shadow(0 0 34px rgba(255, 215, 0, 0.85)); }
+}
+html[data-mode="light"] .theme-bulb .bulb-glass { animation: bulb-pulse 2.8s ease-in-out infinite; }
+@media (prefers-reduced-motion: reduce) { html[data-mode="light"] .theme-bulb .bulb-glass { animation: none !important; } }
+
+/* Flash brighter while cord is pulled past trigger */
+.theme-bulb.pull-armed .bulb-glass {
+  fill: #fff3a8 !important;
+  stroke: #ffdd44 !important;
+  filter: drop-shadow(0 0 18px #fff) drop-shadow(0 0 36px #ffd700) !important;
+}
+
+/* Swing on switch release */
+@keyframes bulb-swing {
+  0%   { transform: rotate(0deg); }
+  25%  { transform: rotate(6deg); }
+  50%  { transform: rotate(-5deg); }
+  75%  { transform: rotate(2deg); }
+  100% { transform: rotate(0deg); }
+}
+.theme-bulb.swinging { animation: bulb-swing 0.65s cubic-bezier(0.22, 1, 0.36, 1); }
+
+/* Hidden when mascots/animations are off */
+body.mascots-off .theme-bulb,
+html.mascots-off-init .theme-bulb { display: none !important; }
 
 /* ==========================================================================
    MASCOT CONTROLS — floating direct toggle pill + mode + gear button + popup panel
@@ -1267,23 +1344,26 @@ body.mascots-off .byte-dog-wrapper .dog-eyes {
 
 
 /* ==========================================================================
-   PULL ROPE — hangs from the top, beside Contact, down to Nodi's hoof
+   PULL ROPE — hangs directly from the bottom of the lamp socket
    ========================================================================== */
 .pull-rope {
   --rl: calc(50vh + 49px);
   position: fixed;
-  top: 0;
+  top: 50px;
   right: var(--rope-right, 37px);
-  width: 22px;
+  width: 44px;
   height: var(--rl);
   rotate: var(--tilt, 0deg);
-  z-index: 1000;
-  cursor: pointer;
+  z-index: 1001;
+  cursor: grab;
+  touch-action: none;
+  user-select: none;
+  background: transparent;
   transform-origin: 50% 0;
-  animation: rope-idle 6s ease-in-out infinite;
   -webkit-tap-highlight-color: transparent;
   outline: none;
 }
+.pull-rope:active, .pull-rope.is-pulling { cursor: grabbing; }
 .rope-thread {
   position: absolute;
   top: 0;
@@ -1365,6 +1445,12 @@ body.mascots-off .byte-dog-wrapper .dog-eyes {
 .pull-rope { width: 44px; animation: none !important; background: transparent; cursor: grab; touch-action: none; user-select: none; }
 .pull-rope:active, .pull-rope.is-pulling { cursor: grabbing; }
 .pull-rope.nudge, .pull-rope.pulled { animation: none !important; }
+/* pull-armed: threshold crossed — a subtle glow on the rope canvas area signals "release to switch" */
+@keyframes rope-arm-pulse {
+  0%, 100% { box-shadow: 0 0 0 0 rgba(var(--green-rgb), 0); }
+  50%       { box-shadow: 0 0 0 4px rgba(var(--green-rgb), 0.35); }
+}
+.pull-rope.pull-armed { animation: rope-arm-pulse 0.4s ease-in-out 2 !important; }
 .rope-thread, .rope-knob { display: none; }
 .pull-rope:focus-visible { outline: 2px solid rgba(var(--green-rgb), 0.7); outline-offset: 2px; border-radius: 6px; }
 .rope-canvas {

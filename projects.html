@@ -27,7 +27,7 @@
     </a>
     <button class="menu-toggle" aria-label="Toggle navigation" aria-expanded="false"><span></span><span></span></button>
     <nav class="nav" aria-label="Main navigation">
-      <a href="index.html">Home</a><a href="index.html#about">About</a><a href="index.html#skills">Skills</a><a class="active" href="projects.html">Repositories <span class="nav-count">12</span></a><a href="index.html#journey">Experience</a><button class="nav-mode-btn" id="navModeBtn" type="button" aria-label="Toggle dark and light mode" title="Toggle dark/light mode"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="5"/><path d="M12 1v2M12 21v2M4.22 4.22l1.42 1.42M18.36 18.36l1.42 1.42M1 12h2M21 12h2M4.22 19.78l1.42-1.42M18.36 5.64l1.42-1.42"/></svg></button><a class="nav-cta" href="index.html#contact"><span class="cta-pulse"></span> Contact</a>
+      <a href="index.html">Home</a><a href="index.html#about">About</a><a href="index.html#skills">Skills</a><a class="active" href="projects.html">Repositories <span class="nav-count">12</span></a><a href="index.html#journey">Experience</a><a class="nav-cta" href="index.html#contact"><span class="cta-pulse"></span> Contact</a>
     </nav>
   </header>
   <main>
@@ -104,9 +104,6 @@
       <span class="ms-pill-dot" aria-hidden="true"></span>
       <span class="ms-pill-icon" aria-hidden="true">🐾</span>
       <span class="ms-pill-text"><span class="ms-pill-word">Animations:</span> <b id="msPillStatus">Off</b></span>
-    </button>
-    <button class="ms-mode-btn" id="msModeBtn" type="button" aria-label="Toggle dark and light mode" title="Toggle dark / light mode">
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="5"/><path d="M12 1v2M12 21v2M4.22 4.22l1.42 1.42M18.36 18.36l1.42 1.42M1 12h2M21 12h2M4.22 19.78l1.42-1.42M18.36 5.64l1.42-1.42"/></svg>
     </button>
     <button class="ms-gear" id="mascotSettingsBtn" type="button" aria-label="Mascot settings" aria-haspopup="dialog" aria-expanded="false" aria-controls="mascotSettingsPanel" title="Mascot settings">
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="3.2"/><path d="M19.4 15a1.7 1.7 0 0 0 .34 1.87l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.7 1.7 0 0 0-1.87-.34 1.7 1.7 0 0 0-1.03 1.55V21a2 2 0 1 1-4 0v-.09a1.7 1.7 0 0 0-1.11-1.55 1.7 1.7 0 0 0-1.87.34l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06A1.7 1.7 0 0 0 4.6 15a1.7 1.7 0 0 0-1.55-1.03H3a2 2 0 1 1 0-4h.09A1.7 1.7 0 0 0 4.6 8.9a1.7 1.7 0 0 0-.34-1.87l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06a1.7 1.7 0 0 0 1.87.34H9a1.7 1.7 0 0 0 1.03-1.55V3a2 2 0 1 1 4 0v.09a1.7 1.7 0 0 0 1.03 1.55 1.7 1.7 0 0 0 1.87-.34l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06a1.7 1.7 0 0 0-.34 1.87V9c.26.6.85 1 1.55 1.03H21a2 2 0 1 1 0 4h-.09c-.7.03-1.29.43-1.51 1.03Z"/></svg>
@@ -189,25 +186,26 @@
 
 
 
-  <!-- THEME BULB: fixed top-right glowing bulb — ON in light mode, OFF in dark mode -->
-  <button class="theme-bulb" id="themeBulb" type="button" aria-label="Toggle light / dark theme">
-    <svg class="bulb-svg" viewBox="0 0 48 72" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
-      <circle class="bulb-glow3" cx="24" cy="22" r="20" fill="currentColor" opacity="0.07"/>
-      <circle class="bulb-glow2" cx="24" cy="22" r="15" fill="currentColor" opacity="0.12"/>
-      <circle class="bulb-glow1" cx="24" cy="22" r="11" fill="currentColor" opacity="0.18"/>
-      <path class="bulb-glass" d="M24 4C15.16 4 8 11.16 8 20c0 5.52 2.78 10.38 7 13.4V40h18v-6.6C37.22 30.38 40 25.52 40 20c0-8.84-7.16-16-16-16z"/>
-      <path class="bulb-filament" d="M19 34 Q21 28 24 26 Q27 28 29 34" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
-      <rect class="bulb-cap" x="15" y="40" width="18" height="5" rx="2"/>
-      <rect class="bulb-cap" x="16" y="45" width="16" height="4" rx="2"/>
-      <rect class="bulb-cap" x="17" y="49" width="14" height="4" rx="2.5"/>
-      <line class="bulb-thread" x1="16" y1="42" x2="32" y2="42" stroke-width="0.8" stroke-linecap="round"/>
-      <line class="bulb-thread" x1="16" y1="47" x2="32" y2="47" stroke-width="0.8" stroke-linecap="round"/>
-      <line class="bulb-cord" x1="24" y1="53" x2="24" y2="68" stroke-width="2.5" stroke-linecap="round"/>
-      <circle class="bulb-pull" cx="24" cy="70" r="3"/>
+  <!-- THEME LAMP: hanging bulb at ceiling, pull-rope hangs straight down from socket -->
+  <div class="theme-bulb" id="themeBulb" role="button" tabindex="0" aria-label="Lamp: toggle light and dark theme">
+    <svg class="bulb-svg" viewBox="0 0 48 56" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+      <circle class="bulb-glow3" cx="24" cy="22" r="22" fill="currentColor" opacity="0.08"/>
+      <circle class="bulb-glow2" cx="24" cy="22" r="16" fill="currentColor" opacity="0.14"/>
+      <circle class="bulb-glow1" cx="24" cy="22" r="11" fill="currentColor" opacity="0.22"/>
+      <rect class="bulb-mount" x="18" y="0" width="12" height="4" rx="1.5" fill="#525d73"/>
+      <line x1="24" y1="4" x2="24" y2="8" stroke="#525d73" stroke-width="2.5"/>
+      <path class="bulb-glass" d="M24 8C15.16 8 8 15.16 8 24c0 5.52 2.78 10.38 7 13.4V42h18v-4.6C37.22 34.38 40 29.52 40 24c0-8.84-7.16-16-16-16z"/>
+      <path class="bulb-filament" d="M19 36 Q21 28 24 26 Q27 28 29 36" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
+      <rect class="bulb-cap" x="15" y="42" width="18" height="4" rx="1.5"/>
+      <rect class="bulb-cap" x="16" y="46" width="16" height="4" rx="1.5"/>
+      <rect class="bulb-cap" x="18" y="50" width="12" height="3" rx="1"/>
+      <line class="bulb-thread" x1="16" y1="44" x2="32" y2="44" stroke-width="0.8" stroke-linecap="round"/>
+      <line class="bulb-thread" x1="17" y1="48" x2="31" y2="48" stroke-width="0.8" stroke-linecap="round"/>
     </svg>
-  </button>
-  <!-- hidden rope anchor kept for Nodi climb animation compatibility -->
-  <div class="pull-rope" id="pullRope" aria-hidden="true" tabindex="-1" style="visibility:hidden;pointer-events:none;position:fixed;top:0;right:40px;width:0;height:0;overflow:hidden;"></div>
+  </div>
+
+  <!-- PULL ROPE: lamp cord hanging from the bulb socket — click or drag to pull down -->
+  <div class="pull-rope" id="pullRope" role="button" tabindex="0" aria-label="Pull lamp cord to switch theme"></div>
 
   <!-- CORNER POPPING MOON BEAR MASCOT (PERSISTENT COMPANION) -->
   <aside class="corner-bear-container" id="cornerBear" aria-label="Kodi the Corner Peeking Bear">
@@ -273,6 +271,6 @@
   <!-- DYNAMIC FLOATING TOAST NOTIFICATION CONTAINER -->
   <div id="toastContainer" class="toast-container" aria-live="polite"></div>
 
-  <script src="assets/js/main.js?v=11.7"></script><script src="assets/js/projects.js?v=5.6"></script>
+  <script src="assets/js/main.js?v=12.0"></script><script src="assets/js/projects.js?v=5.6"></script>
 </body>
 </html>

@@ -2683,7 +2683,7 @@ window.ThemeColors = { green: '#a1f4c2', blue: '#8eb5ff', purple: '#c0a5ff', gre
     let dragX = 0, dragY = 0;
     let dragStartX = 0, dragStartY = 0;
     let hasMovedFar = false;
-    let ax = 0, ay = -6;
+    let ax = 0, ay = 50;
     let canvasLeft = 0;
     let time = 0, last = 0, raf = null;
     let climber = null;
@@ -2694,9 +2694,9 @@ window.ThemeColors = { green: '#a1f4c2', blue: '#8eb5ff', purple: '#c0a5ff', gre
       pts = [];
       for (let i = 0; i < N; i++) {
         const t = i / (N - 1);
-        pts.push({ x: ax, y: ay + t * 3, px: ax, py: ay + t * 3 });
+        pts.push({ x: ax, y: ay + t * 4, px: ax, py: ay + t * 4 });
       }
-      segLen = 3 / (N - 1);
+      segLen = 4 / (N - 1);
       rope.style.setProperty('--rl', '4px');
     }
 
@@ -2718,14 +2718,19 @@ window.ThemeColors = { green: '#a1f4c2', blue: '#8eb5ff', purple: '#c0a5ff', gre
       ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
       canvasLeft = 0;   // canvas origin IS the viewport origin — no offset needed
 
-      // anchor hangs from the top-right corner of the viewport
+      // anchor hangs directly from the bottom of the lamp socket at y = 50
       ax = vw - topCentre;
+      ay = 50;
       targetLength = hoofY - ay;
       targetSegLen = targetLength / (N - 1);
 
-      // Tap target: a vertical strip along the cord, wide enough to cover its swing
-      rope.style.setProperty('--rope-right', (topCentre - 20) + 'px');
+      // Tap target & bulb: perfectly centered together
+      rope.style.setProperty('--rope-right', (topCentre - 22) + 'px');
       rope.style.setProperty('--tilt', '0deg');
+      const bulb = document.getElementById('themeBulb');
+      if (bulb) {
+        bulb.style.right = (topCentre - 24) + 'px';
+      }
 
       if (!rolling) {
         segLen = targetSegLen;
@@ -3046,26 +3051,65 @@ window.ThemeColors = { green: '#a1f4c2', blue: '#8eb5ff', purple: '#c0a5ff', gre
       return !cl.contains('no-nodi') && !cl.contains('mascots-off');
     }
 
+    function syncBulbGlow() {
+      const b = document.getElementById('themeBulb');
+      if (!b) return;
+      const isLight = document.documentElement.getAttribute('data-mode') === 'light';
+      b.classList.toggle('is-lit', isLight);
+      b.setAttribute('aria-pressed', String(isLight));
+      b.setAttribute('aria-label', isLight ? 'Lamp on: Light mode (pull cord to switch)' : 'Lamp off: Dark mode (pull cord to switch)');
+    }
+
     function toggleThemeWithRope() {
       if (window.SoundFX && window.SoundFX.ropeSnap) {
         window.SoundFX.ropeSnap();
       }
       const msg = flip();
+      syncBulbGlow();
+      const b = document.getElementById('themeBulb');
+      if (b) {
+        b.classList.remove('swinging');
+        void b.offsetWidth;
+        b.classList.add('swinging');
+      }
       if (window.showToast) {
-        window.showToast(msg, msg.includes('Light') ? '☀️' : '🌙');
+        window.showToast(msg, msg.includes('Light') ? '💡' : '🌙');
       }
     }
+
+    // Mechanical lamp pull-chain switch click sound
+    function playTick() {
+      try {
+        const ac = window.SoundFX && window.SoundFX.getCtx ? window.SoundFX.getCtx() : null;
+        if (!ac) return;
+        const t = ac.currentTime;
+        const o = ac.createOscillator();
+        const g = ac.createGain();
+        o.type = 'triangle';
+        o.frequency.setValueAtTime(2200, t);
+        o.frequency.exponentialRampToValueAtTime(480, t + 0.038);
+        g.gain.setValueAtTime(0.38, t);
+        g.gain.exponentialRampToValueAtTime(0.001, t + 0.045);
+        o.connect(g); g.connect(ac.destination);
+        o.start(t); o.stop(t + 0.05);
+      } catch (_) {}
+    }
+
+    // Pull threshold: how far down (px) user must drag to trigger the switch click
+    const PULL_TRIGGER_PX = 28;
+    let pullTriggered = false;
 
     function onPointerDown(e) {
       if (document.body.classList.contains('mascots-off') || reduced) return;
       isDragging = true;
       hasMovedFar = false;
+      pullTriggered = false;
       dragStartX = e.clientX;
       dragStartY = e.clientY;
       const r = rope.getBoundingClientRect();
       const relY = Math.max(0, Math.min(r.height, e.clientY - r.top));
-      dragPointIdx = Math.max(2, Math.min(N - 1, Math.round((relY / r.height) * (N - 1))));
-      dragX = e.clientX - canvasLeft;
+      dragPointIdx = Math.max(3, Math.min(N - 1, Math.round((relY / r.height) * (N - 1))));
+      dragX = e.clientX;
       dragY = Math.max(ay + 15, e.clientY);
       rope.classList.add('is-pulling');
       try { rope.setPointerCapture(e.pointerId); } catch (_) {}
@@ -3076,45 +3120,71 @@ window.ThemeColors = { green: '#a1f4c2', blue: '#8eb5ff', purple: '#c0a5ff', gre
       if (!isDragging) return;
       const dx = e.clientX - dragStartX;
       const dy = e.clientY - dragStartY;
-      if (Math.hypot(dx, dy) > 6) hasMovedFar = true;
-      dragX = e.clientX - canvasLeft;
-      dragY = Math.max(ay + 25, e.clientY);
+      const totalDist = Math.hypot(dx, dy);
+      if (totalDist > 5) hasMovedFar = true;
 
-      // Elastic stretch: stretch segments if pulled down past target length
-      const pullDist = dragY - ay;
-      if (pullDist > targetLength) {
-        segLen = Math.min(targetSegLen * 1.5, pullDist / (N - 1));
-        rope.style.setProperty('--rl', pullDist.toFixed(1) + 'px');
+      dragX = e.clientX;
+      dragY = Math.max(ay + 20, e.clientY);
+
+      // Elastic stretch: cord stretches whenever pulled down
+      const pullDown = Math.max(0, dy);
+      const stretch = pullDown * 0.55;
+      segLen = targetSegLen + stretch / (N - 1);
+      rope.style.setProperty('--rl', (targetLength + stretch).toFixed(1) + 'px');
+
+      // Lamp pull-chain switch threshold
+      if (!pullTriggered && pullDown >= PULL_TRIGGER_PX) {
+        pullTriggered = true;
+        playTick();
+        rope.classList.add('pull-armed');
+        const b = document.getElementById('themeBulb');
+        if (b) b.classList.add('pull-armed');
+      } else if (pullTriggered && pullDown < PULL_TRIGGER_PX * 0.5) {
+        pullTriggered = false;
+        rope.classList.remove('pull-armed');
+        const b = document.getElementById('themeBulb');
+        if (b) b.classList.remove('pull-armed');
       }
     }
 
     function onPointerUp(e) {
       if (!isDragging) return;
       isDragging = false;
-      rope.classList.remove('is-pulling');
+      rope.classList.remove('is-pulling', 'pull-armed');
+      const b = document.getElementById('themeBulb');
+      if (b) b.classList.remove('pull-armed');
       try { rope.releasePointerCapture(e.pointerId); } catch (_) {}
 
       const deltaY = e.clientY - dragStartY;
       const deltaX = e.clientX - dragStartX;
       const totalPull = Math.hypot(deltaX, deltaY);
 
-      // Spring snap back
+      // Elastic spring snap back
       segLen = targetSegLen;
       rope.style.setProperty('--rl', targetLength.toFixed(1) + 'px');
 
+      // Upward snap recoil
       if (dragPointIdx > 0 && pts[dragPointIdx]) {
-        pts[dragPointIdx].py -= Math.min(45, Math.max(14, deltaY * 0.45));
-        pts[dragPointIdx].px -= Math.min(30, Math.max(-30, deltaX * 0.4));
+        pts[dragPointIdx].py -= Math.min(60, Math.max(18, Math.abs(deltaY) * 0.5 || 24));
+        pts[dragPointIdx].px -= Math.min(35, Math.max(-35, deltaX * 0.4));
       }
-      pluck(dragPointIdx, deltaX < 0 ? 1 : -1, Math.min(3.6, 1.8 + totalPull * 0.025));
+      pluck(dragPointIdx, deltaX < 0 ? 1 : -1, Math.min(4.2, 2.2 + totalPull * 0.03));
 
-      toggleThemeWithRope();
+      // Toggle if pulled past threshold OR if it was a quick click/tap on the cord
+      const wasClick = !hasMovedFar || totalPull < 8;
+      if (pullTriggered || wasClick) {
+        pullTriggered = false;
+        toggleThemeWithRope();
+      }
     }
 
     function onPointerCancel(e) {
       if (!isDragging) return;
       isDragging = false;
-      rope.classList.remove('is-pulling');
+      pullTriggered = false;
+      rope.classList.remove('is-pulling', 'pull-armed');
+      const b = document.getElementById('themeBulb');
+      if (b) b.classList.remove('pull-armed');
       segLen = targetSegLen;
       rope.style.setProperty('--rl', targetLength.toFixed(1) + 'px');
       pluck(dragPointIdx, 1, 1.5);
@@ -3125,6 +3195,16 @@ window.ThemeColors = { green: '#a1f4c2', blue: '#8eb5ff', purple: '#c0a5ff', gre
     rope.addEventListener('pointerup', onPointerUp);
     rope.addEventListener('pointercancel', onPointerCancel);
 
+    // Clicking the lamp bulb also pulls the cord
+    const bulb = document.getElementById('themeBulb');
+    if (bulb) {
+      bulb.addEventListener('click', () => {
+        if (document.body.classList.contains('mascots-off') || reduced) return;
+        pluck(Math.floor(N * 0.35), (Math.random() < 0.5 ? 1 : -1), 2.6);
+        toggleThemeWithRope();
+      });
+    }
+
     rope.addEventListener('keydown', (e) => {
       if (document.body.classList.contains('mascots-off')) return;
       if (e.key === 'Enter' || e.key === ' ') {
@@ -3133,19 +3213,27 @@ window.ThemeColors = { green: '#a1f4c2', blue: '#8eb5ff', purple: '#c0a5ff', gre
         toggleThemeWithRope();
       }
     });
-    document.addEventListener('theme:change', () => { if (reduced) draw(); });
+
+    document.addEventListener('theme:change', () => {
+      syncBulbGlow();
+      if (reduced) draw();
+    });
+    syncBulbGlow();
 
     let wasOff = true;
     function syncRope() {
       const off = document.body.classList.contains('mascots-off');
+      const b = document.getElementById('themeBulb');
       if (off) {
         wasOff = true;
         stop();
         if (canvas) canvas.style.display = 'none';
         if (rope) rope.style.display = 'none';
+        if (b) b.style.display = 'none';
       } else {
         if (canvas) canvas.style.display = '';
         if (rope) rope.style.display = '';
+        if (b) b.style.display = '';
         layout();
         if (wasOff) {
           triggerRollDown();
