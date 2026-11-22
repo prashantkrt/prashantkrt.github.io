@@ -1276,6 +1276,8 @@ body.modal-open{overflow:hidden}
 @media(max-width: 1120px) {
   .menu-toggle {
     display: flex !important;
+    position: relative;
+    z-index: 1050;
     background: rgba(var(--ov-rgb),0.05);
     border: 1px solid var(--line);
     border-radius: 8px;

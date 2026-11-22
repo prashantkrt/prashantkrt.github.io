@@ -994,6 +994,14 @@ html[data-mode="light"] .theme-bulb .bulb-glass { animation: bulb-pulse 2.8s eas
 }
 .theme-bulb.swinging { animation: bulb-swing 0.65s cubic-bezier(0.22, 1, 0.36, 1); }
 
+/* When mobile navigation menu is open, disable pull-rope and bulb pointer-events so dropdown links are 100% accessible */
+body.menu-open .pull-rope,
+body.menu-open .theme-bulb,
+body:has(.nav.open) .pull-rope,
+body:has(.nav.open) .theme-bulb {
+  pointer-events: none !important;
+}
+
 /* Hidden when mascots/animations are off */
 body.mascots-off .theme-bulb,
 html.mascots-off-init .theme-bulb { display: none !important; }

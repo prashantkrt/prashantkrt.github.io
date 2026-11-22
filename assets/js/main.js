@@ -1018,11 +1018,13 @@ window.ThemeColors = { green: '#a1f4c2', blue: '#8eb5ff', purple: '#c0a5ff', gre
         e.stopPropagation();
         const open = nav.classList.toggle('open');
         menuButton.setAttribute('aria-expanded', String(open));
+        document.body.classList.toggle('menu-open', open);
       });
       // Close menu when clicking any nav link, button, or mobile social link
       nav.querySelectorAll('a, button').forEach((el) =>
         el.addEventListener('click', () => {
           nav.classList.remove('open');
+          document.body.classList.remove('menu-open');
           menuButton.setAttribute('aria-expanded', 'false');
         })
       );
@@ -1030,6 +1032,7 @@ window.ThemeColors = { green: '#a1f4c2', blue: '#8eb5ff', purple: '#c0a5ff', gre
       document.addEventListener('click', (e) => {
         if (nav.classList.contains('open') && !nav.contains(e.target) && !menuButton.contains(e.target)) {
           nav.classList.remove('open');
+          document.body.classList.remove('menu-open');
           menuButton.setAttribute('aria-expanded', 'false');
         }
       });
@@ -2703,11 +2706,50 @@ window.ThemeColors = { green: '#a1f4c2', blue: '#8eb5ff', purple: '#c0a5ff', gre
     function layout() {
       const vw = window.innerWidth;
       const vh = window.innerHeight;
-      const topCentre = Math.min(84, Math.max(22, (vw - 1280) / 2 - 12));
-      // give plenty of room below so a pulled rope is never clipped
-      const hoofY = vh * 0.75 + 50;
       const dpr = window.devicePixelRatio || 1;
-      // Full-viewport canvas so the rope is never clipped on any edge
+
+      // 1. Calculate anchor X (ax) based on actual header geometry so it NEVER overlaps
+      // with the mobile hamburger button OR desktop navigation links!
+      const menuToggle = document.querySelector('.menu-toggle');
+      const isMobile = menuToggle && window.getComputedStyle(menuToggle).display !== 'none';
+
+      let computedAx = vw - 50;
+      if (isMobile) {
+        // On mobile / tablet: the hamburger button is at the right edge of the header.
+        // Place the lamp safely to the LEFT of the hamburger button with clear air-gap!
+        const mRect = menuToggle.getBoundingClientRect();
+        if (mRect.left > 0) {
+          computedAx = Math.max(70, Math.round(mRect.left - 34));
+        } else {
+          computedAx = Math.max(70, vw - 88);
+        }
+      } else {
+        // On desktop: place lamp in the right margin, clear of Contact button & nav links
+        const contactBtn = document.querySelector('.header .nav-cta, .nav-cta');
+        const nav = document.querySelector('.nav');
+        const rightmost = contactBtn || nav;
+        if (rightmost) {
+          const rRect = rightmost.getBoundingClientRect();
+          const spaceOnRight = vw - rRect.right;
+          if (spaceOnRight >= 65) {
+            // Generous right margin on wide screen
+            computedAx = Math.min(vw - 32, Math.round(rRect.right + Math.min(spaceOnRight * 0.5, 60)));
+          } else if (spaceOnRight >= 35) {
+            computedAx = Math.min(vw - 24, Math.round(rRect.right + 26));
+          } else {
+            // Tight viewport: place near screen edge
+            computedAx = Math.max(rRect.right + 20, vw - 28);
+          }
+        } else {
+          computedAx = vw - 48;
+        }
+      }
+
+      const shiftX = pts.length > 0 ? (computedAx - ax) : 0;
+      ax = computedAx;
+      ay = 50; // Directly beneath ceiling bulb socket (bulb is 0..54px)
+
+      const hoofY = vh * 0.75 + 50;
       const H = Math.round(Math.max(vh, hoofY + 200));
       W = vw;
 
@@ -2716,25 +2758,34 @@ window.ThemeColors = { green: '#a1f4c2', blue: '#8eb5ff', purple: '#c0a5ff', gre
       canvas.width  = Math.round(vw * dpr);
       canvas.height = Math.round(H  * dpr);
       ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
-      canvasLeft = 0;   // canvas origin IS the viewport origin — no offset needed
+      canvasLeft = 0;
 
-      // anchor hangs directly from the bottom of the lamp socket at y = 50
-      ax = vw - topCentre;
-      ay = 50;
       targetLength = hoofY - ay;
       targetSegLen = targetLength / (N - 1);
 
-      // Tap target & bulb: perfectly centered together
-      rope.style.setProperty('--rope-right', (topCentre - 22) + 'px');
+      // Position the DOM elements to match ax exactly
+      const ropeRightPx = Math.round(vw - ax - 20);
+      const bulbRightPx = Math.round(vw - ax - 24);
+      rope.style.setProperty('--rope-right', ropeRightPx + 'px');
+      rope.style.setProperty('--rl', targetLength.toFixed(1) + 'px');
       rope.style.setProperty('--tilt', '0deg');
+
       const bulb = document.getElementById('themeBulb');
       if (bulb) {
-        bulb.style.right = (topCentre - 24) + 'px';
+        bulb.style.right = bulbRightPx + 'px';
+      }
+
+      // If points already exist (window resized), shift them horizontally so the cord
+      // doesn't stretch or distort diagonally!
+      if (pts.length > 0 && Math.abs(shiftX) > 0.1) {
+        for (let i = 0; i < pts.length; i++) {
+          pts[i].x += shiftX;
+          pts[i].px += shiftX;
+        }
       }
 
       if (!rolling) {
         segLen = targetSegLen;
-        rope.style.setProperty('--rl', targetLength.toFixed(1) + 'px');
         if (pts.length === 0) {
           pts = [];
           for (let i = 0; i < N; i++) {
