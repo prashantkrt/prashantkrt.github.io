@@ -2708,72 +2708,42 @@ window.ThemeColors = { green: '#a1f4c2', blue: '#8eb5ff', purple: '#c0a5ff', gre
       const vh = window.innerHeight;
       const dpr = window.devicePixelRatio || 1;
 
-      // 1. Calculate anchor X (ax) based on actual header geometry so it NEVER overlaps
-      // with the mobile hamburger button OR desktop navigation links!
+      // Calculate anchor X (ax) safely in the right viewport margin
+      // so the pull cord NEVER overlaps with the header, hamburger button, or desktop nav links!
       const menuToggle = document.querySelector('.menu-toggle');
       const isMobile = menuToggle && window.getComputedStyle(menuToggle).display !== 'none';
 
-      let computedAx = vw - 50;
+      let computedAx;
       if (isMobile) {
-        // On mobile / tablet: the hamburger button is at the right edge of the header.
-        // Place the lamp safely to the LEFT of the hamburger button with clear air-gap!
-        const mRect = menuToggle.getBoundingClientRect();
-        if (mRect.left > 0) {
-          computedAx = Math.max(70, Math.round(mRect.left - 34));
-        } else {
-          computedAx = Math.max(70, vw - 88);
-        }
+        // On mobile: cord hangs in the right margin outside the header
+        computedAx = Math.min(vw - 12, Math.max(80, vw - 16));
       } else {
-        // On desktop: place lamp in the right margin, clear of Contact button & nav links
-        const contactBtn = document.querySelector('.header .nav-cta, .nav-cta');
-        const nav = document.querySelector('.nav');
-        const rightmost = contactBtn || nav;
-        if (rightmost) {
-          const rRect = rightmost.getBoundingClientRect();
-          const spaceOnRight = vw - rRect.right;
-          if (spaceOnRight >= 65) {
-            // Generous right margin on wide screen
-            computedAx = Math.min(vw - 32, Math.round(rRect.right + Math.min(spaceOnRight * 0.5, 60)));
-          } else if (spaceOnRight >= 35) {
-            computedAx = Math.min(vw - 24, Math.round(rRect.right + 26));
-          } else {
-            // Tight viewport: place near screen edge
-            computedAx = Math.max(rRect.right + 20, vw - 28);
-          }
-        } else {
-          computedAx = vw - 48;
-        }
+        // On desktop: cord hangs gracefully in the right margin
+        computedAx = Math.min(vw - 24, Math.max(100, vw - 36));
       }
 
       const shiftX = pts.length > 0 ? (computedAx - ax) : 0;
       ax = computedAx;
-      ay = 50; // Directly beneath ceiling bulb socket (bulb is 0..54px)
+      ay = 0; // Cord hangs cleanly from ceiling mount (y = 0)
 
-      const hoofY = vh * 0.75 + 50;
-      const H = Math.round(Math.max(vh, hoofY + 200));
       W = vw;
-
       canvas.style.width  = vw + 'px';
-      canvas.style.height = H  + 'px';
+      canvas.style.height = vh + 'px';
       canvas.width  = Math.round(vw * dpr);
-      canvas.height = Math.round(H  * dpr);
+      canvas.height = Math.round(vh * dpr);
       ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
       canvasLeft = 0;
 
-      targetLength = hoofY - ay;
+      // Cord spans from ceiling (0px) down to near the bottom dock (vh - 110px)
+      // so it is a full, continuous hanging lamp pull cord that never cuts off mid-air!
+      targetLength = Math.max(220, Math.round(vh - 110 - ay));
       targetSegLen = targetLength / (N - 1);
 
-      // Position the DOM elements to match ax exactly
+      // Position the touch target DOM element to match ax exactly
       const ropeRightPx = Math.round(vw - ax - 20);
-      const bulbRightPx = Math.round(vw - ax - 24);
       rope.style.setProperty('--rope-right', ropeRightPx + 'px');
       rope.style.setProperty('--rl', targetLength.toFixed(1) + 'px');
       rope.style.setProperty('--tilt', '0deg');
-
-      const bulb = document.getElementById('themeBulb');
-      if (bulb) {
-        bulb.style.right = bulbRightPx + 'px';
-      }
 
       // If points already exist (window resized), shift them horizontally so the cord
       // doesn't stretch or distort diagonally!
@@ -2861,6 +2831,14 @@ window.ThemeColors = { green: '#a1f4c2', blue: '#8eb5ff', purple: '#c0a5ff', gre
           pts[dragPointIdx].y = dragY;
         }
       }
+
+      // Safeguard: clamp all physics points strictly inside the viewport boundaries
+      // so the rope, halo, shadow, and bottom bead are NEVER cut off at the screen edges!
+      const vhBound = window.innerHeight || 800;
+      for (let i = 1; i < N; i++) {
+        pts[i].x = Math.max(10, Math.min(W - 10, pts[i].x));
+        pts[i].y = Math.max(ay, Math.min(vhBound - 22, pts[i].y));
+      }
     }
 
     function tracePath(offsetX) {
@@ -2879,6 +2857,16 @@ window.ThemeColors = { green: '#a1f4c2', blue: '#8eb5ff', purple: '#c0a5ff', gre
       ctx.clearRect(0, 0, canvas.width, canvas.height);
       ctx.lineCap = 'round';
       ctx.lineJoin = 'round';
+
+      // Ceiling fixture grommet
+      ctx.save();
+      ctx.fillStyle = col.shadow;
+      ctx.fillRect(ax - 7, 0, 14, 3);
+      ctx.fillStyle = col.rope;
+      ctx.beginPath();
+      ctx.ellipse(ax, 3, 5, 2.2, 0, 0, Math.PI * 2);
+      ctx.fill();
+      ctx.restore();
 
       tracePath(0);
       ctx.strokeStyle = col.halo;
@@ -3108,7 +3096,8 @@ window.ThemeColors = { green: '#a1f4c2', blue: '#8eb5ff', purple: '#c0a5ff', gre
       const isLight = document.documentElement.getAttribute('data-mode') === 'light';
       b.classList.toggle('is-lit', isLight);
       b.setAttribute('aria-pressed', String(isLight));
-      b.setAttribute('aria-label', isLight ? 'Lamp on: Light mode (pull cord to switch)' : 'Lamp off: Dark mode (pull cord to switch)');
+      b.setAttribute('aria-label', isLight ? 'Switch to dark mode (currently light)' : 'Switch to light mode (currently dark)');
+      b.setAttribute('title', isLight ? 'Switch to dark mode' : 'Switch to light mode');
     }
 
     function toggleThemeWithRope() {
@@ -3119,9 +3108,9 @@ window.ThemeColors = { green: '#a1f4c2', blue: '#8eb5ff', purple: '#c0a5ff', gre
       syncBulbGlow();
       const b = document.getElementById('themeBulb');
       if (b) {
-        b.classList.remove('swinging');
+        b.classList.remove('igniting');
         void b.offsetWidth;
-        b.classList.add('swinging');
+        b.classList.add('igniting');
       }
       if (window.showToast) {
         window.showToast(msg, msg.includes('Light') ? '💡' : '🌙');
@@ -3160,8 +3149,8 @@ window.ThemeColors = { green: '#a1f4c2', blue: '#8eb5ff', purple: '#c0a5ff', gre
       const r = rope.getBoundingClientRect();
       const relY = Math.max(0, Math.min(r.height, e.clientY - r.top));
       dragPointIdx = Math.max(3, Math.min(N - 1, Math.round((relY / r.height) * (N - 1))));
-      dragX = e.clientX;
-      dragY = Math.max(ay + 15, e.clientY);
+      dragX = Math.max(12, Math.min(W - 12, e.clientX));
+      dragY = Math.max(ay + 15, Math.min(window.innerHeight - 30, e.clientY));
       rope.classList.add('is-pulling');
       try { rope.setPointerCapture(e.pointerId); } catch (_) {}
       start();
@@ -3174,12 +3163,12 @@ window.ThemeColors = { green: '#a1f4c2', blue: '#8eb5ff', purple: '#c0a5ff', gre
       const totalDist = Math.hypot(dx, dy);
       if (totalDist > 5) hasMovedFar = true;
 
-      dragX = e.clientX;
-      dragY = Math.max(ay + 20, e.clientY);
+      dragX = Math.max(12, Math.min(W - 12, e.clientX));
+      dragY = Math.max(ay + 15, Math.min(window.innerHeight - 30, e.clientY));
 
-      // Elastic stretch: cord stretches whenever pulled down
+      // Elastic stretch: cord stretches smoothly when pulled down
       const pullDown = Math.max(0, dy);
-      const stretch = pullDown * 0.55;
+      const stretch = Math.min(pullDown * 0.55, 65);
       segLen = targetSegLen + stretch / (N - 1);
       rope.style.setProperty('--rl', (targetLength + stretch).toFixed(1) + 'px');
 
@@ -3221,11 +3210,14 @@ window.ThemeColors = { green: '#a1f4c2', blue: '#8eb5ff', purple: '#c0a5ff', gre
       }
       pluck(dragPointIdx, deltaX < 0 ? 1 : -1, Math.min(4.2, 2.2 + totalPull * 0.03));
 
-      // Toggle if pulled past threshold OR if it was a quick click/tap on the cord
+      // Only toggle if pulled down past the mechanical threshold!
+      // Clicking or tapping sways the cord without flipping the theme.
       const wasClick = !hasMovedFar || totalPull < 8;
-      if (pullTriggered || wasClick) {
+      if (pullTriggered) {
         pullTriggered = false;
         toggleThemeWithRope();
+      } else if (wasClick) {
+        pluck(dragPointIdx, Math.random() < 0.5 ? 1 : -1, 2.4);
       }
     }
 
@@ -3246,13 +3238,15 @@ window.ThemeColors = { green: '#a1f4c2', blue: '#8eb5ff', purple: '#c0a5ff', gre
     rope.addEventListener('pointerup', onPointerUp);
     rope.addEventListener('pointercancel', onPointerCancel);
 
-    // Clicking the lamp bulb also pulls the cord
+    // Clicking the lamp bulb in the header toggles theme with ignition burst
     const bulb = document.getElementById('themeBulb');
     if (bulb) {
-      bulb.addEventListener('click', () => {
-        if (document.body.classList.contains('mascots-off') || reduced) return;
-        pluck(Math.floor(N * 0.35), (Math.random() < 0.5 ? 1 : -1), 2.6);
+      bulb.addEventListener('click', (e) => {
+        e.preventDefault();
         toggleThemeWithRope();
+        if (!document.body.classList.contains('mascots-off') && !reduced) {
+          pluck(Math.floor(N * 0.35), (Math.random() < 0.5 ? 1 : -1), 2.6);
+        }
       });
     }
 
@@ -3274,17 +3268,19 @@ window.ThemeColors = { green: '#a1f4c2', blue: '#8eb5ff', purple: '#c0a5ff', gre
     let wasOff = true;
     function syncRope() {
       const off = document.body.classList.contains('mascots-off');
-      const b = document.getElementById('themeBulb');
       if (off) {
         wasOff = true;
         stop();
         if (canvas) canvas.style.display = 'none';
         if (rope) rope.style.display = 'none';
-        if (b) b.style.display = 'none';
       } else {
         if (canvas) canvas.style.display = '';
         if (rope) rope.style.display = '';
-        if (b) b.style.display = '';
+        layout();
+        if (wasOff) {
+          triggerRollDown();
+        }
+        wasOff = false;
         layout();
         if (wasOff) {
           triggerRollDown();

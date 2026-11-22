@@ -926,85 +926,177 @@ body.mascots-off .byte-dog-wrapper .dog-eyes {
 }
 
 /* ==========================================================================
-   THEME LAMP & BULB — ceiling fixture at the top of the pull cord
+   THEME LAMP & BULB — Professional Header Toggle Button & High-End Animation
    ========================================================================== */
-.theme-bulb {
-  position: fixed;
-  top: 0;
-  right: calc(var(--rope-right, 37px) - 2px);
-  width: 48px;
-  height: 56px;
-  padding: 0;
-  background: transparent;
-  border: none;
+.theme-bulb-btn {
+  position: relative;
+  width: 38px;
+  height: 38px;
+  border-radius: 10px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(var(--ov-rgb), 0.04);
+  border: 1px solid var(--line);
+  color: var(--t2);
   cursor: pointer;
-  z-index: 1002;
+  padding: 0;
+  transition: transform 0.22s cubic-bezier(0.34, 1.56, 0.64, 1),
+              background 0.3s ease,
+              border-color 0.3s ease,
+              box-shadow 0.3s ease;
   -webkit-tap-highlight-color: transparent;
   outline: none;
-  transform-origin: 50% 0;
-  transition: transform 0.2s cubic-bezier(0.34, 1.56, 0.64, 1);
+  overflow: visible;
+  flex-shrink: 0;
 }
-.theme-bulb:hover  { transform: scale(1.08); }
-.theme-bulb:active { transform: scale(0.95); }
-.theme-bulb:focus-visible { outline: 2px solid rgba(var(--green-rgb), 0.7); border-radius: 6px; }
 
-/* SVG parts — dark mode defaults (bulb OFF) */
-.bulb-svg { width: 100%; height: 100%; overflow: visible; display: block; }
-.bulb-glass   { fill: rgba(255, 255, 255, 0.05); stroke: rgba(180, 195, 220, 0.4); stroke-width: 1.4; transition: fill 0.35s, stroke 0.35s, filter 0.35s; }
-.bulb-filament{ stroke: rgba(180, 195, 220, 0.3); transition: stroke 0.35s; }
-.bulb-cap     { fill: #3a4454; transition: fill 0.35s; }
-.bulb-thread  { stroke: rgba(255, 255, 255, 0.2); }
-.bulb-mount   { fill: #525d73; }
-.bulb-glow1, .bulb-glow2, .bulb-glow3 { opacity: 0; transition: opacity 0.35s; }
-
-/* Light mode — bulb ON: warm glowing yellow lamp */
-html[data-mode="light"] .theme-bulb .bulb-glass {
-  fill: #ffe97a;
-  stroke: #f5c842;
-  filter: drop-shadow(0 0 10px #ffe066) drop-shadow(0 0 24px rgba(255, 215, 0, 0.7));
+.theme-bulb-btn:hover {
+  transform: translateY(-1.5px) scale(1.05);
+  border-color: rgba(var(--green-rgb), 0.45);
+  background: rgba(var(--ov-rgb), 0.08);
+  color: var(--strong);
 }
-html[data-mode="light"] .theme-bulb .bulb-filament { stroke: #c8860a; }
-html[data-mode="light"] .theme-bulb .bulb-cap      { fill: #8a7040; }
-html[data-mode="light"] .theme-bulb .bulb-glow1    { opacity: 0.25; fill: #ffe97a; }
-html[data-mode="light"] .theme-bulb .bulb-glow2    { opacity: 0.15; fill: #ffe97a; }
-html[data-mode="light"] .theme-bulb .bulb-glow3    { opacity: 0.08; fill: #ffe97a; }
 
-/* Pulse aura when bulb is ON */
-@keyframes bulb-pulse {
-  0%, 100% { filter: drop-shadow(0 0 8px #ffe066) drop-shadow(0 0 20px rgba(255, 215, 0, 0.55)); }
-  50%       { filter: drop-shadow(0 0 14px #ffe97a) drop-shadow(0 0 34px rgba(255, 215, 0, 0.85)); }
+.theme-bulb-btn:active {
+  transform: translateY(1px) scale(0.92);
 }
-html[data-mode="light"] .theme-bulb .bulb-glass { animation: bulb-pulse 2.8s ease-in-out infinite; }
-@media (prefers-reduced-motion: reduce) { html[data-mode="light"] .theme-bulb .bulb-glass { animation: none !important; } }
 
-/* Flash brighter while cord is pulled past trigger */
-.theme-bulb.pull-armed .bulb-glass {
-  fill: #fff3a8 !important;
+.theme-bulb-btn:focus-visible {
+  outline: 2px solid var(--green);
+  outline-offset: 2px;
+}
+
+/* Radiant atmospheric aura behind bulb */
+.theme-bulb-btn .bulb-halo {
+  position: absolute;
+  inset: -6px;
+  border-radius: 14px;
+  background: radial-gradient(circle, rgba(255, 215, 0, 0.38) 0%, rgba(255, 185, 0, 0.12) 50%, transparent 72%);
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.4s cubic-bezier(0.16, 1, 0.3, 1), transform 0.4s ease;
+  transform: scale(0.75);
+}
+
+/* Bulb SVG inner graphics */
+.theme-bulb-btn .bulb-svg {
+  width: 22px;
+  height: 22px;
+  display: block;
+  overflow: visible;
+  position: relative;
+  z-index: 1;
+}
+
+/* Dark mode default: subtle smoked glass with warm unlit tungsten filament */
+.theme-bulb-btn .bulb-glass {
+  fill: rgba(255, 255, 255, 0.04);
+  stroke: rgba(185, 205, 235, 0.45);
+  stroke-width: 1.4;
+  transition: fill 0.35s ease, stroke 0.35s ease, filter 0.35s ease;
+}
+
+.theme-bulb-btn .bulb-filament {
+  stroke: rgba(195, 155, 105, 0.42);
+  fill: none;
+  transition: stroke 0.35s ease, filter 0.35s ease;
+}
+
+.theme-bulb-btn .bulb-spark-dot {
+  fill: transparent;
+  transition: fill 0.3s ease, filter 0.3s ease;
+}
+
+.theme-bulb-btn .bulb-cap {
+  fill: #5a667e;
+  transition: fill 0.3s ease;
+}
+
+.theme-bulb-btn .bulb-contact {
+  fill: #3e4758;
+}
+
+/* ==========================================================================
+   LIGHT MODE: THE BULB IS RADIANTLY LIT!
+   ========================================================================== */
+html[data-mode="light"] .theme-bulb-btn,
+.theme-bulb-btn.is-lit {
+  background: rgba(255, 246, 215, 0.88);
+  border-color: rgba(245, 185, 45, 0.65);
+  box-shadow: 0 0 16px rgba(255, 200, 40, 0.42), inset 0 1px 2px rgba(255, 255, 255, 0.85);
+}
+
+html[data-mode="light"] .theme-bulb-btn .bulb-halo,
+.theme-bulb-btn.is-lit .bulb-halo {
+  opacity: 1;
+  transform: scale(1);
+  animation: bulb-halo-pulse 3.2s ease-in-out infinite;
+}
+
+html[data-mode="light"] .theme-bulb-btn .bulb-glass,
+.theme-bulb-btn.is-lit .bulb-glass {
+  fill: #ffe873;
+  stroke: #f5b324;
+  filter: drop-shadow(0 0 5px #ffe066) drop-shadow(0 0 12px rgba(255, 200, 0, 0.75));
+}
+
+html[data-mode="light"] .theme-bulb-btn .bulb-filament,
+.theme-bulb-btn.is-lit .bulb-filament {
+  stroke: #ff4d00;
+  stroke-width: 1.5;
+  filter: drop-shadow(0 0 2px #ff2200);
+}
+
+html[data-mode="light"] .theme-bulb-btn .bulb-spark-dot,
+.theme-bulb-btn.is-lit .bulb-spark-dot {
+  fill: #ffffff;
+  filter: drop-shadow(0 0 3px #ffffff) drop-shadow(0 0 6px #ffe066);
+}
+
+html[data-mode="light"] .theme-bulb-btn .bulb-cap,
+.theme-bulb-btn.is-lit .bulb-cap {
+  fill: #a0844f;
+}
+
+/* Gentle breathing pulse in light mode */
+@keyframes bulb-halo-pulse {
+  0%, 100% { transform: scale(1); opacity: 0.82; }
+  50%      { transform: scale(1.16); opacity: 1; }
+}
+
+/* High-voltage switch ignition burst animation when clicked or pulled */
+@keyframes bulb-ignite {
+  0%   { transform: scale(0.9); }
+  25%  { transform: scale(1.18); }
+  50%  { transform: scale(0.96); }
+  75%  { transform: scale(1.06); }
+  100% { transform: scale(1); }
+}
+
+.theme-bulb-btn.igniting {
+  animation: bulb-ignite 0.42s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+
+/* Flash brighter while cord is pulled past trigger threshold */
+.theme-bulb-btn.pull-armed {
+  background: rgba(255, 252, 235, 0.98) !important;
+  border-color: #ffd700 !important;
+  box-shadow: 0 0 24px rgba(255, 215, 0, 0.75), 0 0 40px rgba(255, 255, 255, 0.9) !important;
+  transform: scale(1.1) !important;
+}
+
+.theme-bulb-btn.pull-armed .bulb-glass {
+  fill: #fff9bd !important;
   stroke: #ffdd44 !important;
-  filter: drop-shadow(0 0 18px #fff) drop-shadow(0 0 36px #ffd700) !important;
+  filter: drop-shadow(0 0 8px #ffffff) drop-shadow(0 0 20px #ffd700) !important;
 }
 
-/* Swing on switch release */
-@keyframes bulb-swing {
-  0%   { transform: rotate(0deg); }
-  25%  { transform: rotate(6deg); }
-  50%  { transform: rotate(-5deg); }
-  75%  { transform: rotate(2deg); }
-  100% { transform: rotate(0deg); }
-}
-.theme-bulb.swinging { animation: bulb-swing 0.65s cubic-bezier(0.22, 1, 0.36, 1); }
-
-/* When mobile navigation menu is open, disable pull-rope and bulb pointer-events so dropdown links are 100% accessible */
+/* When mobile navigation menu is open, disable pull-rope pointer-events so dropdown links are 100% accessible */
 body.menu-open .pull-rope,
-body.menu-open .theme-bulb,
-body:has(.nav.open) .pull-rope,
-body:has(.nav.open) .theme-bulb {
+body:has(.nav.open) .pull-rope {
   pointer-events: none !important;
 }
-
-/* Hidden when mascots/animations are off */
-body.mascots-off .theme-bulb,
-html.mascots-off-init .theme-bulb { display: none !important; }
 
 /* ==========================================================================
    MASCOT CONTROLS — floating direct toggle pill + mode + gear button + popup panel
@@ -1352,17 +1444,17 @@ html.mascots-off-init .theme-bulb { display: none !important; }
 
 
 /* ==========================================================================
-   PULL ROPE — hangs directly from the bottom of the lamp socket
+   PULL ROPE — hangs directly from the ceiling mount
    ========================================================================== */
 .pull-rope {
-  --rl: calc(50vh + 49px);
+  --rl: calc(100vh - 110px);
   position: fixed;
-  top: 50px;
-  right: var(--rope-right, 37px);
+  top: 0;
+  right: var(--rope-right, 28px);
   width: 44px;
   height: var(--rl);
   rotate: var(--tilt, 0deg);
-  z-index: 1001;
+  z-index: 998;
   cursor: grab;
   touch-action: none;
   user-select: none;
