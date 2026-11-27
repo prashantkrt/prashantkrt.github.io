@@ -81,10 +81,10 @@
 /* RIGHT edge — Nodi slides in from the right */
 .deer-corner-peek-top-right {
   top: var(--nodi-top, 50%);
-  right: var(--nodi-right, -44px);
+  right: var(--nodi-right, clamp(-30px, -2.5vw, -16px));
   transform: var(--nodi-transform, translateY(-50%));
-  width: 134px;
-  height: 137px;
+  width: clamp(74px, 10vw, 120px);
+  height: clamp(76px, 10.2vw, 123px);
 }
 .deer-corner-peek-top-right .dp-body {
   transform: translateX(115%);
@@ -96,13 +96,13 @@
   animation: nodi-exit-right 0.6s cubic-bezier(0.55, 0, 0.8, 0.4) forwards;
 }
 
-/* LEFT edge — Nodi slides in from the left */
+/* LEFT edge — Nodi slides in from the left (opposite side from the right-hand rope) */
 .deer-corner-peek-top-left {
-  top: 50%;
-  left: -44px;
-  transform: translateY(-50%);
-  width: 134px;
-  height: 137px;
+  top: var(--nodi-top, 52%);
+  left: var(--nodi-left, clamp(-30px, -2.5vw, -16px));
+  transform: var(--nodi-transform, translateY(-50%));
+  width: clamp(74px, 10vw, 120px);
+  height: clamp(76px, 10.2vw, 123px);
 }
 .deer-corner-peek-top-left .dp-body {
   transform: translateX(-115%);
@@ -634,31 +634,46 @@ body.chase-active .deer-corner-peek * {
   .dust-puff { display: none !important; }
 }
 
-/* ── Mobile scale down ───────────────────────────────────────────────────── */
-@media (max-width: 480px) {
+/* ── Responsive scale down ───────────────────────────────────────────────── */
+@media (max-width: 768px) {
   .patrol-sprite {
-    width: 74px;
-    height: 74px;
+    width: 82px;
+    height: 82px;
   }
 
   .patrol-kodi {
-    width: 84px;
-    height: 84px;
+    width: 94px;
+    height: 94px;
   }
-
-  .dp-body {
-    left: -35px;
-    top: -98px;
-    width: 70px;
-    height: 98px;
-  }
-
-  .deer-corner-peek-bottom-left  { left: 164px; }
-  .deer-corner-peek-bottom-right { right: 112px; }
 
   .dp-bubble {
     white-space: normal;
-    max-width: 190px;
+    max-width: min(210px, calc(100vw - 120px));
+    font-size: 9px;
+    padding: 7px 11px;
+  }
+}
+
+@media (max-width: 480px) {
+  .patrol-sprite {
+    width: 68px;
+    height: 68px;
+  }
+
+  .patrol-kodi {
+    width: 78px;
+    height: 78px;
+  }
+
+  .deer-corner-peek-top-left .dp-tag {
+    left: calc(100% + 6px);
+    font-size: 8px;
+    padding: 2px 6px;
+  }
+
+  .dp-bubble {
+    white-space: normal;
+    max-width: min(180px, calc(100vw - 105px));
     font-size: 8.5px;
     padding: 6px 10px;
   }
@@ -1544,13 +1559,7 @@ body:has(.nav.open) .pull-rope {
 /* The visible cord is drawn on a canvas; .pull-rope is just the slim, tilted tap target along it */
 .pull-rope { width: 44px; animation: none !important; background: transparent; cursor: grab; touch-action: none; user-select: none; }
 .pull-rope:active, .pull-rope.is-pulling { cursor: grabbing; }
-.pull-rope.nudge, .pull-rope.pulled { animation: none !important; }
-/* pull-armed: threshold crossed — a subtle glow on the rope canvas area signals "release to switch" */
-@keyframes rope-arm-pulse {
-  0%, 100% { box-shadow: 0 0 0 0 rgba(var(--green-rgb), 0); }
-  50%       { box-shadow: 0 0 0 4px rgba(var(--green-rgb), 0.35); }
-}
-.pull-rope.pull-armed { animation: rope-arm-pulse 0.4s ease-in-out 2 !important; }
+.pull-rope.nudge, .pull-rope.pulled, .pull-rope.pull-armed { animation: none !important; box-shadow: none !important; }
 .rope-thread, .rope-knob { display: none; }
 .pull-rope:focus-visible { outline: 2px solid rgba(var(--green-rgb), 0.7); outline-offset: 2px; border-radius: 6px; }
 .rope-canvas {
@@ -1579,8 +1588,8 @@ body:has(.nav.open) .pull-rope {
   position: fixed;
   top: 0;
   left: 0;
-  width: 96px;
-  height: 152px;
+  width: clamp(44px, 5.5vw, 66px);
+  height: calc(clamp(44px, 5.5vw, 66px) * 70 / 44);
   z-index: 1003;
   pointer-events: none;
   opacity: 0;
@@ -1601,7 +1610,7 @@ body:has(.nav.open) .pull-rope {
 @keyframes cl-climb-b { 0%, 100% { transform: translateY(-6px); } 50% { transform: translateY(1px); } }
 .cl-bubble {
   position: absolute;
-  top: 6px;
+  top: 10px;
   right: calc(100% + 6px);
   padding: 5px 10px;
   border-radius: 10px;
@@ -1610,6 +1619,7 @@ body:has(.nav.open) .pull-rope {
   color: var(--t1);
   font: 700 9.5px "DM Mono", monospace;
   white-space: nowrap;
+  max-width: min(200px, calc(100vw - 90px));
   opacity: 0;
   transform: translateX(6px) scale(0.92);
   transition: opacity 0.2s, transform 0.25s cubic-bezier(0.16, 1, 0.3, 1);

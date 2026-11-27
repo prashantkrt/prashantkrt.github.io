@@ -1585,8 +1585,9 @@ window.ThemeColors = { green: '#a1f4c2', blue: '#8eb5ff', purple: '#c0a5ff', gre
     const tag = deer.querySelector('.dp-tag');
     const bubble = deer.querySelector('.dp-bubble');
 
-    // Nodi peeks only from SIDE views (left and right edges)
-    const corners = ['top-right'];
+    // Nodi peeks from the LEFT edge (opposite side from the right-hand pull rope)
+    // so he never overlaps the rope and leaps across the window when clicked
+    const corners = ['top-left'];
     const quotes = [
       "Hi! I'm Nodi, I keep the pods running! 🦌",
       "Kodi writes the code, I deploy it! 🚀",
@@ -2679,6 +2680,7 @@ window.ThemeColors = { green: '#a1f4c2', blue: '#8eb5ff', purple: '#c0a5ff', gre
     let dragPointIdx = N - 1;
     let dragX = 0, dragY = 0;
     let dragStartX = 0, dragStartY = 0;
+    let pullOffset = 0;
     let hasMovedFar = false;
     let ax = 0, ay = 50;
     let canvasLeft = 0;
@@ -2728,19 +2730,18 @@ window.ThemeColors = { green: '#a1f4c2', blue: '#8eb5ff', purple: '#c0a5ff', gre
       ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
       canvasLeft = 0;
 
-      // Cord spans from ceiling (0px) down to around mid-to-lower screen (30% shorter)
-      targetLength = Math.max(160, Math.round((vh - 110 - ay) * 0.70));
+      // Cord spans from ceiling (0px) down to around mid-to-lower screen, clamped for small viewports
+      targetLength = Math.max(120, Math.min(vh - 96, Math.round((vh - 110 - ay) * 0.68)));
       targetSegLen = targetLength / (N - 1);
 
-      // Dynamically position Nodi on the right edge so his hand aligns with the cord right above the bead
-      const nodiTop = Math.max(70, Math.round(ay + targetLength - 105));
-      const nodiRight = Math.round((vw - ax) - 110);
+      // Position Nodi on the opposite (left) edge, slightly below the rope's grab point
+      // so clicking him launches a clean arc across the screen to catch the rope
+      const nodiTop = Math.max(88, Math.min(vh - 90, Math.round(ay + targetLength * 0.68)));
       document.documentElement.style.setProperty('--nodi-top', nodiTop + 'px');
-      document.documentElement.style.setProperty('--nodi-right', nodiRight + 'px');
-      document.documentElement.style.setProperty('--nodi-transform', 'none');
+      document.documentElement.style.setProperty('--nodi-transform', 'translateY(-50%)');
 
       // Position the touch target DOM element to match ax exactly
-      const ropeRightPx = Math.round(vw - ax - 20);
+      const ropeRightPx = Math.round(vw - ax - 22);
       rope.style.setProperty('--rope-right', ropeRightPx + 'px');
       rope.style.setProperty('--rl', targetLength.toFixed(1) + 'px');
       rope.style.setProperty('--tilt', '0deg');
@@ -2796,10 +2797,9 @@ window.ThemeColors = { green: '#a1f4c2', blue: '#8eb5ff', purple: '#c0a5ff', gre
       }
 
       if (isDragging) {
-        // While user is pulling the cord, keep it in a smooth, taut line under mechanical tension
-        // from the ceiling mount down to the user's hand.
-        // This completely eliminates chaotic string-jumping and wild spring oscillations!
-        const totalStretchLen = targetLength + (segLen - targetSegLen) * (N - 1);
+        // Keep the rope inextensible (fixed segment length) while under tension.
+        // Pulling down draws a small amount of slack (pullOffset) from the ceiling switch,
+        // and the lower tail hangs naturally from the user's hand.
         for (let i = 1; i <= dragPointIdx; i++) {
           const t = i / dragPointIdx;
           pts[i].x = ax + (dragX - ax) * t;
@@ -2808,12 +2808,14 @@ window.ThemeColors = { green: '#a1f4c2', blue: '#8eb5ff', purple: '#c0a5ff', gre
           pts[i].py = pts[i].y;
         }
         for (let i = dragPointIdx + 1; i < N; i++) {
-          const t = (i - dragPointIdx) / (N - 1 - dragPointIdx || 1);
+          const stepsBelow = i - dragPointIdx;
           pts[i].x = dragX;
-          pts[i].y = dragY + (totalStretchLen - (dragY - ay)) * t;
+          pts[i].y = Math.min((window.innerHeight || 800) - 22, dragY + stepsBelow * targetSegLen);
           pts[i].px = pts[i].x;
           pts[i].py = pts[i].y;
         }
+        pts[0].x = ax;
+        pts[0].y = ay;
         return;
       }
 
@@ -2950,9 +2952,9 @@ window.ThemeColors = { green: '#a1f4c2', blue: '#8eb5ff', purple: '#c0a5ff', gre
       };
     }
 
-    const FLIGHT = 0.58;       // seconds in the air
-    const GRAVITY = 1900;      // px/s^2 for the leap
-    const GRAB_DIST = 62;      // where on the cord he grabs, measured up from its end
+    function getGrabDist() {
+      return Math.min(62, Math.max(32, Math.round(targetLength * 0.25)));
+    }
 
     function kickCord(dir, gripIndex) {
       // A sudden force: the whole cord is shoved in the direction of the jump,
@@ -2966,8 +2968,10 @@ window.ThemeColors = { green: '#a1f4c2', blue: '#8eb5ff', purple: '#c0a5ff', gre
     }
 
     function place(x, y, rotDeg, sx, sy) {
+      const ox = (climber.w || 60) * 0.5;
+      const oy = (climber.h || 95) * 0.44;
       climber.el.style.transform =
-        'translate3d(' + (x - 48) + 'px,' + (y - 73) + 'px,0) rotate(' + rotDeg.toFixed(2) + 'deg) scale(' + sx.toFixed(3) + ',' + sy.toFixed(3) + ')';
+        'translate3d(' + (x - ox).toFixed(1) + 'px,' + (y - oy).toFixed(1) + 'px,0) rotate(' + rotDeg.toFixed(2) + 'deg) scale(' + sx.toFixed(3) + ',' + sy.toFixed(3) + ')';
     }
 
     function updateClimber(dt) {
@@ -2975,29 +2979,31 @@ window.ThemeColors = { green: '#a1f4c2', blue: '#8eb5ff', purple: '#c0a5ff', gre
       climber.t += dt;
       if (climber.t < 0) return;
 
-      // ---- flight: a real projectile arc, with anticipation, tuck and reach ----
+      // ---- flight: a real projectile arc across the window, with anticipation, tuck and reach ----
       if (climber.phase === 'flight') {
         if (!climber.started) {
           climber.started = true;
           climber.el.classList.add('show', 'flying');
         }
-        const T = FLIGHT;
-        const tt = Math.min(T, climber.t);
-        const u = tt / T;
-        const target = pointAt(GRAB_DIST);
+        const grabDist = getGrabDist();
+        const target = pointAt(grabDist);
         const dx = target.x - climber.from.x;
         const dy = target.y - climber.from.y;
+        const T = climber.flightTime;
+        const g = climber.gravity;
+        const tt = Math.min(T, climber.t);
+        const u = tt / T;
         // launch speed so gravity brings him exactly onto the cord at time T
-        const vy = (dy - 0.5 * GRAVITY * T * T) / T;
-        const x = climber.from.x + dx * (tt / T);
-        const y = climber.from.y + vy * tt + 0.5 * GRAVITY * tt * tt;
-        const velY = vy + GRAVITY * tt;                 // negative while rising
-        const dir = Math.sign(dx) || -1;
-        // body follows the flight path: nose up while rising, levelling out as he falls
-        const rot = dir * Math.max(-20, Math.min(20, velY * -0.03)) + dir * (1 - u) * 6;
+        const vy = (dy - 0.5 * g * T * T) / T;
+        const x = climber.from.x + dx * u;
+        const y = climber.from.y + vy * tt + 0.5 * g * tt * tt;
+        const velY = vy + g * tt;                 // negative while rising
+        const dir = Math.sign(dx) || 1;
+        // body follows the flight path: nose up while rising, levelling out to catch the cord
+        const rot = dir * Math.max(-22, Math.min(22, velY * -0.025)) * (1 - u * 0.35);
         // stretch at take-off and fall speed, tuck at the top, reach for the cord on the way down
-        const speedStretch = 1 + Math.min(0.16, Math.abs(velY) / 4200);
-        const launchSquash = tt < 0.07 ? 1 - (0.07 - tt) * 2.2 : 1;
+        const speedStretch = 1 + Math.min(0.14, Math.abs(velY) / 4500);
+        const launchSquash = tt < 0.07 ? 1 - (0.07 - tt) * 2.0 : 1;
         place(x, y, rot, (1 / speedStretch) * launchSquash, speedStretch / launchSquash);
         const tuck = Math.sin(Math.PI * Math.min(1, u * 1.15));      // 0 → 1 → 0
         climber.el.style.setProperty('--ay', (-2 - 6 * u).toFixed(2));
@@ -3005,10 +3011,10 @@ window.ThemeColors = { green: '#a1f4c2', blue: '#8eb5ff', purple: '#c0a5ff', gre
         if (climber.t >= T) {
           climber.phase = 'climb';
           climber.t = 0;
-          climber.dist = GRAB_DIST;
+          climber.dist = grabDist;
           climber.el.classList.remove('flying');
           climber.el.classList.add('land');
-          kickCord(dir, Math.max(1, Math.floor((N - 1) - GRAB_DIST / segLen)));
+          kickCord(dir, Math.max(1, Math.floor((N - 1) - grabDist / segLen)));
           if (climber.onLand) climber.onLand();
         }
         return;
@@ -3017,7 +3023,8 @@ window.ThemeColors = { green: '#a1f4c2', blue: '#8eb5ff', purple: '#c0a5ff', gre
       // ---- climbing: hand over hand, pushing up in pulses ----
       const ease = Math.min(1, climber.t / 0.7);
       const pulse = 0.3 + 0.7 * Math.abs(Math.sin(Math.PI * climber.t / 0.42));
-      const speed = 150 * ease * pulse * (climber.t < 0.45 ? 0.35 : 1);
+      const baseSpeed = Math.max(120, Math.min(180, targetLength * 0.42));
+      const speed = baseSpeed * ease * pulse * (climber.t < 0.45 ? 0.35 : 1);
       climber.dist += speed * dt;
       const p = pointAt(climber.dist);
       const bob = Math.sin(climber.t * 14.9) * 1.4;
@@ -3088,12 +3095,24 @@ window.ThemeColors = { green: '#a1f4c2', blue: '#8eb5ff', purple: '#c0a5ff', gre
       el.className = 'nodi-climber';
       el.innerHTML = CLIMBER_SVG + '<span class="cl-bubble"></span>';
       document.body.appendChild(el);
+      const elRect = el.getBoundingClientRect();
       const r = o.from;
       const from = r
-        ? { x: r.left + r.width * 0.42, y: r.top + r.height * 0.62 }
-        : { x: ax + 50, y: pts[N - 1].y };
+        ? { x: r.left + r.width * 0.55, y: r.top + r.height * 0.55 }
+        : { x: 40, y: pts[N - 1].y };
+      const grabDist = getGrabDist();
+      const target = pointAt(grabDist);
+      const vh = window.innerHeight || 700;
+      const dx = Math.abs(target.x - from.x);
+      // Scale flight duration and parabolic arc height to the current viewport size
+      const flightTime = Math.max(0.56, Math.min(0.95, 0.46 + dx / 1700));
+      const maxSafeRise = Math.max(55, Math.min(from.y, target.y) - 36);
+      const arcRise = Math.min(175, Math.max(70, vh * 0.22), maxSafeRise);
+      const gravity = (8 * arcRise) / (flightTime * flightTime);
       climber = {
-        el, from, phase: 'flight', t: -(o.delay || 0) / 1000, dist: GRAB_DIST, started: false, step: -1,
+        el, w: elRect.width || 60, h: elRect.height || 95,
+        from, flightTime, gravity,
+        phase: 'flight', t: -(o.delay || 0) / 1000, dist: grabDist, started: false, step: -1,
         onDone: o.onDone,
         onLand() {
           const msg = flip();
@@ -3161,13 +3180,14 @@ window.ThemeColors = { green: '#a1f4c2', blue: '#8eb5ff', purple: '#c0a5ff', gre
       isDragging = true;
       hasMovedFar = false;
       pullTriggered = false;
+      pullOffset = 0;
       dragStartX = e.clientX;
       dragStartY = e.clientY;
       const r = rope.getBoundingClientRect();
       const relY = Math.max(0, Math.min(r.height, e.clientY - r.top));
       dragPointIdx = Math.max(3, Math.min(N - 1, Math.round((relY / r.height) * (N - 1))));
       dragX = ax;
-      dragY = ay + targetLength;
+      dragY = ay + dragPointIdx * targetSegLen;
       rope.classList.add('is-pulling');
       try { rope.setPointerCapture(e.pointerId); } catch (_) {}
       start();
@@ -3180,29 +3200,29 @@ window.ThemeColors = { green: '#a1f4c2', blue: '#8eb5ff', purple: '#c0a5ff', gre
       const totalDist = Math.hypot(dx, dy);
       if (totalDist > 5) hasMovedFar = true;
 
+      // Rope itself is inextensible: pulling down draws a small switch travel (max 24px)
       const pullDown = Math.max(0, dy);
-      // Hard clamp: cord can stretch at most 20% of its size, strictly capped!
-      const maxStretch = targetLength * 0.20;
-      const stretch = Math.min(pullDown * 0.5, maxStretch);
-      segLen = targetSegLen + stretch / (N - 1);
-      rope.style.setProperty('--rl', (targetLength + stretch).toFixed(1) + 'px');
+      pullOffset = Math.min(pullDown * 0.45, 24);
+      segLen = targetSegLen;
+      rope.style.setProperty('--rl', (targetLength + pullOffset).toFixed(1) + 'px');
 
-      // Taut mechanical drag position under hand
-      const maxAllowedY = ay + targetLength + maxStretch;
-      dragY = Math.max(ay + 15, Math.min(maxAllowedY, ay + targetLength + stretch));
-      dragX = Math.max(12, Math.min(W - 12, ax + dx * 0.22));
+      // Keep the grabbed point strictly within the rope's fixed reach from the ceiling anchor
+      const maxReach = dragPointIdx * targetSegLen + pullOffset;
+      const desiredY = ay + dragPointIdx * targetSegLen + pullOffset;
+      dragY = Math.max(ay + 12, Math.min(ay + maxReach, desiredY));
+      const vertDist = Math.max(1, dragY - ay);
+      const maxHoriz = Math.sqrt(Math.max(0, maxReach * maxReach - vertDist * vertDist)) + 16;
+      dragX = Math.max(12, Math.min(W - 12, ax + Math.max(-maxHoriz, Math.min(maxHoriz, dx * 0.35))));
 
-      // Lamp pull-chain switch threshold at 10% stretch
-      const triggerThreshold = Math.min(30, Math.max(14, targetLength * 0.10));
-      if (!pullTriggered && stretch >= triggerThreshold) {
+      // Lamp pull-chain switch threshold at 13px downward travel
+      const triggerThreshold = 13;
+      if (!pullTriggered && pullOffset >= triggerThreshold) {
         pullTriggered = true;
         playTick();
-        rope.classList.add('pull-armed');
         const b = document.getElementById('themeBulb');
         if (b) b.classList.add('pull-armed');
-      } else if (pullTriggered && stretch < triggerThreshold * 0.5) {
+      } else if (pullTriggered && pullOffset < triggerThreshold * 0.5) {
         pullTriggered = false;
-        rope.classList.remove('pull-armed');
         const b = document.getElementById('themeBulb');
         if (b) b.classList.remove('pull-armed');
       }
@@ -3211,6 +3231,7 @@ window.ThemeColors = { green: '#a1f4c2', blue: '#8eb5ff', purple: '#c0a5ff', gre
     function onPointerUp(e) {
       if (!isDragging) return;
       isDragging = false;
+      pullOffset = 0;
       rope.classList.remove('is-pulling', 'pull-armed');
       const b = document.getElementById('themeBulb');
       if (b) b.classList.remove('pull-armed');
@@ -3248,6 +3269,7 @@ window.ThemeColors = { green: '#a1f4c2', blue: '#8eb5ff', purple: '#c0a5ff', gre
     function onPointerCancel(e) {
       if (!isDragging) return;
       isDragging = false;
+      pullOffset = 0;
       pullTriggered = false;
       rope.classList.remove('is-pulling', 'pull-armed');
       const b = document.getElementById('themeBulb');
@@ -3305,11 +3327,6 @@ window.ThemeColors = { green: '#a1f4c2', blue: '#8eb5ff', purple: '#c0a5ff', gre
       } else {
         if (canvas) canvas.style.display = '';
         if (rope) rope.style.display = '';
-        layout();
-        if (wasOff) {
-          triggerRollDown();
-        }
-        wasOff = false;
         layout();
         if (wasOff) {
           triggerRollDown();
