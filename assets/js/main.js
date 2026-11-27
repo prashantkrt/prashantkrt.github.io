@@ -2728,10 +2728,16 @@ window.ThemeColors = { green: '#a1f4c2', blue: '#8eb5ff', purple: '#c0a5ff', gre
       ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
       canvasLeft = 0;
 
-      // Cord spans from ceiling (0px) down to near the bottom dock (vh - 110px)
-      // so it is a full, continuous hanging lamp pull cord that never cuts off mid-air!
-      targetLength = Math.max(220, Math.round(vh - 110 - ay));
+      // Cord spans from ceiling (0px) down to around mid-to-lower screen (30% shorter)
+      targetLength = Math.max(160, Math.round((vh - 110 - ay) * 0.70));
       targetSegLen = targetLength / (N - 1);
+
+      // Dynamically position Nodi on the right edge so his hand aligns with the cord right above the bead
+      const nodiTop = Math.max(70, Math.round(ay + targetLength - 105));
+      const nodiRight = Math.round((vw - ax) - 110);
+      document.documentElement.style.setProperty('--nodi-top', nodiTop + 'px');
+      document.documentElement.style.setProperty('--nodi-right', nodiRight + 'px');
+      document.documentElement.style.setProperty('--nodi-transform', 'none');
 
       // Position the touch target DOM element to match ax exactly
       const ropeRightPx = Math.round(vw - ax - 20);
@@ -2739,12 +2745,14 @@ window.ThemeColors = { green: '#a1f4c2', blue: '#8eb5ff', purple: '#c0a5ff', gre
       rope.style.setProperty('--rl', targetLength.toFixed(1) + 'px');
       rope.style.setProperty('--tilt', '0deg');
 
-      // If points already exist (window resized), shift them horizontally so the cord
-      // doesn't stretch or distort diagonally!
-      if (pts.length > 0 && Math.abs(shiftX) > 0.1) {
+      // If points already exist (window resized), smoothly align them to new ax and targetLength
+      if (pts.length > 0) {
         for (let i = 0; i < pts.length; i++) {
-          pts[i].x += shiftX;
-          pts[i].px += shiftX;
+          const t = i / (N - 1);
+          pts[i].x = ax;
+          pts[i].px = ax;
+          pts[i].y = ay + targetLength * t;
+          pts[i].py = pts[i].y;
         }
       }
 
@@ -2783,19 +2791,42 @@ window.ThemeColors = { green: '#a1f4c2', blue: '#8eb5ff', purple: '#c0a5ff', gre
           rolling = false;
           segLen = targetSegLen;
           rope.style.setProperty('--rl', targetLength.toFixed(1) + 'px');
-          pluck(N - 1, (Math.random() < 0.5 ? -1 : 1), 1.4);
+          pluck(N - 1, (Math.random() < 0.5 ? -1 : 1), 0.6);
         }
       }
+
+      if (isDragging) {
+        // While user is pulling the cord, keep it in a smooth, taut line under mechanical tension
+        // from the ceiling mount down to the user's hand.
+        // This completely eliminates chaotic string-jumping and wild spring oscillations!
+        const totalStretchLen = targetLength + (segLen - targetSegLen) * (N - 1);
+        for (let i = 1; i <= dragPointIdx; i++) {
+          const t = i / dragPointIdx;
+          pts[i].x = ax + (dragX - ax) * t;
+          pts[i].y = ay + (dragY - ay) * t;
+          pts[i].px = pts[i].x;
+          pts[i].py = pts[i].y;
+        }
+        for (let i = dragPointIdx + 1; i < N; i++) {
+          const t = (i - dragPointIdx) / (N - 1 - dragPointIdx || 1);
+          pts[i].x = dragX;
+          pts[i].y = dragY + (totalStretchLen - (dragY - ay)) * t;
+          pts[i].px = pts[i].x;
+          pts[i].py = pts[i].y;
+        }
+        return;
+      }
+
       const gravity = 1250;
       for (let i = 1; i < N; i++) {
         const p = pts[i];
         const f = i / (N - 1);
-        const vx = (p.x - p.px) * 0.992;
-        const vy = (p.y - p.py) * 0.992;
+        const vx = (p.x - p.px) * 0.965;
+        const vy = (p.y - p.py) * 0.965;
         // a light breeze: stronger lower down, so the loose end drifts like a real cord
-        const wind = (Math.sin(time * 1.05 + i * 0.45) * 30 + Math.sin(time * 0.37) * 24) * f;
+        const wind = (Math.sin(time * 1.05 + i * 0.45) * 16 + Math.sin(time * 0.37) * 12) * f;
         // the bead at the bottom has some weight
-        const g = i >= N - 3 ? gravity * 1.7 : gravity;
+        const g = i >= N - 3 ? gravity * 1.6 : gravity;
         p.px = p.x;
         p.py = p.y;
         p.x += vx + wind * dt * dt;
@@ -2820,10 +2851,6 @@ window.ThemeColors = { green: '#a1f4c2', blue: '#8eb5ff', purple: '#c0a5ff', gre
           }
         }
         pts[0].x = ax; pts[0].y = ay;
-        if (isDragging && dragPointIdx > 0 && dragPointIdx < N && pts[dragPointIdx]) {
-          pts[dragPointIdx].x = dragX;
-          pts[dragPointIdx].y = dragY;
-        }
       }
 
       // Safeguard: clamp all physics points strictly inside the viewport boundaries
@@ -3024,14 +3051,13 @@ window.ThemeColors = { green: '#a1f4c2', blue: '#8eb5ff', purple: '#c0a5ff', gre
     function stop() { cancelAnimationFrame(raf); raf = null; }
     document.addEventListener('visibilitychange', () => (document.hidden ? stop() : start()));
 
-    // Pluck the cord where it was touched: a sideways shove plus a ripple that runs along it
+    // Pluck the cord where it was touched: a gentle sideways sway without vertical spring bouncing
     function pluck(gripIndex, dir, strength) {
       gripIndex = Math.max(1, Math.min(N - 1, gripIndex));
       for (let i = 1; i < N; i++) {
         const f = i / (N - 1);
         const ripple = Math.sin((i - gripIndex) * 0.8) * Math.exp(-Math.abs(i - gripIndex) / 5);
-        pts[i].x += dir * strength * (0.8 * f + 0.9 * ripple);
-        pts[i].y += 0.3 * strength * Math.abs(ripple);
+        pts[i].x += dir * strength * (0.4 * f + 0.5 * ripple);
       }
     }
     function pluckAt(e, strength) {
@@ -3098,16 +3124,13 @@ window.ThemeColors = { green: '#a1f4c2', blue: '#8eb5ff', purple: '#c0a5ff', gre
       if (window.SoundFX && window.SoundFX.ropeSnap) {
         window.SoundFX.ropeSnap();
       }
-      const msg = flip();
+      flip();
       syncBulbGlow();
       const b = document.getElementById('themeBulb');
       if (b) {
         b.classList.remove('igniting');
         void b.offsetWidth;
         b.classList.add('igniting');
-      }
-      if (window.showToast) {
-        window.showToast(msg, msg.includes('Light') ? '💡' : '🌙');
       }
     }
 
@@ -3130,7 +3153,7 @@ window.ThemeColors = { green: '#a1f4c2', blue: '#8eb5ff', purple: '#c0a5ff', gre
     }
 
     // Pull threshold: how far down (px) user must drag to trigger the switch click
-    const PULL_TRIGGER_PX = 28;
+    const PULL_TRIGGER_PX = 20;
     let pullTriggered = false;
 
     function onPointerDown(e) {
@@ -3143,8 +3166,8 @@ window.ThemeColors = { green: '#a1f4c2', blue: '#8eb5ff', purple: '#c0a5ff', gre
       const r = rope.getBoundingClientRect();
       const relY = Math.max(0, Math.min(r.height, e.clientY - r.top));
       dragPointIdx = Math.max(3, Math.min(N - 1, Math.round((relY / r.height) * (N - 1))));
-      dragX = Math.max(12, Math.min(W - 12, e.clientX));
-      dragY = Math.max(ay + 15, Math.min(window.innerHeight - 30, e.clientY));
+      dragX = ax;
+      dragY = ay + targetLength;
       rope.classList.add('is-pulling');
       try { rope.setPointerCapture(e.pointerId); } catch (_) {}
       start();
@@ -3157,23 +3180,27 @@ window.ThemeColors = { green: '#a1f4c2', blue: '#8eb5ff', purple: '#c0a5ff', gre
       const totalDist = Math.hypot(dx, dy);
       if (totalDist > 5) hasMovedFar = true;
 
-      dragX = Math.max(12, Math.min(W - 12, e.clientX));
-      dragY = Math.max(ay + 15, Math.min(window.innerHeight - 30, e.clientY));
-
-      // Elastic stretch: cord stretches smoothly when pulled down
       const pullDown = Math.max(0, dy);
-      const stretch = Math.min(pullDown * 0.55, 65);
+      // Hard clamp: cord can stretch at most 20% of its size, strictly capped!
+      const maxStretch = targetLength * 0.20;
+      const stretch = Math.min(pullDown * 0.5, maxStretch);
       segLen = targetSegLen + stretch / (N - 1);
       rope.style.setProperty('--rl', (targetLength + stretch).toFixed(1) + 'px');
 
-      // Lamp pull-chain switch threshold
-      if (!pullTriggered && pullDown >= PULL_TRIGGER_PX) {
+      // Taut mechanical drag position under hand
+      const maxAllowedY = ay + targetLength + maxStretch;
+      dragY = Math.max(ay + 15, Math.min(maxAllowedY, ay + targetLength + stretch));
+      dragX = Math.max(12, Math.min(W - 12, ax + dx * 0.22));
+
+      // Lamp pull-chain switch threshold at 10% stretch
+      const triggerThreshold = Math.min(30, Math.max(14, targetLength * 0.10));
+      if (!pullTriggered && stretch >= triggerThreshold) {
         pullTriggered = true;
         playTick();
         rope.classList.add('pull-armed');
         const b = document.getElementById('themeBulb');
         if (b) b.classList.add('pull-armed');
-      } else if (pullTriggered && pullDown < PULL_TRIGGER_PX * 0.5) {
+      } else if (pullTriggered && stretch < triggerThreshold * 0.5) {
         pullTriggered = false;
         rope.classList.remove('pull-armed');
         const b = document.getElementById('themeBulb');
@@ -3193,25 +3220,28 @@ window.ThemeColors = { green: '#a1f4c2', blue: '#8eb5ff', purple: '#c0a5ff', gre
       const deltaX = e.clientX - dragStartX;
       const totalPull = Math.hypot(deltaX, deltaY);
 
-      // Elastic spring snap back
+      // Return to resting cord length with a crisp mechanical pullback retraction
       segLen = targetSegLen;
       rope.style.setProperty('--rl', targetLength.toFixed(1) + 'px');
 
-      // Upward snap recoil
-      if (dragPointIdx > 0 && pts[dragPointIdx]) {
-        pts[dragPointIdx].py -= Math.min(60, Math.max(18, Math.abs(deltaY) * 0.5 || 24));
-        pts[dragPointIdx].px -= Math.min(35, Math.max(-35, deltaX * 0.4));
+      for (let i = 1; i < N; i++) {
+        const t = i / (N - 1);
+        const restY = ay + targetLength * t;
+        pts[i].x = ax + (pts[i].x - ax) * 0.2;
+        pts[i].px = pts[i].x;
+        pts[i].y = restY;
+        pts[i].py = restY + 1.6; // tiny 1.6px gravity settle, zero catapulting!
       }
-      pluck(dragPointIdx, deltaX < 0 ? 1 : -1, Math.min(4.2, 2.2 + totalPull * 0.03));
+      pluck(N - 1, deltaX < 0 ? 0.35 : -0.35, 0.45);
 
       // Only toggle if pulled down past the mechanical threshold!
-      // Clicking or tapping sways the cord without flipping the theme.
+      // Clicking or tapping sways the cord gently without flipping the theme.
       const wasClick = !hasMovedFar || totalPull < 8;
       if (pullTriggered) {
         pullTriggered = false;
         toggleThemeWithRope();
       } else if (wasClick) {
-        pluck(dragPointIdx, Math.random() < 0.5 ? 1 : -1, 2.4);
+        pluck(dragPointIdx, Math.random() < 0.5 ? 0.4 : -0.4, 0.5);
       }
     }
 
@@ -3224,7 +3254,12 @@ window.ThemeColors = { green: '#a1f4c2', blue: '#8eb5ff', purple: '#c0a5ff', gre
       if (b) b.classList.remove('pull-armed');
       segLen = targetSegLen;
       rope.style.setProperty('--rl', targetLength.toFixed(1) + 'px');
-      pluck(dragPointIdx, 1, 1.5);
+      for (let i = 1; i < N; i++) {
+        const t = i / (N - 1);
+        pts[i].x = ax; pts[i].px = ax;
+        pts[i].y = ay + targetLength * t; pts[i].py = pts[i].y;
+      }
+      pluck(dragPointIdx, 1, 0.4);
     }
 
     rope.addEventListener('pointerdown', onPointerDown);
@@ -3239,7 +3274,7 @@ window.ThemeColors = { green: '#a1f4c2', blue: '#8eb5ff', purple: '#c0a5ff', gre
         e.preventDefault();
         toggleThemeWithRope();
         if (!document.body.classList.contains('mascots-off') && !reduced) {
-          pluck(Math.floor(N * 0.35), (Math.random() < 0.5 ? 1 : -1), 2.6);
+          pluck(Math.floor(N * 0.35), (Math.random() < 0.5 ? 0.6 : -0.6), 0.8);
         }
       });
     }

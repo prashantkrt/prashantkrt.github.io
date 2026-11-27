@@ -80,9 +80,9 @@
 
 /* RIGHT edge — Nodi slides in from the right */
 .deer-corner-peek-top-right {
-  top: 50%;
-  right: -44px;
-  transform: translateY(-50%);
+  top: var(--nodi-top, 50%);
+  right: var(--nodi-right, -44px);
+  transform: var(--nodi-transform, translateY(-50%));
   width: 134px;
   height: 137px;
 }
@@ -1447,7 +1447,7 @@ body:has(.nav.open) .pull-rope {
    PULL ROPE — hangs directly from the ceiling mount
    ========================================================================== */
 .pull-rope {
-  --rl: calc(100vh - 110px);
+  --rl: calc((100vh - 110px) * 0.7);
   position: fixed;
   top: 0;
   right: var(--rope-right, 28px);
