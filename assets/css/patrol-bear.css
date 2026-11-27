@@ -1561,7 +1561,18 @@ body:has(.nav.open) .pull-rope {
 .pull-rope:active, .pull-rope.is-pulling { cursor: grabbing; }
 .pull-rope.nudge, .pull-rope.pulled, .pull-rope.pull-armed { animation: none !important; box-shadow: none !important; }
 .rope-thread, .rope-knob { display: none; }
-.pull-rope:focus-visible { outline: 2px solid rgba(var(--green-rgb), 0.7); outline-offset: 2px; border-radius: 6px; }
+.pull-rope,
+.pull-rope:hover,
+.pull-rope:active,
+.pull-rope:focus,
+.pull-rope:focus-visible,
+.pull-rope.is-pulling,
+.pull-rope.pull-armed {
+  border: none !important;
+  outline: none !important;
+  box-shadow: none !important;
+  background: transparent !important;
+}
 .rope-canvas {
   position: fixed;
   top: 0;

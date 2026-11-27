@@ -3177,6 +3177,7 @@ window.ThemeColors = { green: '#a1f4c2', blue: '#8eb5ff', purple: '#c0a5ff', gre
 
     function onPointerDown(e) {
       if (document.body.classList.contains('mascots-off') || reduced) return;
+      e.preventDefault();
       isDragging = true;
       hasMovedFar = false;
       pullTriggered = false;
@@ -3232,7 +3233,7 @@ window.ThemeColors = { green: '#a1f4c2', blue: '#8eb5ff', purple: '#c0a5ff', gre
       if (!isDragging) return;
       isDragging = false;
       pullOffset = 0;
-      rope.classList.remove('is-pulling', 'pull-armed');
+      rope.classList.remove('is-pulling');
       const b = document.getElementById('themeBulb');
       if (b) b.classList.remove('pull-armed');
       try { rope.releasePointerCapture(e.pointerId); } catch (_) {}
@@ -3271,7 +3272,7 @@ window.ThemeColors = { green: '#a1f4c2', blue: '#8eb5ff', purple: '#c0a5ff', gre
       isDragging = false;
       pullOffset = 0;
       pullTriggered = false;
-      rope.classList.remove('is-pulling', 'pull-armed');
+      rope.classList.remove('is-pulling');
       const b = document.getElementById('themeBulb');
       if (b) b.classList.remove('pull-armed');
       segLen = targetSegLen;
