@@ -2637,8 +2637,49 @@ window.ThemeColors = { green: '#a1f4c2', blue: '#8eb5ff', purple: '#c0a5ff', gre
   const N = 20;              // points along the cord
   let W = 150;               // canvas width in px (grows on wide screens)
 
+  const LEAP_SVG = `
+<svg class="cl-leap" viewBox="0 0 64 56" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+  <!-- Hind legs trailing back (left) -->
+  <g stroke-linecap="round" stroke-linejoin="round">
+    <path d="M19 36 C12 40 8 44 5 46" stroke="#6B4122" stroke-width="5.2"/>
+    <path d="M19 36 C12 40 8 44 5 46" stroke="#A86B34" stroke-width="3.6"/>
+    <ellipse cx="4.5" cy="46.5" rx="2.6" ry="2" fill="#3A2616"/>
+    <path d="M23 38 C16 43 13 48 11 51" stroke="#6B4122" stroke-width="5.2"/>
+    <path d="M23 38 C16 43 13 48 11 51" stroke="#B87A3C" stroke-width="3.6"/>
+    <ellipse cx="10.5" cy="51.5" rx="2.6" ry="2" fill="#3A2616"/>
+  </g>
+  <!-- White tail -->
+  <ellipse cx="13" cy="31" rx="3.4" ry="4.4" transform="rotate(-30 13 31)" fill="#FFF8EC" stroke="#E2CFA6" stroke-width="0.7"/>
+  <!-- Torso angled forward toward the rope -->
+  <ellipse cx="28" cy="33" rx="13" ry="9" transform="rotate(-14 28 33)" fill="#BE7B3C"/>
+  <ellipse cx="30" cy="36" rx="8" ry="5" transform="rotate(-14 30 36)" fill="#F2D6AA"/>
+  <g fill="#FFF2DE" opacity="0.9"><circle cx="22" cy="29" r="1.1"/><circle cx="27" cy="27.5" r="1.2"/><circle cx="31" cy="30" r="1"/></g>
+  <!-- Front legs reaching forward toward the rope (right) -->
+  <g stroke-linecap="round" stroke-linejoin="round">
+    <path d="M36 31 C45 28 52 24 58 20" stroke="#6B4122" stroke-width="5"/>
+    <path d="M36 31 C45 28 52 24 58 20" stroke="#B87A3C" stroke-width="3.5"/>
+    <ellipse cx="58.5" cy="19.5" rx="2.7" ry="2.1" fill="#3A2616"/>
+    <path d="M38 35 C47 34 54 31 60 28" stroke="#6B4122" stroke-width="5"/>
+    <path d="M38 35 C47 34 54 31 60 28" stroke="#C98644" stroke-width="3.5"/>
+    <ellipse cx="60.5" cy="27.5" rx="2.7" ry="2.1" fill="#3A2616"/>
+  </g>
+  <!-- Head facing right toward the rope -->
+  <g>
+    <path d="M39 10 C38 6 36 4 34 3.5 M45 10 C47 6 49 4 51 3.5" stroke="#D9B27C" stroke-width="1.8" stroke-linecap="round"/>
+    <ellipse cx="35" cy="14" rx="3.8" ry="6" transform="rotate(-32 35 14)" fill="#B06E34"/>
+    <ellipse cx="35.3" cy="14.3" rx="2" ry="3.8" transform="rotate(-32 35.3 14.3)" fill="#F0A58E"/>
+    <ellipse cx="43" cy="19" rx="11" ry="9.5" fill="#C98644"/>
+    <ellipse cx="50.5" cy="22" rx="5.5" ry="4.2" fill="#F2D6AA"/>
+    <ellipse cx="54.8" cy="20.5" rx="2.1" ry="1.6" fill="#2A1A10"/>
+    <circle cx="48" cy="16.5" r="2.2" fill="#1B1410"/>
+    <circle cx="48.6" cy="15.8" r="0.8" fill="#fff"/>
+    <ellipse cx="45" cy="21.5" rx="1.9" ry="1.1" fill="#F28B82" opacity="0.55"/>
+    <g fill="#FFF2DE" opacity="0.9"><circle cx="39" cy="13" r="1"/><circle cx="43" cy="12" r="1.1"/></g>
+  </g>
+</svg>`;
+
   const CLIMBER_SVG = `
-<svg viewBox="0 0 44 70" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+<svg class="cl-climb" viewBox="0 0 44 70" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
   <g class="cl-legs" stroke-linecap="round" stroke-linejoin="round">
     <g class="cl-legL"><path d="M17 54 C13 59 14 62 18 64" stroke="#6B4122" stroke-width="6"/><path d="M17 54 C13 59 14 62 18 64" stroke="#B87A3C" stroke-width="4.4"/><ellipse cx="18.4" cy="65" rx="3" ry="2.3" fill="#3A2616"/></g>
     <g class="cl-legR"><path d="M27 54 C31 59 30 62 26 64" stroke="#6B4122" stroke-width="6"/><path d="M27 54 C31 59 30 62 26 64" stroke="#B87A3C" stroke-width="4.4"/><ellipse cx="25.6" cy="65" rx="3" ry="2.3" fill="#3A2616"/></g>
@@ -3093,7 +3134,7 @@ window.ThemeColors = { green: '#a1f4c2', blue: '#8eb5ff', purple: '#c0a5ff', gre
       if (reduced || climber) { flip(); if (o.onDone) o.onDone(); return; }
       const el = document.createElement('div');
       el.className = 'nodi-climber';
-      el.innerHTML = CLIMBER_SVG + '<span class="cl-bubble"></span>';
+      el.innerHTML = LEAP_SVG + CLIMBER_SVG + '<span class="cl-bubble"></span>';
       document.body.appendChild(el);
       const elRect = el.getBoundingClientRect();
       const r = o.from;

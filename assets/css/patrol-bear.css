@@ -81,10 +81,10 @@
 /* RIGHT edge — Nodi slides in from the right */
 .deer-corner-peek-top-right {
   top: var(--nodi-top, 50%);
-  right: var(--nodi-right, clamp(-30px, -2.5vw, -16px));
+  right: var(--nodi-right, -26px);
   transform: var(--nodi-transform, translateY(-50%));
-  width: clamp(74px, 10vw, 120px);
-  height: clamp(76px, 10.2vw, 123px);
+  width: 100px;
+  height: 103px;
 }
 .deer-corner-peek-top-right .dp-body {
   transform: translateX(115%);
@@ -99,10 +99,10 @@
 /* LEFT edge — Nodi slides in from the left (opposite side from the right-hand rope) */
 .deer-corner-peek-top-left {
   top: var(--nodi-top, 52%);
-  left: var(--nodi-left, clamp(-30px, -2.5vw, -16px));
+  left: var(--nodi-left, -26px);
   transform: var(--nodi-transform, translateY(-50%));
-  width: clamp(74px, 10vw, 120px);
-  height: clamp(76px, 10.2vw, 123px);
+  width: 100px;
+  height: 103px;
 }
 .deer-corner-peek-top-left .dp-body {
   transform: translateX(-115%);
@@ -635,20 +635,43 @@ body.chase-active .deer-corner-peek * {
 }
 
 /* ── Responsive scale down ───────────────────────────────────────────────── */
+@media (max-width: 1100px) {
+  .deer-corner-peek-top-left,
+  .deer-corner-peek-top-right {
+    width: 84px;
+    height: 86px;
+  }
+  .deer-corner-peek-top-left  { left: -22px; }
+  .deer-corner-peek-top-right { right: -22px; }
+}
+
 @media (max-width: 768px) {
   .patrol-sprite {
-    width: 82px;
-    height: 82px;
+    width: 80px;
+    height: 80px;
   }
 
   .patrol-kodi {
-    width: 94px;
-    height: 94px;
+    width: 92px;
+    height: 92px;
+  }
+
+  .deer-corner-peek-top-left,
+  .deer-corner-peek-top-right {
+    width: 68px;
+    height: 70px;
+  }
+  .deer-corner-peek-top-left  { left: -18px; }
+  .deer-corner-peek-top-right { right: -18px; }
+
+  .nodi-climber {
+    width: 44px;
+    height: 70px;
   }
 
   .dp-bubble {
     white-space: normal;
-    max-width: min(210px, calc(100vw - 120px));
+    max-width: min(200px, calc(100vw - 110px));
     font-size: 9px;
     padding: 7px 11px;
   }
@@ -656,26 +679,39 @@ body.chase-active .deer-corner-peek * {
 
 @media (max-width: 480px) {
   .patrol-sprite {
-    width: 68px;
-    height: 68px;
+    width: 64px;
+    height: 64px;
   }
 
   .patrol-kodi {
-    width: 78px;
-    height: 78px;
+    width: 74px;
+    height: 74px;
+  }
+
+  .deer-corner-peek-top-left,
+  .deer-corner-peek-top-right {
+    width: 52px;
+    height: 53px;
+  }
+  .deer-corner-peek-top-left  { left: -14px; }
+  .deer-corner-peek-top-right { right: -14px; }
+
+  .nodi-climber {
+    width: 34px;
+    height: 54px;
   }
 
   .deer-corner-peek-top-left .dp-tag {
-    left: calc(100% + 6px);
-    font-size: 8px;
-    padding: 2px 6px;
+    left: calc(100% + 4px);
+    font-size: 7.5px;
+    padding: 2px 5px;
   }
 
   .dp-bubble {
     white-space: normal;
-    max-width: min(180px, calc(100vw - 105px));
+    max-width: min(170px, calc(100vw - 90px));
     font-size: 8.5px;
-    padding: 6px 10px;
+    padding: 6px 9px;
   }
 }
 
@@ -1599,14 +1635,18 @@ body:has(.nav.open) .pull-rope {
   position: fixed;
   top: 0;
   left: 0;
-  width: clamp(44px, 5.5vw, 66px);
-  height: calc(clamp(44px, 5.5vw, 66px) * 70 / 44);
+  width: 56px;
+  height: 89px;
   z-index: 1003;
   pointer-events: none;
   opacity: 0;
   will-change: transform;
   filter: drop-shadow(0 3px 6px rgba(0, 0, 0, 0.22));
 }
+.nodi-climber .cl-leap  { display: none; }
+.nodi-climber .cl-climb { display: block; }
+.nodi-climber.flying .cl-leap  { display: block; }
+.nodi-climber.flying .cl-climb { display: none; }
 .nodi-climber.show { opacity: 1; }
 .nodi-climber svg { display: block; width: 100%; height: 100%; transform-origin: 50% 60%; }
 .nodi-climber.land svg { animation: cl-land 0.5s cubic-bezier(0.3, 1.5, 0.5, 1); }
